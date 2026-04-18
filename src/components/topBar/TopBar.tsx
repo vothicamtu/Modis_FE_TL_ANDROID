@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -19,6 +19,7 @@ import { profileController } from '../../controller/profile.controller';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { on } from '../../utils/eventBus';
 import { styles } from '../../styles/TopBar.styles';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface Props {
   variant?: 'home' | 'filter';
@@ -27,6 +28,8 @@ interface Props {
   onSelectedUserId?: (id: string) => void;
   canTransform: boolean;
   onFilterChange?: (selectedId: string) => void;
+  showBackButton?: boolean;
+  onBackPress?: () => void;
 }
 
 const TopBar: React.FC<Props> = ({
@@ -36,6 +39,8 @@ const TopBar: React.FC<Props> = ({
   onSelectedUserId,
   canTransform,
   onFilterChange,
+  showBackButton,
+  onBackPress,
 }) => {
   const navigation = useNavigation<any>();
 
@@ -44,6 +49,16 @@ const TopBar: React.FC<Props> = ({
   const [selectedLabel, setSelectedLabel] = useState('Tất cả bạn bè');
   const [friendsList, setFriendsList] = useState<FriendDTO[]>([]);
   const [friendCount, setFriendCount] = useState(0);
+
+  const handleBack = () => {
+    if (onBackPress) {
+      onBackPress();
+    } else if (navigation.canGoBack()) {
+      navigation.goBack();
+    } else {
+      console.warn('Cannot go back: No history and no onBackPress provided');
+    }
+  };
 
   //  Load avatar (ưu tiên AsyncStorage -> nhanh + realtime)
   const loadAvatar = async () => {
@@ -117,12 +132,13 @@ const TopBar: React.FC<Props> = ({
     return off;
   }, []);
 
-   useEffect(() => {
-     const off = on('avatarUpdated', (newUrl: string) => {
-       setAvatarUrl(newUrl);
+  useEffect(() => {
+     const off = on('avatarUpdated', () => {
+       loadAvatar();
      });
      return off;
    }, []);
+
   const handleSelectFriend = (item: FriendDTO) => {
     setSelectedLabel(item.fullname);
     setDropdownVisible(false);
@@ -163,28 +179,38 @@ const TopBar: React.FC<Props> = ({
 
   return (
     <View style={styles.container} testID="topbar">
-      {/* Avatar */}
-      <TouchableOpacity
-        testID="topbar-avatar-button"
-        style={styles.iconButton}
-        onPress={() => {
-          if (canTransform && goToProfile) {
-            goToProfile();
-          } else {
-            navigation.navigate('ProfileScreen');
-          }
-        }}
-      >
-        <Image
-          testID="topbar-avatar-image"
-          source={
-            avatarUrl
-              ? { uri: avatarUrl }
-              : require('../../assets/image/avt.png')
-          }
-          style={styles.avatarImage}
-        />
-      </TouchableOpacity>
+      {/* Nút Back hoặc Avatar */}
+      {showBackButton ? (
+        <TouchableOpacity
+          testID="topbar-back-button"
+          style={styles.iconButton}
+          onPress={handleBack}
+        >
+          <Icon name="arrow-back" size={24} color={Colors.text_primary} />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          testID="topbar-avatar-button"
+          style={styles.iconButton}
+          onPress={() => {
+            if (canTransform && goToProfile) {
+              goToProfile();
+            } else {
+              navigation.navigate('ProfileScreen');
+            }
+          }}
+        >
+          <Image
+            testID="topbar-avatar-image"
+            source={
+              avatarUrl
+                ? { uri: avatarUrl }
+                : require('../../assets/image/avt.png')
+            }
+            style={styles.avatarImage}
+          />
+        </TouchableOpacity>
+      )}
 
       {renderCenterContent()}
 

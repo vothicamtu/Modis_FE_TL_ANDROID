@@ -8,8 +8,8 @@ import {
 import Colors from "../styles/color";
 import EmojiPicker from "rn-emoji-keyboard";
 import { useNavigation, NavigationProp, useFocusEffect } from "@react-navigation/native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import type { RootStackParamList } from "../navigation/Navigation";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { RootStackParamList } from "../navigation/types";
 import TopBar from "../components/topBar/TopBar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ImageFullItem } from "../types";
@@ -21,6 +21,7 @@ import { on } from "../utils/eventBus";
 import MessageService from "../services/messageService";
 import { CameraRoll } from "@react-native-camera-roll/camera-roll";
 import RNFS from "react-native-fs";
+import LinearGradient from "react-native-linear-gradient";
 
 const { height } = Dimensions.get("window");
 
@@ -35,7 +36,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const insets = useSafeAreaInsets();
 
-  const topBarHeight = 70;
+  const topBarHeight = 60; // paddingTop:4 + icon:44 + paddingBottom:12
   const imageHeight  = Math.floor(height * 0.52);
 
   const [userId, setUserId]               = useState<string | null>(null);
@@ -67,6 +68,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [reactedEmoji, setReactedEmoji]   = useState(0);
   const [showMenu, setShowMenu]           = useState(false);
+  const [focused, setFocused]             = useState(false);
 
   const inputRef    = useRef<TextInput>(null);
   const flatListRef = useRef<FlatList>(null);
@@ -157,7 +159,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
 
   const handlePress = () => {
     setShowInput(true);
-    setKeyboardHeight(0); // reset để input hiện ở vị trí tạm, sẽ được đẩy lên khi bàn phím hiện
+    setKeyboardHeight(0); 
     requestAnimationFrame(() => {
       inputRef.current?.focus();
     });
@@ -207,11 +209,8 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
         }
       }
 
-      // Download thẳng vào Pictures — thư mục public, tồn tại vĩnh viễn
       const filename = `modis_${Date.now()}.jpg`;
       const destPath = `${RNFS.PicturesDirectoryPath}/Modis/${filename}`;
-
-      // Tạo thư mục Modis nếu chưa có
       await RNFS.mkdir(`${RNFS.PicturesDirectoryPath}/Modis`);
 
       const result = await RNFS.downloadFile({
@@ -223,8 +222,6 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
       if (result.statusCode !== 200) {
         throw new Error(`Download failed: ${result.statusCode}`);
       }
-
-      // Báo cho Media Scanner biết có file mới để hiện trong Gallery
       await RNFS.scanFile(destPath);
 
       Animated.sequence([
@@ -304,18 +301,23 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
 
   return (
     <View style={{ flex: 1 }} testID="home-feed-screen">
-      <View style={styles.container}>
+      <LinearGradient colors={['#ede8ff', '#e8f4ff', '#e8fff8']} style={styles.container}>
         <StatusBar backgroundColor="transparent" barStyle="dark-content" translucent />
 
-        <View style={{ width: '100%', zIndex: 20, elevation: 20 }}>
-          <TopBar
-            variant="filter"
-            goToMessage={goToMessage}
-            goToProfile={goToProfile}
-            onSelectedUserId={setSelectedUserId}
-            canTransform={true}
-          />
-        </View>
+        {/* Header — giống Profile/AllImage: SafeAreaView transparent, hòa vào gradient */}
+        <SafeAreaView edges={['top']}>
+          <View style={{ paddingTop: 4 }}>
+            <TopBar
+                variant="filter"
+                goToMessage={goToMessage}
+                goToProfile={goToProfile}
+                onSelectedUserId={setSelectedUserId}
+                canTransform={true}
+                showBackButton={true}
+                onBackPress={goToHome}
+              />
+          </View>
+        </SafeAreaView>
 
         <FlatList
           ref={flatListRef}
@@ -343,7 +345,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
             <View testID={`feed-post-item-${item._id}`} style={[styles.post_item, { height }]}>
               <View style={{ flex: 1, flexDirection: 'column' }}>
 
-                <View style={{ height: topBarHeight }} />
+                <View style={{ height: 0 }} />
 
                 <View style={styles.image_area}>
                   <AnimatedImage
@@ -431,11 +433,6 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                       resizeMode="contain"
                     />
                   </Pressable>
-                  <Pressable testID="feed-take-photo-button" onPress={goToHome} style={styles.take_btn}>
-                    <View style={styles.outerCircle}>
-                      <View style={styles.innerCircle} />
-                    </View>
-                  </Pressable>
                   <Pressable testID="feed-menu-button" onPress={() => setShowMenu(true)} style={styles.flash_btn}>
                     <Image
                       source={require("../assets/image/pending.png")}
@@ -452,8 +449,16 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
 
         <View style={[
           styles.react_comment_box_hidden,
-          { bottom: showInput && keyboardHeight > 0 ? keyboardHeight + 20 : 170 },
+          { bottom: showInput && keyboardHeight > 0 ? keyboardHeight + 10 : (Platform.OS === 'ios' ? 40 : 60) },
           !showInput && { opacity: 0, pointerEvents: 'none' },
+          focused && { 
+            borderColor: Colors.primary, 
+            backgroundColor: Colors.white, 
+            shadowColor: Colors.primary, 
+            shadowOpacity: 0.4, 
+            shadowRadius: 10, 
+            elevation: 12 
+          }
         ]}>
             <TextInput
               testID="feed-comment-input"
@@ -461,6 +466,8 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
               style={styles.comment_input}
               value={commentText}
               onChangeText={handleCommentChange}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
               placeholder="Gửi tin nhắn..."
               placeholderTextColor={Colors.text_hint}
               returnKeyType="send"
@@ -469,7 +476,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
             <Pressable testID="feed-send-comment-button" style={styles.send_icon_wrapper} onPress={handleSendComment}>
               <Image
                 source={require("../assets/image/send_message.png")}
-                style={{ width: 20, height: 20, tintColor: Colors.text_primary }}
+                style={{ width: 20, height: 20, tintColor: Colors.white }}
               />
             </Pressable>
           </View>
@@ -528,7 +535,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
             </View>
           </View>
         </Modal>
-      </View>
+      </LinearGradient>
 
       <Animated.View pointerEvents="none" style={{
         position: "absolute", alignSelf: "center", bottom: 160,

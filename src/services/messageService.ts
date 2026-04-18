@@ -36,12 +36,7 @@ class MessageService {
             throw new Error('No access token found');
         }
         try {
-            const response = await axiosInstance.get<ConversationItem[]>(`/api/messages`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            console.log('Response from /api/messages:', response.data);
+            const response = await axiosInstance.get<ConversationItem[]>(`api/messages`);
             return response.data;
         } catch (error: any) {
             if (error.response) {
@@ -60,16 +55,7 @@ class MessageService {
 
     // Get all messages in a conversation (returns individual messages)
     async getMessagesWithUser(userId: string): Promise<ServerMessage[]> {
-        const token = await AsyncStorage.getItem('userToken');
-        if (!token) {
-            throw new Error('No access token found');
-        }
-
-        const response = await axiosInstance.get<ServerMessage[]>(`/api/messages/${userId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        const response = await axiosInstance.get<ServerMessage[]>(`api/messages/${userId}`);
         return response.data;
     }
 }

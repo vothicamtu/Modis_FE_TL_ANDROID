@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { styles } from '../styles/loading.styles';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/Navigation';
+import { RootStackParamList } from '../navigation/types';
 
 export default function LoadingScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();

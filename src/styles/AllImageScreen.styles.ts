@@ -4,17 +4,6 @@ import Colors from "./color";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e8f4ff',
-  },
-  topBarWrapper: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 10,
-    backgroundColor: Colors.surface_strong,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(159,165,174,0.25)',
   },
   headerOverlay: {
     position: 'absolute',
@@ -27,6 +16,19 @@ export const styles = StyleSheet.create({
   },
   listContent: {
     paddingBottom: 110,
+  },
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 999,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 100,
   },
   textPrimary:   { color: Colors.text_primary },
   textSecondary: { color: Colors.text_secondary },

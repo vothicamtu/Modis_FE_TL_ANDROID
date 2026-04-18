@@ -117,7 +117,7 @@ function HomeScreen() {
                     >
                         {/* Hàng 0 */}
                         <View style={{ width, height }}>
-                            <ProfileScreen goToProfile={goToProfile} />
+                            <ProfileScreen goToHome={goToHome} />
                         </View>
                         <View style={{ width, height }}>
                             <TakeScreen goToMessage={goToMessage} goToProfile={goToProfile}/>
@@ -128,7 +128,7 @@ function HomeScreen() {
 
                         {/* Hàng 1 */}
                         <View style={{ width, height }}>
-                            <ProfileScreen />
+                            <ProfileScreen goToHome={goToHome} />
                         </View>
                         <View style={{ width, height }}>
                             <React_emoji_comment goToHome={goToHome} goToMessage={goToMessage} goToProfile={goToProfile} panGesture={gesture} />

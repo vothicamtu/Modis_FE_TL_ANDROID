@@ -5,10 +5,55 @@ import Colors from "./color";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e8f4ff',
-    paddingHorizontal: scale(16),
   },
-
+  safeAreaAbsolute: {
+    zIndex: 10,
+    width: '100%',
+    backgroundColor: 'transparent',
+  },
+  scrollContent: {
+    paddingTop: 0,
+    paddingHorizontal: 16,
+  },
+  headerBarModern: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 0,    // Đã có View padding bên ngoài
+    paddingBottom: 12,
+    paddingHorizontal: 16,
+    backgroundColor: 'transparent',
+  },
+  backButtonModern: {
+    width: 44,
+    height: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 12,
+    backgroundColor: 'white',
+    borderRadius: 22,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  dragHandle: {
+    width: 40,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: Colors.neutral_light1,
+  },
+  headerBar: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   // HEADER
   title: {
     fontSize: scale(18),

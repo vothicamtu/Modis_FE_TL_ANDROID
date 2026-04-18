@@ -7,7 +7,6 @@ export const friendsService = {
   // Danh sách bạn bè
 
   getFriends: async (userId: string): Promise<Friend[]> => {
-    console.log("URL:", api.defaults.baseURL + "api/friends/list");
     const res = await api.get("api/friends/list", {
       params: { userId },
     });

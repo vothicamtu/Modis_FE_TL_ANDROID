@@ -10,7 +10,7 @@ export type PostFilterResponse = ImagePostDTO[] | PostResponse[];
 export const postService = {
     sendPost: async (req: PostRequest): Promise<PostResponse> => {
         console.log("URL đang gọi:", api.defaults.baseURL + "api/posts/create");
-        const response = await api.post('api/posts/create', req)
+        const response = await api.post("api/posts/create", req)
         return response.data
     },
 
@@ -20,13 +20,13 @@ export const postService = {
 
 
     filterPosts: async (filterRequest: PostFilterRequest): Promise<PostDTO[] | PostSimpleDTO[]> => {
-        const response = await api.get('api/posts/filter', { params: filterRequest });
+        const response = await api.get("api/posts/filter", { params: filterRequest });
         return response.data;
     },
 
     reactToPost: async (reactRequest: ReactRequest): Promise<ImageFullItem> => {
         console.log("URL đang gọi:", api.defaults.baseURL + "api/posts/react");
-        const response = await api.put('api/posts/react', reactRequest)
+        const response = await api.put("api/posts/react", reactRequest)
         return response.data;
     },
 
@@ -46,12 +46,33 @@ export const postService = {
 
         console.log("[uploadImage] URI:", normalizedUri, "| type:", mimeType, "| name:", fileName);
 
-        const response = await api.post("api/posts/upload/image", formData, {
-          timeout: 60000,
-          headers: { "Content-Type": "multipart/form-data" }
-        });
+        try {
+          const token = await loadTokenFromStorage();
+          const baseURL = api.defaults.baseURL?.endsWith("/") ? api.defaults.baseURL : `${api.defaults.baseURL}/`;
+          
+          // Sử dụng fetch cho upload để tránh lỗi boundary của Axios trên Android
+          const response = await fetch(`${baseURL}api/posts/upload/image`, {
+            method: "POST",
+            body: formData,
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Accept": "application/json",
+              // QUAN TRỌNG: KHÔNG ĐƯỢC SET Content-Type: multipart/form-data ở đây
+              // fetch sẽ tự động sinh Content-Type kèm theo boundary chính xác.
+            },
+          });
 
-        console.log("[uploadImage] Success:", response.data);
-        return response.data.url;
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Upload failed with status ${response.status}: ${errorText}`);
+          }
+
+          const result = await response.json();
+          console.log("[uploadImage] Success:", result);
+          return result.url;
+        } catch (error) {
+          console.error("[uploadImage] Error:", error);
+          throw error;
+        }
       },
 };

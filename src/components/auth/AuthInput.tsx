@@ -19,35 +19,49 @@ export const AuthInput = ({ label, value, onChangeText, placeholder, secureTextE
   return (
     <View style={formStyles.inputContainer}>
       <Text style={formStyles.label}>{label}</Text>
-      <TextInput
-        testID={testID}
+      <View 
         style={[
-          formStyles.input,
-          focused && styles.inputFocused,
+          formStyles.input, 
+          { paddingHorizontal: 0, paddingVertical: 0, overflow: 'hidden' },
+          focused && styles.inputFocused
         ]}
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        placeholderTextColor={Colors.text_hint}
-        secureTextEntry={secureTextEntry}
-        autoCapitalize="none"
-        keyboardType={keyboardType}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-      />
+      >
+        <TextInput
+          testID={testID}
+          style={{ 
+            paddingVertical: 14, 
+            paddingHorizontal: 16, 
+            fontSize: 15, 
+            color: Colors.text_primary, 
+            backgroundColor: 'transparent',
+            width: '100%',
+          }}
+          value={value}
+          onChangeText={onChangeText}
+          placeholder={placeholder}
+          placeholderTextColor={Colors.text_hint}
+          secureTextEntry={secureTextEntry}
+          autoCapitalize="none"
+          keyboardType={keyboardType}
+          underlineColorAndroid="transparent"
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   inputFocused: {
-    borderColor: Colors.accent,
+    borderColor: Colors.primary,
     borderWidth: 2,
-    borderRadius: 14,
-    shadowColor: Colors.accent,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 3,
+    borderRadius: 26,
+    backgroundColor: 'rgba(255, 255, 255, 0.6)', // Sáng hơn và rõ ràng hơn
+    shadowColor: Colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 8,
   },
 });

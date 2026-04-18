@@ -5,7 +5,14 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 28,
+  },
+  safeArea: {
+    flex: 1,
     justifyContent: 'center',
+  },
+  backButton: {
+    marginBottom: 8,
+    padding: 4,
   },
 
   containerSignup: {
@@ -42,13 +49,13 @@ export const styles = StyleSheet.create({
     borderColor: 'rgba(137,212,255,0.5)',
     paddingVertical: 14,
     paddingHorizontal: 16,
-    borderRadius: 14,
-    backgroundColor: Colors.surface_strong,
+    borderRadius: 26, // Bo tròn hơn giống trang react
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
     fontSize: 15,
     color: Colors.text_primary,
     shadowColor: Colors.secondary,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
@@ -92,9 +99,9 @@ export const styles = StyleSheet.create({
     marginBottom: 32,
   },
   logoImage: {
-    width: 180,
-    height: 180,
-    marginBottom: 8,
+    width: 120,
+    height: 120,
+    marginBottom: 16,
   },
 
   card: {

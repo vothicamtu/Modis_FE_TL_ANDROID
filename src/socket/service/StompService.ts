@@ -21,7 +21,7 @@ class StompService {
   //connect to the server
   async connect(): Promise<void> {
     if (this.client?.connected || this.isConnecting) {
-      console.log('Already connected or connecting', this.client?.connected);
+      // Reduced log level for redundant connection attempts
       return;
     }
 
@@ -40,7 +40,9 @@ class StompService {
       }
 
       const baseURL = api.defaults.baseURL ?? 'http://localhost:8080/';
-      const wsUrl = `${baseURL}ws?token=${encodeURIComponent(token)}`;
+      // Đảm bảo baseURL kết thúc bằng / và wsUrl không bắt đầu bằng /
+      const cleanBaseURL = baseURL.endsWith('/') ? baseURL : `${baseURL}/`;
+      const wsUrl = `${cleanBaseURL}ws?token=${encodeURIComponent(token)}`;
 
       console.log('Connecting to STOMP server at:', wsUrl);
 

@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import color from '../../../styles/color';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type Props = {
     goToHome: () => void;
@@ -8,23 +9,40 @@ type Props = {
 function MessagesHeader({ goToHome }: Props) {
     return (
         <View testID="messages-header" style={styles.headerContainer}>
-            {/* spacer — keeps title centered */}
-            <View style={styles.backBtn} />
-            <Text testID="messages-header-title" style={styles.headerText}>Messages</Text>
-            <View style={styles.backBtn} />
+            <TouchableOpacity 
+                testID="messages-header-back-button"
+                onPress={goToHome} 
+                style={styles.backButtonModern}
+            >
+                <Icon name="arrow-back" size={24} color={color.text_primary} />
+            </TouchableOpacity>
+            <Text testID="messages-header-title" style={styles.headerText}>Tin nhắn</Text>
+            <View style={{ width: 44 }} />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     headerContainer: {
-        paddingVertical: 16,
-        paddingHorizontal: 20,
+        paddingTop: 0,    // Đã có View padding bên ngoài
+        paddingBottom: 12,
+        paddingHorizontal: 16,
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: color.surface_strong,
-        borderBottomWidth: 1,
-        borderBottomColor: 'rgba(159,165,174,0.25)',
+        backgroundColor: 'transparent', // Đồng bộ không nền
+    },
+    backButtonModern: {
+        width: 44,
+        height: 44,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        borderRadius: 22,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
     },
     backBtn: {
         width: 36,

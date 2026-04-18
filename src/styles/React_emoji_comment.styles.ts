@@ -15,8 +15,6 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#e8f4ff',
-    alignItems: 'center',
     position: 'relative',
   },
 
@@ -31,11 +29,8 @@ export const styles = StyleSheet.create({
   },
 
   post_list: {
+    flex: 1,
     width: '100%',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    zIndex: 2,
   },
 
   post_item: {
@@ -170,6 +165,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 12,
     fontSize: 15,
     color: Colors.text_primary,
+    borderRadius: 26,
   },
   send_icon_wrapper: {
     width: 34,

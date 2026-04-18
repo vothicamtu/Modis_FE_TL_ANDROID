@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StatusBar, Alert, SafeAreaView, ActivityIndicator } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StatusBar, Alert, ActivityIndicator, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthInput } from '../components/auth/AuthInput';
 import { styles } from '../styles/loginScreen.styles';
 import { authController } from '../controller/auth.controller';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/Navigation';
+import { RootStackParamList } from '../navigation/types';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Colors from '../styles/color';
@@ -27,7 +28,10 @@ export default function LoginScreen() {
     const result = await authController.login(username, password);
     setLoading(false);
     if (result.success) {
-      navigation.navigate('HomeScreen');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'HomeScreen' }],
+      });
     } else {
       Alert.alert('Thông báo', result.message);
     }
@@ -36,65 +40,56 @@ export default function LoginScreen() {
   return (
     <LinearGradient colors={['#ede8ff', '#e8f4ff', '#e8fff8']} style={styles.container}>
       <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+          <View style={styles.topSection}>
+            <Image
+              source={require('../assets/image/LOGO_MODIS_TACH_NEN.png')}
+              style={styles.logoImage}
+              resizeMode="contain"
+            />
+            <Text testID="login-title" style={styles.title}>Chào mừng trở lại</Text>
+            <Text style={styles.subtitle}>Đăng nhập để tiếp tục kết nối</Text>
+          </View>
 
-      <SafeAreaView>
-        <TouchableOpacity testID="login-back-button" onPress={() => navigation.goBack()} style={{ marginBottom: 8 }}>
-          <Icon name="arrow-back-ios" size={20} color={Colors.accent} />
-        </TouchableOpacity>
+          <View style={styles.card}>
+            <AuthInput
+              testID="login-username-input"
+              label="Tên đăng nhập"
+              value={username}
+              onChangeText={setUsername}
+              placeholder="Nhập tên đăng nhập"
+            />
+            <AuthInput
+              testID="login-password-input"
+              label="Mật khẩu"
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Nhập mật khẩu"
+              secureTextEntry
+            />
 
-        <View style={styles.topSection}>
-          <Image
-            testID="login-logo"
-            source={require('../assets/image/LOGO_MODIS_TACH_NEN.png')}
-            style={styles.logoImage}
-            resizeMode="contain"
-          />
-        </View>
-
-        <View style={styles.card} testID="login-card">
-          <Text style={styles.title}>Welcome back</Text>
-          <Text style={styles.subtitle}>Sign in to continue</Text>
-
-          <AuthInput
-            testID="login-username-input"
-            label="Username"
-            value={username}
-            onChangeText={setUsername}
-            placeholder="Your username..."
-          />
-
-          <AuthInput
-            testID="login-password-input"
-            label="Password"
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Your password..."
-            secureTextEntry
-          />
-
-          <TouchableOpacity
-            testID="login-button"
-            accessibilityLabel="login-button"
-            style={[styles.button, isValid ? styles.buttonActive : styles.buttonDisabled]}
-            onPress={onLoginPress}
-            disabled={!isValid || loading}
-          >
-            {loading ? (
-              <ActivityIndicator testID="login-loading" color={Colors.text_primary} />
-            ) : (
-              <Text style={styles.buttonText}>Login</Text>
-            )}
-          </TouchableOpacity>
+            <TouchableOpacity
+              testID="login-submit-button"
+              style={[styles.button, isValid ? styles.buttonActive : styles.buttonDisabled]}
+              onPress={onLoginPress}
+              disabled={!isValid || loading}
+            >
+              {loading ? (
+                <ActivityIndicator color={Colors.text_primary} />
+              ) : (
+                <Text style={styles.buttonText}>Đăng nhập</Text>
+              )}
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.footer}>
-            <Text style={{ color: Colors.text_hint, fontSize: 14 }}>
-              Don't have an account?{' '}
-              <Text testID="login-signup-link" style={styles.linkText} onPress={() => navigation.navigate('SignupScreen')}>
-                Sign up
-              </Text>
-            </Text>
+            <Text style={{ color: Colors.text_hint }}>Chưa có tài khoản?</Text>
+            <TouchableOpacity testID="login-signup-link" onPress={() => navigation.navigate('SignupScreen')}>
+              <Text style={styles.linkText}>Đăng ký ngay</Text>
+            </TouchableOpacity>
           </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </LinearGradient>
   );

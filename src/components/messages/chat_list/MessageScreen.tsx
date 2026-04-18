@@ -3,29 +3,39 @@ import MessagesHeader from "./MessageHeader";
 import MessageItem from "./MessageItem";
 import MessagesList from "./MessageList";
 import { View, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import MessageService, { ConversationItem } from "../../../services/messageService";
 import { useState } from "react";
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../../navigation/Navigation';
+import { RootStackParamList } from '../../../navigation/types';
 import StompService from "../../../socket/service/StompService";
 import color from "../../../styles/color";
+
+import LinearGradient from 'react-native-linear-gradient';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f0eeff',
     }
 });
 
-type ReactEmojiCommentProps = {
-    goToHome: () => void;
+type MessageScreenProps = {
+    goToHome?: () => void;
 };
 
-function MessageScreen({ goToHome }: ReactEmojiCommentProps) {
+function MessageScreen({ goToHome }: MessageScreenProps) {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const [conversation, setConversation] = useState<ConversationItem[]>([]);
     const [loading, setLoading] = useState(false);
+
+    const handleGoBack = () => {
+        if (goToHome) {
+            goToHome();
+        } else {
+            navigation.goBack();
+        }
+    };
 
     const handleConversationPress = (item: ConversationItem) => {
         navigation.navigate('ConversationScreen', {
@@ -56,14 +66,20 @@ function MessageScreen({ goToHome }: ReactEmojiCommentProps) {
     );
 
     return (
-        <View style={styles.container}>
-            <MessagesHeader goToHome={goToHome} />
-            <MessagesList
-                messages={conversation}
-                onItemPress={handleConversationPress}
-                loading={loading}
-            />
-        </View>
+        <LinearGradient colors={['#ede8ff', '#e8f4ff', '#e8fff8']} style={styles.container}>
+            <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+                <View style={{ paddingTop: 4 }}>
+                    <MessagesHeader goToHome={handleGoBack} />
+                </View>
+                <View style={{ flex: 1 }}>
+                    <MessagesList
+                        messages={conversation}
+                        onItemPress={handleConversationPress}
+                        loading={loading}
+                    />
+                </View>
+            </SafeAreaView>
+        </LinearGradient>
     );
 }
 

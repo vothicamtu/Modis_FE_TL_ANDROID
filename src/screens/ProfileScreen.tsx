@@ -32,11 +32,21 @@ type Profile = {
 };
 
 type Props = {
-  goToProfile?: () => void;
+  goToHome?: () => void;
 };
 
-export default function ProfileScreen({ goToProfile }: Props) {
+export default function ProfileScreen({ goToHome }: Props) {
   const navigation = useNavigation();
+
+  const handleBack = () => {
+    if (goToHome) {
+      goToHome();
+    } else if (navigation.canGoBack()) {
+      navigation.goBack();
+    } else {
+      console.warn('ProfileScreen: No history and no goToHome provided');
+    }
+  };
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [passwordModal, setPasswordModal] = useState(false);
@@ -176,18 +186,30 @@ export default function ProfileScreen({ goToProfile }: Props) {
 
   return (
     <LinearGradient colors={['#ede8ff', '#e8f4ff', '#e8fff8']} style={{ flex: 1 }}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
       <View style={{ flex: 1 }}>
+        <SafeAreaView style={{ zIndex: 10, width: '100%', backgroundColor: 'transparent' }} edges={['top']}>
+          <View style={{ paddingTop: 4 }}>
+            <View style={{ paddingBottom: 12, paddingHorizontal: 16 }}>
+              <TouchableOpacity
+                testID="profile-back-button"
+                onPress={handleBack}
+                style={styles.backButtonModern}
+              >
+                <Icon name="arrow-back" size={24} color={Colors.text_primary} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </SafeAreaView>
+
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 120 }}
+          contentContainerStyle={{ paddingBottom: 40, paddingTop: 0 }}
           style={{ flex: 1 }}
           bounces={false}
           overScrollMode="never"
           testID="profile-scroll"
         >
-          <View style={styles.back} />
-
           {/* Avatar Section */}
           <View style={styles.header} testID="profile-header">
             <Image

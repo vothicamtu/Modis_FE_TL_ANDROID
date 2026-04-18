@@ -13,15 +13,15 @@ import {
   ActivityIndicator,
 } from "react-native";
 import Colors from "../styles/color";
-import { useNavigation, NavigationProp} from "@react-navigation/native";
-import type { RootStackParamList } from "../navigation/Navigation";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
+import type { RootStackParamList } from "../navigation/types";
 import { optimizeCloudinaryUrl } from "../utils/cloudinary";
 import { CameraRoll } from "@react-native-camera-roll/camera-roll";
 import { friendsService } from "../services/friends.service";
 import { Friend } from "../types/friend/Friend";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import postController from "../controller/post.controller";
-import { PostRequest, PostResponse } from "../types";
+import { PostRequest } from "../types";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type SendPhotoScreenProps = {
@@ -48,7 +48,6 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
   const [loading, setLoading] = useState(false);
   const [caption, setCaption] = useState("");
 
-
   useEffect(() => {
     const showSub = Keyboard.addListener("keyboardDidShow", () => {
       setShowInput(true);
@@ -68,10 +67,10 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
   useEffect(() => {
     AsyncStorage.getItem("userId").then(setUserId);
   }, []);
+
   useEffect(() => {
     if (!userId) return;
 
-    // Gọi thẳng service với userId đã có sẵn, không qua controller
     friendsService.getFriends(userId).then(setFriends).catch(console.error);
 
     const off = on("friendsUpdated", () => {
@@ -115,12 +114,11 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
     setOnCaptionPattern((prev) => !prev);
   };
 
-   const applyCaption = (text: string) => {
-       setCaption(text);
-       setOnCaptionPattern(false);
-   };
+  const applyCaption = (text: string) => {
+    setCaption(text);
+    setOnCaptionPattern(false);
+  };
 
-  //  SAVE IMAGE 
   const saveImage = async () => {
     try {
       await CameraRoll.save(photoUri, { type: "photo" });
@@ -153,8 +151,7 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
       setLoading(true);
 
       const urlImage = await postController.uploadImage(photoUri);
-      console.log("Caption đang gửi:", caption);
-
+      
       const postRequest: PostRequest = {
         senderId: userId,
         receivers: receivers.map((id) => ({
@@ -167,13 +164,12 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
       };
 
       const newPost = await postController.sendPost(postRequest);
-
       //  realtime: phát event toàn app
-      globalThis.__NEW_POST__ = newPost;
+      (globalThis as any).__NEW_POST__ = newPost;
 
       navigation.goBack();
     } catch (e: any) {
-      console.error("Send post error:", e?.response?.status, e?.response?.data, e?.message);
+      console.error("Send post error:", e);
     } finally {
       setLoading(false);
     }
@@ -181,7 +177,6 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
 
   return (
     <SafeAreaView style={styles.container} testID="send-photo-screen">
-      {/*TOP BAR*/}
       <View style={styles.send_to}>
         <Text style={{ fontSize: 20, fontWeight: "bold", color: Colors.text_primary }}>
           Gửi đến ...
@@ -195,7 +190,6 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
         </Pressable>
       </View>
 
-      {/*IMAGE PREVIEW*/}
       <View style={styles.image_area} testID="send-photo-preview-area">
         <Image testID="send-photo-preview-image" source={{ uri: photoUri }} style={styles.image} />
 
@@ -224,7 +218,6 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
         </View>
       </View>
 
-      {/*SEND BAR*/}
       <View style={styles.send_btn_area}>
         <Pressable
           testID="send-photo-close-button"
@@ -269,7 +262,6 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
         </Pressable>
       </View>
 
-      {/*FRIEND LIST*/}
       <View style={styles.friend_list} testID="send-photo-friend-list">
         <View style={styles.friend}>
           <Pressable
@@ -326,7 +318,6 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
         />
       </View>
 
-      {/*CAPTION PATTERN OVERLAY*/}
       {onCaptionPattern && (
         <View
           onTouchEnd={() => {
@@ -339,91 +330,91 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
 
       {onCaptionPattern && (
         <View style={styles.caption_pattern} testID="send-photo-caption-panel">
-        <View
-          style={{
-            width: 45,
-            height: 7,
-            borderRadius: 5,
-            backgroundColor: Colors.light_gray,
-            marginTop: 10,
-          }}
-        />
+          <View
+            style={{
+              width: 45,
+              height: 7,
+              borderRadius: 5,
+              backgroundColor: Colors.light_gray,
+              marginTop: 10,
+            }}
+          />
 
-        <Text style={[styles.general_text, { margin: 15, fontSize: 20 }]}>
-          Chú thích
-        </Text>
-
-        <View style={styles.general}>
-          <Text style={[styles.general_text, { color: Colors.light_gray }]}>
-            General
+          <Text style={[styles.general_text, { margin: 15, fontSize: 20 }]}>
+            Chú thích
           </Text>
-          <View style={styles.box_area}>
-            <Pressable
-              testID="caption-text-button"
-              onPress={() => {
-                setOnCaptionPattern(false);
-                setTimeout(() => inputRef.current?.focus(), 300);
-              }}
-              style={styles.box_radius}
-            >
-              <Text style={styles.text_caption}>Aa Văn bản</Text>
-            </Pressable>
 
-            <Pressable
-              testID="caption-time-button"
-              onPress={() => {
-                const now = new Date();
-                const time = now.toLocaleTimeString("vi-VN", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: false,
-                });
-                applyCaption(`⏰ ${time}`);
-              }}
-              style={styles.box_radius}
-            >
-              <Text style={styles.text_caption}>⏰ 10:27</Text>
-            </Pressable>
+          <View style={styles.general}>
+            <Text style={[styles.general_text, { color: Colors.light_gray }]}>
+              General
+            </Text>
+            <View style={styles.box_area}>
+              <Pressable
+                testID="caption-text-button"
+                onPress={() => {
+                  setOnCaptionPattern(false);
+                  setTimeout(() => inputRef.current?.focus(), 300);
+                }}
+                style={styles.box_radius}
+              >
+                <Text style={styles.text_caption}>Aa Văn bản</Text>
+              </Pressable>
+
+              <Pressable
+                testID="caption-time-button"
+                onPress={() => {
+                  const now = new Date();
+                  const time = now.toLocaleTimeString("vi-VN", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  });
+                  applyCaption(`⏰ ${time}`);
+                }}
+                style={styles.box_radius}
+              >
+                <Text style={styles.text_caption}>⏰ 10:27</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
-        <View style={styles.decorative}>
-          <Text style={[styles.general_text, { color: Colors.light_gray }]}>
-            Decorative
-          </Text>
-          <View style={styles.box_area}>
-            <Pressable
-              testID="caption-party-button"
-              onPress={() => applyCaption("Party Time!")}
-              style={[styles.box_radius, { backgroundColor: Colors.cyan }]}
-            >
-              <Text style={[styles.text_caption, { color: Colors.black }]}>Party Time!</Text>
-            </Pressable>
+          <View style={styles.decorative}>
+            <Text style={[styles.general_text, { color: Colors.light_gray }]}>
+              Decorative
+            </Text>
+            <View style={styles.box_area}>
+              <Pressable
+                testID="caption-party-button"
+                onPress={() => applyCaption("Party Time!")}
+                style={[styles.box_radius, { backgroundColor: Colors.cyan }]}
+              >
+                <Text style={[styles.text_caption, { color: Colors.black }]}>Party Time!</Text>
+              </Pressable>
 
-            <Pressable
-              testID="caption-ootd-button"
-              onPress={() => applyCaption("🕶️ OOTD")}
-              style={[styles.box_radius, { backgroundColor: Colors.white }]}
-            >
-              <Text style={[styles.text_caption, { color: Colors.black }]}>🕶️ OOTD</Text>
-            </Pressable>
+              <Pressable
+                testID="caption-ootd-button"
+                onPress={() => applyCaption("🕶️ OOTD")}
+                style={[styles.box_radius, { backgroundColor: Colors.white }]}
+              >
+                <Text style={[styles.text_caption, { color: Colors.black }]}>🕶️ OOTD</Text>
+              </Pressable>
 
-            <Pressable
-              testID="caption-missyou-button"
-              onPress={() => applyCaption("🥰 Miss you")}
-              style={[styles.box_radius, { backgroundColor: Colors.organce }]}
-            >
-              <Text style={styles.text_caption}>🥰 Miss you</Text>
-            </Pressable>
+              <Pressable
+                testID="caption-missyou-button"
+                onPress={() => applyCaption("🥰 Miss you")}
+                style={[styles.box_radius, { backgroundColor: Colors.organce }]}
+              >
+                <Text style={styles.text_caption}>🥰 Miss you</Text>
+              </Pressable>
 
-            <Pressable
-              testID="caption-iloveyou-button"
-              onPress={() => applyCaption("😍 I love you")}
-              style={[styles.box_radius, { backgroundColor: Colors.red }]}
-            >
-              <Text style={styles.text_caption}>😍 I love you</Text>
-            </Pressable>
+              <Pressable
+                testID="caption-iloveyou-button"
+                onPress={() => applyCaption("😍 I love you")}
+                style={[styles.box_radius, { backgroundColor: Colors.red }]}
+              >
+                <Text style={styles.text_caption}>😍 I love you</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
         </View>
       )}
     </SafeAreaView>

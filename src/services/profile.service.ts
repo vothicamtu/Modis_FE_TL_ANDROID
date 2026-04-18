@@ -1,5 +1,6 @@
 import apiClient from '../api/config';
 import { ProfileRespone } from '../types/auth/profile';
+import { loadTokenFromStorage } from '../utils/token';
 
 export const profileService = {
   getProfileById: async (id: string): Promise<ProfileRespone> => {
@@ -48,12 +49,29 @@ export const profileService = {
       name: `avatar_${id}.${ext}`,
     } as any);
 
-    const response = await apiClient.put(
-      `users/${id}/update-avatar`,
-      formData,
-      { headers: { 'Content-Type': 'multipart/form-data' } }
-    );
+    try {
+      const token = await loadTokenFromStorage();
+      const baseURL = apiClient.defaults.baseURL?.endsWith("/") ? apiClient.defaults.baseURL : `${apiClient.defaults.baseURL}/`;
+      
+      const response = await fetch(`${baseURL}users/${id}/update-avatar`, {
+        method: "PUT",
+        body: formData,
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Accept": "application/json",
+          // KHÔNG SET Content-Type ở đây
+        },
+      });
 
-    return response.data;
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Avatar update failed with status ${response.status}: ${errorText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Lỗi tại profileService.updateAvatar:", error);
+      throw error;
+    }
   },
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import Colors from '../styles/color';
-import { RootStackParamList } from '../navigation/Navigation';
+import { RootStackParamList } from '../navigation/types';
 
 const BottomBar = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();

@@ -3,7 +3,7 @@ import { loadTokenFromStorage } from "../utils/token";
 
 const api = axios.create({
     baseURL: "https://modis-backend.onrender.com/",
-    timeout: 60000,
+    timeout: 90000, // 90s — Render free tier cold start có thể mất tới 80s
 });
 
 // Interceptor gắn JWT cho tất cả request

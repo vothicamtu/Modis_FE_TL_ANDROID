@@ -4,7 +4,30 @@ import Colors from './color';
 export const styles = StyleSheet.create({
   container: { flex: 1 },
 
-  back: { margin: 12 },   
+  headerBar: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  backButtonModern: {
+    width: 44,
+    height: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 12,
+    backgroundColor: 'white',
+    borderRadius: 22,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
   header: {
     alignItems: 'center',
