@@ -7,13 +7,13 @@ export default StyleSheet.create({
     flex: 1,
   },
   safeAreaAbsolute: {
-    zIndex: 10,
     width: '100%',
     backgroundColor: 'transparent',
   },
   scrollContent: {
     paddingTop: 0,
     paddingHorizontal: 16,
+    paddingBottom: scale(32),
   },
   headerBarModern: {
     flexDirection: 'row',
@@ -29,10 +29,7 @@ export default StyleSheet.create({
     height: 44,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 12,
-    backgroundColor: 'white',
     borderRadius: 22,
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -42,7 +39,6 @@ export default StyleSheet.create({
     width: 40,
     height: 4,
     borderRadius: 2,
-    backgroundColor: Colors.neutral_light1,
   },
   headerBar: {
     paddingHorizontal: 16,
@@ -54,39 +50,34 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  // HEADER
+  // HEADER - KHÔNG dùng hardcode Colors.text_primary/secondary
+  // Dùng dynamic color từ useColors() trong component
   title: {
     fontSize: scale(18),
-    color: Colors.text_primary,
     fontWeight: "bold",
     textAlign: "center",
   },
   subTitle: {
     fontSize: scale(14),
-    color: Colors.text_secondary,
     textAlign: "center",
     marginBottom: scale(12),
   },
 
-  // SEARCH
+  // SEARCH - KHÔNG dùng hardcode
   searchBox: {
     height: scale(48),
     borderRadius: scale(12),
-    backgroundColor: Colors.surface_strong,
     paddingHorizontal: scale(12),
-    color: Colors.text_primary,
     fontSize: scale(14),
     marginBottom: scale(10),
     borderWidth: 1,
-    borderColor: Colors.secondary,
   },
 
-  // SECTION
+  // SECTION - KHÔNG dùng hardcode
   sectionTitle: {
     marginTop: scale(16),
     marginBottom: scale(6),
     fontSize: scale(15),
-    color: Colors.primary,
     fontWeight: "bold",
   },
 
@@ -103,7 +94,6 @@ export default StyleSheet.create({
     borderRadius: scale(20),
     marginRight: scale(8),
     borderWidth: 2,
-    borderColor: Colors.primary,
   },
 
   avatarSmall: {
@@ -112,26 +102,22 @@ export default StyleSheet.create({
     borderRadius: scale(20),
     marginRight: scale(8),
     borderWidth: 2,
-    borderColor: Colors.primary,
   },
 
   name: {
     flex: 1,
-    color: Colors.text_primary,
     fontSize: scale(14),
   },
 
   icon: {
     width: scale(18),
     height: scale(18),
-    tintColor: Colors.text_secondary,
   },
 
   iconWrapper: {
     width: scale(32),
     height: scale(32),
     borderRadius: scale(16),
-    backgroundColor: 'rgba(74,74,106,0.12)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -146,19 +132,16 @@ export default StyleSheet.create({
     width: scale(32),
     height: scale(32),
     borderRadius: scale(16),
-    backgroundColor: 'rgba(74,74,106,0.12)',
     justifyContent: "center",
     alignItems: "center",
   },
   rejectIcon: {
     width: scale(16),
     height: scale(16),
-    tintColor: Colors.text_secondary,
   },
 
-  // BUTTONS
+  // BUTTONS - KHÔNG dùng hardcode
   addBtn: {
-    backgroundColor: Colors.primary,
     paddingHorizontal: scale(16),
     paddingVertical: scale(8),
     borderRadius: scale(8),
@@ -167,7 +150,6 @@ export default StyleSheet.create({
 
   addText: {
     fontWeight: "bold",
-    color: Colors.text_primary,
     fontSize: scale(13),
   },
 
@@ -189,7 +171,6 @@ export default StyleSheet.create({
   },
 
   shareText: {
-    color: Colors.text_secondary,
     fontSize: scale(14),
   },
 
@@ -202,8 +183,6 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: scale(12),
-    borderBottomWidth: 0.5,
-    borderBottomColor: Colors.neutral_light1,
   },
 
   inviteIcon: {
@@ -212,14 +191,12 @@ export default StyleSheet.create({
   },
 
   inviteText: {
-    color: Colors.text_primary,
     fontSize: scale(16),
     marginLeft: scale(12),
   },
 
   username: {
     fontSize: 12,
-    color: Colors.text_hint,
     marginTop: 2,
   },
 });

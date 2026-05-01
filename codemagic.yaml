@@ -1,0 +1,93 @@
+workflows:
+  # Workflow để build unsigned IPA cho React Native iOS
+  ios-unsigned-build:
+    name: iOS Unsigned IPA Build
+    max_build_duration: 60  # Timeout 60 phút
+    instance_type: mac_mini_m1
+    environment:
+      vars:
+        # ← THAY TÊN THẬT: Workspace file (thường là <TÊN_APP>.xcworkspace)
+        XCODE_WORKSPACE: "ios/Modis.xcworkspace"
+        # ← THAY TÊN THẬT: Scheme name (thường trùng tên app)
+        XCODE_SCHEME: "Modis"
+        # ← THAY TÊN THẬT: Tên app cho file IPA output
+        APP_NAME: "Modis"
+        # Disable Flipper cho build ổn định
+        NO_FLIPPER: 1
+        # Disable code signing - sẽ dùng Sideloadly re-sign sau
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGN_IDENTITY: ""
+        CODE_SIGNING_ALLOWED: NO
+      node: v20.11.0
+      xcode: latest
+      cocoapods: default
+    scripts:
+      # Bước 1: Install npm dependencies
+      - name: Install npm dependencies
+        script: |
+          echo " Installing npm dependencies..."
+          npm install
+      
+      # Bước 2: Install CocoaPods dependencies
+      - name: Install CocoaPods dependencies
+        script: |
+          echo " Installing CocoaPods dependencies..."
+          cd ios
+          pod install --repo-update
+          cd ..
+      
+      # Bước 3: Build và Archive (unsigned)
+      - name: Build iOS Archive (unsigned)
+        script: |
+          echo " Building iOS archive without code signing..."
+          xcodebuild archive \
+            -workspace $XCODE_WORKSPACE \
+            -scheme $XCODE_SCHEME \
+            -configuration Release \
+            -destination "generic/platform=iOS" \
+            -archivePath "$CM_BUILD_DIR/build/ios/archive/$APP_NAME.xcarchive" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_ALLOWED=NO \
+            PROVISIONING_PROFILE="" \
+            DEVELOPMENT_TEAM=""
+      
+      # Bước 4: Đóng gói thủ công thành IPA
+      - name: Create unsigned IPA manually
+        script: |
+          echo " Creating unsigned IPA file..."
+          
+          # Tạo thư mục Payload
+          mkdir -p "$CM_BUILD_DIR/Payload"
+          
+          # Copy .app file vào Payload
+          cp -r "$CM_BUILD_DIR/build/ios/archive/$APP_NAME.xcarchive/Products/Applications/$APP_NAME.app" "$CM_BUILD_DIR/Payload/"
+          
+          # Tạo file IPA bằng cách zip thư mục Payload
+          cd "$CM_BUILD_DIR"
+          zip -r "${APP_NAME}_unsigned.ipa" Payload/
+          
+          # Di chuyển IPA đến thư mục artifacts
+          mkdir -p "$CM_BUILD_DIR/build/ios/ipa"
+          mv "${APP_NAME}_unsigned.ipa" "$CM_BUILD_DIR/build/ios/ipa/"
+          
+          echo "Unsigned IPA created: ${APP_NAME}_unsigned.ipa"
+          
+          # Hiển thị thông tin file
+          ls -la "$CM_BUILD_DIR/build/ios/ipa/"
+    
+    # Artifacts - file IPA sẽ được lưu ở đây
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - build/ios/archive/*.xcarchive
+      - /tmp/xcodebuild_logs/*.log
+    
+    # Gửi email thông báo khi build xong
+    publishing:
+      email:
+        recipients:
+          # ← THAY EMAIL THẬT: Email của bạn để nhận thông báo
+          - camt91990@gmail.com
+        notify:
+          success: true    # Gửi email khi build thành công
+          failure: true    # Gửi email khi build thất bại

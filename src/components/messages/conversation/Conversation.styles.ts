@@ -1,12 +1,10 @@
 import { StyleSheet } from 'react-native';
 import color from '../../../styles/color';
 
-export const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#f0eeff',
-    },
+// NOTE: màu động (theme-aware) được inject qua props/inline style trong Conversation.tsx
+// File này chỉ giữ các style KHÔNG phụ thuộc màu theme
 
+export const styles = StyleSheet.create({
     headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -16,59 +14,38 @@ export const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     avatar: {
-        width: 42,
-        height: 42,
-        borderRadius: 21,
-        marginRight: 12,
-        borderWidth: 2,
+        width: 42, height: 42, borderRadius: 21,
+        marginRight: 12, borderWidth: 2,
         borderColor: color.primary,
     },
     avatarFallback: {
-        backgroundColor: 'rgba(124,111,171,0.15)',
         justifyContent: 'center',
         alignItems: 'center',
     },
     avatarInitial: {
-        color: color.accent,
         fontSize: 17,
         fontWeight: '700',
     },
-    headerText: {
-        flex: 1,
-    },
+    headerText: { flex: 1 },
     userName: {
         fontSize: 16,
         fontWeight: '700',
-        color: color.text_primary,
         letterSpacing: 0.2,
     },
     onlineStatus: {
         fontSize: 12,
-        color: color.accent,
         marginTop: 2,
     },
     backButtonModern: {
-        width: 44,
-        height: 44,
+        width: 44, height: 44,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
         borderRadius: 22,
         marginRight: 8,
-        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 3,
-    },
-    backIcon: {
-        width: 44,
-        height: 44,
-        marginRight: 4,
-        tintColor: color.text_secondary,
-        borderRadius: 22,
-        backgroundColor: 'rgba(255,255,255,0.9)',
-        padding: 11,
     },
 
     messageContainer: {
@@ -85,12 +62,8 @@ export const styles = StyleSheet.create({
         paddingRight: 4,
     },
     smallAvatar: {
-        width: 28,
-        height: 28,
-        borderRadius: 14,
-        marginRight: 8,
-        borderWidth: 1.5,
-        borderColor: 'rgba(159,165,174,0.4)',
+        width: 28, height: 28, borderRadius: 14,
+        marginRight: 8, borderWidth: 1.5,
     },
     messageBubble: {
         maxWidth: '72%',
@@ -98,10 +71,7 @@ export const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 18,
         borderBottomLeftRadius: 4,
-        backgroundColor: color.surface_strong,
         borderWidth: 1,
-        borderColor: 'rgba(159,165,174,0.25)',
-        shadowColor: color.accent,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.06,
         shadowRadius: 3,
@@ -113,8 +83,6 @@ export const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 18,
         borderBottomRightRadius: 4,
-        backgroundColor: color.primary,
-        shadowColor: color.primary,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
@@ -122,19 +90,11 @@ export const styles = StyleSheet.create({
     },
     messageText: {
         fontSize: 15,
-        color: color.text_primary,
         lineHeight: 21,
     },
     messageTextRight: {
         fontSize: 15,
-        color: color.white,
         lineHeight: 21,
-    },
-    timestamp: {
-        fontSize: 11,
-        color: color.text_hint,
-        marginTop: 4,
-        marginHorizontal: 4,
     },
 
     inputContainer: {
@@ -146,41 +106,26 @@ export const styles = StyleSheet.create({
     },
     textInputWrapper: {
         flex: 1,
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
         borderRadius: 24,
         paddingHorizontal: 16,
         paddingVertical: 0,
         height: 48,
         justifyContent: 'center',
         borderWidth: 1.5,
-        borderColor: 'rgba(254,158,199,0.6)',
-        shadowColor: 'rgba(254,158,199,1)',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.15,
         shadowRadius: 4,
         elevation: 2,
     },
     textInput: {
         fontSize: 15,
-        color: color.text_primary,
         maxHeight: 100,
         paddingVertical: 0,
     },
-    iconButton: {
-        width: 48,
-        height: 48,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     sendButton: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        backgroundColor: color.primary,
+        width: 48, height: 48, borderRadius: 24,
         justifyContent: 'center',
         alignItems: 'center',
         marginLeft: 8,
-        shadowColor: color.primary,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.35,
         shadowRadius: 6,

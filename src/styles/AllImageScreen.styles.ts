@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import Colors from "./color";
 
 export const styles = StyleSheet.create({
   container: {
@@ -19,7 +18,6 @@ export const styles = StyleSheet.create({
   },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255,255,255,0.7)',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 999,
@@ -29,13 +27,5 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 100,
-  },
-  textPrimary:   { color: Colors.text_primary },
-  textSecondary: { color: Colors.text_secondary },
-  textHint:      { color: Colors.text_hint },
-  accentButton: {
-    backgroundColor: Colors.accent,
-    padding: 12,
-    borderRadius: 8,
   },
 });

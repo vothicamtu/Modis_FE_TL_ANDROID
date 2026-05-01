@@ -1,9 +1,7 @@
 import { Dimensions, StyleSheet } from "react-native";
-import Colors from "../styles/color";
 
 export const styles = StyleSheet.create({
   general_text: {
-    color: Colors.text_primary,
     fontSize: 14,
     fontWeight: 'bold',
   },
@@ -23,7 +21,6 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 999,
-    borderColor: Colors.primary,
     borderWidth: 3,
     overflow: 'hidden',
     justifyContent: 'center',
@@ -33,7 +30,6 @@ export const styles = StyleSheet.create({
     width: 150,
     height: 50,
     flexDirection: 'row',
-    backgroundColor: Colors.neutral_dark2,
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
@@ -41,7 +37,6 @@ export const styles = StyleSheet.create({
     marginLeft: 50,
     marginRight: 40,
     borderWidth: 1,
-    borderColor: Colors.primary,
   },
   camera_area: {
     width: "100%",
@@ -69,7 +64,6 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.secondary,
   },
   take_btn: {
     width: 100,
@@ -84,12 +78,10 @@ export const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     borderWidth: 6,
-    borderColor: Colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
+    shadowOpacity: 0.35,
     shadowRadius: 12,
     elevation: 8,
   },
@@ -97,7 +89,6 @@ export const styles = StyleSheet.create({
     width: 75,
     height: 75,
     borderRadius: 35,
-    backgroundColor: Colors.surface_strong,
   },
   history: {
     width: "100%",

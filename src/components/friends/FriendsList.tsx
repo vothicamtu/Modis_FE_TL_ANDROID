@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  Alert,
-} from "react-native";
-
+import { View, Text, Image, TouchableOpacity, FlatList, Alert } from "react-native";
 import styles from "../../styles/FriendsScreen.styles";
 import friendsController from "../../controller/friends.controller";
 import { Friend } from "../../types/friend/Friend";
 import { emit, on } from "../../utils/eventBus";
+import { useColors } from "../../hook/useColors";
 
 export default function FriendsList() {
   const [friends, setFriends] = useState<Friend[]>([]);
+  const C = useColors();
 
   useEffect(() => {
     loadUserAndFriends();
@@ -57,7 +51,7 @@ export default function FriendsList() {
 
   return (
     <>
-      <Text testID="friends-list-title" style={styles.sectionTitle}>Bạn bè của bạn</Text>
+      <Text testID="friends-list-title" style={[styles.sectionTitle, { color: C.primary }]}>Bạn bè của bạn</Text>
 
       <FlatList
         testID="friends-list-flatlist"
@@ -72,25 +66,28 @@ export default function FriendsList() {
                   ? { uri: item.avatarUrl }
                   : require("../../assets/image/avt.png")
               }
-              style={styles.avatar}
+              style={[styles.avatar, { borderColor: C.primary }]}
             />
 
-            <Text testID={`friend-name-${item.friendReqId}`} style={styles.name}>
+            <Text testID={`friend-name-${item.friendReqId}`} style={[styles.name, { color: C.textPrimary }]}>
               {item.fullname || item.username}
             </Text>
 
             <TouchableOpacity testID={`friend-unfriend-${item.friendReqId}`} onPress={() => handleUnfriend(item.friendReqId)}>
-              <View style={styles.iconWrapper}>
-                <Image
-                  source={require("../../assets/image/close.png")}
-                  style={styles.icon}
-                />
+              <View style={{
+                width: 36, height: 36, borderRadius: 18,
+                backgroundColor: C.btnGhostBg,
+                borderWidth: 1.5, borderColor: C.btnGhostBorder,
+                justifyContent: 'center', alignItems: 'center',
+                elevation: 3,
+              }}>
+                <Image source={require("../../assets/image/close.png")} style={{ width: 16, height: 16, tintColor: C.btnGhostIcon }} />
               </View>
             </TouchableOpacity>
           </View>
         )}
         ListEmptyComponent={
-          <Text testID="friends-list-empty" style={{ color: "#888", marginLeft: 16 }}>
+          <Text testID="friends-list-empty" style={{ color: C.textHint, marginLeft: 16 }}>
             Bạn chưa có bạn bè
           </Text>
         }

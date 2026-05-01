@@ -6,28 +6,20 @@ import { styles } from '../styles/loading.styles';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
+import { useColors } from '../hook/useColors';
 
 export default function LoadingScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const C = useColors();
 
-  const login = async () => {
-    navigation.navigate('LoginScreen');
-  };
-
-  const signup = async () => {
-    navigation.navigate('SignupScreen');
-  };
+  const login = async () => { navigation.navigate('LoginScreen'); };
+  const signup = async () => { navigation.navigate('SignupScreen'); };
 
   return (
-    <LinearGradient
-      colors={['#ede8ff', '#e8f4ff', '#e8fff8']}
-      style={styles.container}
-      testID="loading-screen"
-    >
-      <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
+    <LinearGradient colors={C.bgGradient} style={styles.container} testID="loading-screen">
+      <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
 
       <SafeAreaView style={styles.content}>
-
         <View style={styles.topSection}>
           <Image
             testID="loading-logo"
@@ -38,8 +30,8 @@ export default function LoadingScreen() {
         </View>
 
         <View style={styles.textContainer}>
-          <Text testID="loading-tagline-1" style={styles.tagline}>Kết nối mọi nơi!</Text>
-          <Text testID="loading-tagline-2" style={styles.tagline}>Xem ảnh trực tiếp của bạn bè</Text>
+          <Text testID="loading-tagline-1" style={[styles.tagline, { color: C.textPrimary }]}>Kết nối mọi nơi!</Text>
+          <Text testID="loading-tagline-2" style={[styles.tagline, { color: C.textPrimary }]}>Xem ảnh trực tiếp của bạn bè</Text>
         </View>
 
         <View style={styles.buttonContainer}>
@@ -47,17 +39,18 @@ export default function LoadingScreen() {
             testID="loading-signup-button"
             activeOpacity={0.7}
             onPress={signup}
-            style={styles.buttonPrimary}>
-            <Text style={styles.buttonTextPrimary}>Create new account</Text>
+            style={[styles.buttonPrimary, { backgroundColor: C.primary, shadowColor: C.primary }]}
+          >
+            <Text style={[styles.buttonTextPrimary, { color: C.btnPrimaryText }]}>Create new account</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             testID="loading-login-button"
             activeOpacity={0.7}
             onPress={login}
-            style={styles.buttonSecondary}
+            style={[styles.buttonSecondary, { backgroundColor: 'transparent', borderColor: C.secondary }]}
           >
-            <Text style={styles.buttonTextSecondary}>Login</Text>
+            <Text style={[styles.buttonTextSecondary, { color: C.secondary }]}>Login</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

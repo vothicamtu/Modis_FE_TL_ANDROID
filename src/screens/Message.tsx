@@ -1,21 +1,17 @@
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
-
-// type ReactEmojiCommentProps = {
-//     goToHome: () => void;
-// };
+import { StyleSheet, Text, View } from "react-native";
+import { useColors } from "../hook/useColors";
 
 function MessageScreen() {
+    const C = useColors();
     return (
-        <View style={style.container}>
-            <Text>Giao diện nhắn tin</Text>
+        <View style={[style.container, { backgroundColor: C.bgGradient[0] }]}>
+            <Text style={{ color: C.textPrimary }}>Giao diện nhắn tin</Text>
         </View>
     )
 }
 const style = StyleSheet.create({
     container: {
-        display: "flex",
         flex: 1,
-        backgroundColor: "green",
     },
 })
 

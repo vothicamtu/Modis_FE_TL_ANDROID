@@ -9,13 +9,16 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Colors from '../styles/color';
+import { useColors } from '../hook/useColors';
+import { useTheme } from '../context/ThemeContext';
 
 export default function LoginScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
+  const C = useColors();
+  const { isDark } = useTheme();
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -28,65 +31,58 @@ export default function LoginScreen() {
     const result = await authController.login(username, password);
     setLoading(false);
     if (result.success) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'HomeScreen' }],
-      });
+      navigation.reset({ index: 0, routes: [{ name: 'HomeScreen' }] });
     } else {
       Alert.alert('Thông báo', result.message);
     }
   };
 
   return (
-    <LinearGradient colors={['#ede8ff', '#e8f4ff', '#e8fff8']} style={styles.container}>
-      <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
+    <LinearGradient colors={C.bgGradient} style={styles.container}>
+      <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
       <SafeAreaView style={styles.safeArea}>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
           <View style={styles.topSection}>
-            <Image
-              source={require('../assets/image/LOGO_MODIS_TACH_NEN.png')}
-              style={styles.logoImage}
-              resizeMode="contain"
-            />
-            <Text testID="login-title" style={styles.title}>Chào mừng trở lại</Text>
-            <Text style={styles.subtitle}>Đăng nhập để tiếp tục kết nối</Text>
+            <Image source={require('../assets/image/LOGO_MODIS_TACH_NEN.png')} style={styles.logoImage} resizeMode="contain" />
+            <Text testID="login-title" style={[styles.title, { color: C.textPrimary }]}>Chào mừng trở lại</Text>
+            <Text style={[styles.subtitle, { color: C.textHint }]}>Đăng nhập để tiếp tục kết nối</Text>
           </View>
 
-          <View style={styles.card}>
-            <AuthInput
-              testID="login-username-input"
-              label="Tên đăng nhập"
-              value={username}
-              onChangeText={setUsername}
-              placeholder="Nhập tên đăng nhập"
-            />
-            <AuthInput
-              testID="login-password-input"
-              label="Mật khẩu"
-              value={password}
-              onChangeText={setPassword}
-              placeholder="Nhập mật khẩu"
-              secureTextEntry
-            />
+          <View style={[styles.card, {
+            backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.75)',
+            borderColor: isDark ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.9)',
+            shadowColor: isDark ? '#000000' : '#a0a0c0',
+            shadowOpacity: isDark ? 0.12 : 0.15,
+            shadowRadius: isDark ? 12 : 20,
+          }]}>
+            <AuthInput testID="login-username-input" label="Tên đăng nhập" value={username} onChangeText={setUsername} placeholder="Nhập tên đăng nhập" />
+            <AuthInput testID="login-password-input" label="Mật khẩu" value={password} onChangeText={setPassword} placeholder="Nhập mật khẩu" secureTextEntry />
 
             <TouchableOpacity
               testID="login-submit-button"
-              style={[styles.button, isValid ? styles.buttonActive : styles.buttonDisabled]}
+              style={[styles.button, isValid
+                ? { backgroundColor: C.primary, shadowColor: C.primary, shadowOpacity: 0.35, elevation: 5 }
+                : { 
+                    backgroundColor: isDark ? 'rgba(255,158,197,0.4)' : 'rgba(254,158,199,0.45)', 
+                    elevation: 0, 
+                    shadowOpacity: 0 
+                  }
+              ]}
               onPress={onLoginPress}
               disabled={!isValid || loading}
             >
               {loading ? (
-                <ActivityIndicator color={Colors.text_primary} />
+                <ActivityIndicator color={C.btnPrimaryText} />
               ) : (
-                <Text style={styles.buttonText}>Đăng nhập</Text>
+                <Text style={[styles.buttonText, { color: isValid ? C.btnPrimaryText : 'rgba(26,26,46,0.5)' }]}>Đăng nhập</Text>
               )}
             </TouchableOpacity>
           </View>
 
           <View style={styles.footer}>
-            <Text style={{ color: Colors.text_hint }}>Chưa có tài khoản?</Text>
+            <Text style={{ color: C.textSecondary }}>Chưa có tài khoản?</Text>
             <TouchableOpacity testID="login-signup-link" onPress={() => navigation.navigate('SignupScreen')}>
-              <Text style={styles.linkText}>Đăng ký ngay</Text>
+              <Text style={[styles.linkText, { color: C.primary, fontWeight: '600', textDecorationLine: 'none' }]}>Đăng ký ngay</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

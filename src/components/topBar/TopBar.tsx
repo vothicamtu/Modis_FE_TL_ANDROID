@@ -11,7 +11,6 @@ import {
   Pressable,
 } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import Colors from '../../styles/color';
 import { Friend, FriendDTO } from '../../types';
 import FriendRow from './FriendRow';
 import friendsController from '../../controller/friends.controller';
@@ -20,6 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { on } from '../../utils/eventBus';
 import { styles } from '../../styles/TopBar.styles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useColors } from '../../hook/useColors';
 
 interface Props {
   variant?: 'home' | 'filter';
@@ -43,6 +43,7 @@ const TopBar: React.FC<Props> = ({
   onBackPress,
 }) => {
   const navigation = useNavigation<any>();
+  const C = useColors();
 
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -151,28 +152,28 @@ const TopBar: React.FC<Props> = ({
       return (
         <Pressable
           testID="topbar-friends-button"
-          style={styles.homeFriendsButton}
+          style={[styles.homeFriendsButton, { backgroundColor: C.surfaceStrong, borderColor: C.primary, shadowColor: C.primary }]}
           onPress={() => navigation.navigate('FriendsScreen')}
         >
           <View style={styles.box_friends}>
             <Image
               source={require('../../assets/image/image.png')}
-              style={{ width: 48, height: 48 }}
+              style={{ width: 48, height: 48, tintColor: C.primary }}
               resizeMode="contain"
             />
-            <Text testID="topbar-friend-count" style={styles.homeTextCount}>{friendCount}</Text>
-            <Text style={styles.homeTextLabel}>Bạn bè</Text>
+            <Text testID="topbar-friend-count" style={[styles.homeTextCount, { color: C.textPrimary }]}>{friendCount}</Text>
+            <Text style={[styles.homeTextLabel, { color: C.textSecondary }]}>Bạn bè</Text>
           </View>
         </Pressable>
       );
     }
 
     return (
-      <TouchableOpacity testID="topbar-filter-button" style={styles.filterButton} onPress={toggleDropdown}>
-        <Text testID="topbar-filter-label" style={styles.title} numberOfLines={1}>
+      <TouchableOpacity testID="topbar-filter-button" style={[styles.filterButton, { backgroundColor: C.surfaceStrong, borderColor: C.primary, shadowColor: C.primary }]} onPress={toggleDropdown}>
+        <Text testID="topbar-filter-label" style={[styles.title, { color: C.textPrimary }]} numberOfLines={1}>
           {selectedLabel}
         </Text>
-        <View style={styles.arrowDown} />
+        <View style={[styles.arrowDown, { borderTopColor: C.textSecondary }]} />
       </TouchableOpacity>
     );
   };
@@ -183,15 +184,15 @@ const TopBar: React.FC<Props> = ({
       {showBackButton ? (
         <TouchableOpacity
           testID="topbar-back-button"
-          style={styles.iconButton}
+          style={[styles.iconButton, { backgroundColor: C.backBtn, shadowColor: C.backBtnShadow }]}
           onPress={handleBack}
         >
-          <Icon name="arrow-back" size={24} color={Colors.text_primary} />
+          <Icon name="arrow-back" size={24} color={C.textPrimary} />
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
           testID="topbar-avatar-button"
-          style={styles.iconButton}
+          style={[styles.iconButton, { backgroundColor: C.backBtn, shadowColor: C.backBtnShadow }]}
           onPress={() => {
             if (canTransform && goToProfile) {
               goToProfile();
@@ -224,11 +225,11 @@ const TopBar: React.FC<Props> = ({
             navigation.navigate('MessageScreen');
           }
         }}
-        style={styles.iconButton}
+        style={[styles.iconButton, { backgroundColor: C.backBtn, shadowColor: C.backBtnShadow }]}
       >
         <Image
           source={require('../../assets/image/message_circle.png')}
-          style={styles.iconImage}
+          style={[styles.iconImage, { tintColor: C.textPrimary }]}
           resizeMode="contain"
         />
       </TouchableOpacity>
@@ -236,10 +237,10 @@ const TopBar: React.FC<Props> = ({
       {/* Dropdown */}
       <Modal transparent animationType="fade" visible={dropdownVisible}>
         <TouchableWithoutFeedback onPress={() => setDropdownVisible(false)}>
-          <View style={styles.mask}>
+          <View style={[styles.mask, { backgroundColor: C.modalOverlay }]}>
             <TouchableWithoutFeedback>
-              <View testID="topbar-dropdown" style={styles.dropdownBoard}>
-                <View style={styles.separator} />
+              <View testID="topbar-dropdown" style={[styles.dropdownBoard, { backgroundColor: C.surfaceStrong, borderColor: C.borderAccent, shadowColor: C.primary }]}>
+                <View style={[styles.separator, { backgroundColor: C.border }]} />
 
                 <FlatList
                   testID="topbar-friends-dropdown-list"

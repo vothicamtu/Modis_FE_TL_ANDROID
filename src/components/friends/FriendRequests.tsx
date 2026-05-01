@@ -7,9 +7,10 @@ import FriendRequestItem from "./FriendRequestItem";
 import friendsController from "../../controller/friends.controller";
 import { FriendReq } from "../../types/friend/FriendReq";
 import { emit, on } from "../../utils/eventBus";
+import { useColors } from "../../hook/useColors";
 
 export default function FriendRequests() {
-
+  const C = useColors();
   const [requests, setRequests] = useState<FriendReq[]>([]);
 
   // State dùng để biết đang loading hay không
@@ -93,10 +94,10 @@ export default function FriendRequests() {
 
   return (
     <View>
-      <Text style={styles.sectionTitle}>Lời mời kết bạn</Text>
+      <Text style={[styles.sectionTitle, { color: C.primary }]}>Lời mời kết bạn</Text>
 
       {processingId && (
-        <ActivityIndicator size="small" color="#888" style={{ marginVertical: 8 }} />
+        <ActivityIndicator size="small" color={C.textHint} style={{ marginVertical: 8 }} />
       )}
 
       <FlatList
@@ -113,7 +114,7 @@ export default function FriendRequests() {
         )}
         ListEmptyComponent={
           !loading ? (
-            <Text style={{ color: "#888", marginLeft: 16 }}>
+            <Text style={{ color: C.textHint, marginLeft: 16 }}>
               Chưa có lời mời kết bạn
             </Text>
           ) : null

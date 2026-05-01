@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { styles as formStyles } from '../../styles/loginScreen.styles';
-import Colors from '../../styles/color';
+import { useColors } from '../../hook/useColors';
+import { useTheme } from '../../context/ThemeContext';
 
 interface Props {
   label: string;
@@ -15,31 +16,48 @@ interface Props {
 
 export const AuthInput = ({ label, value, onChangeText, placeholder, secureTextEntry, keyboardType, testID }: Props) => {
   const [focused, setFocused] = useState(false);
+  const C = useColors();
+  const { isDark } = useTheme();
 
   return (
     <View style={formStyles.inputContainer}>
-      <Text style={formStyles.label}>{label}</Text>
-      <View 
+      <Text style={[formStyles.label, { color: isDark ? C.textSecondary : '#4a4a6a' }]}>{label}</Text>
+      <View
         style={[
-          formStyles.input, 
-          { paddingHorizontal: 0, paddingVertical: 0, overflow: 'hidden' },
-          focused && styles.inputFocused
+          formStyles.input,
+          { 
+            paddingHorizontal: 0, 
+            paddingVertical: 0, 
+            overflow: 'hidden', 
+            borderColor: isDark ? C.inputBorder : 'rgba(137,212,255,0.5)', 
+            backgroundColor: isDark ? C.inputBg : 'rgba(255,255,255,0.6)' 
+          },
+          focused && { 
+            borderColor: C.primary, 
+            borderWidth: 2, 
+            borderRadius: 26, 
+            shadowColor: C.primary, 
+            shadowOffset: { width: 0, height: 4 }, 
+            shadowOpacity: 0.3, 
+            shadowRadius: 10, 
+            elevation: 8 
+          },
         ]}
       >
         <TextInput
           testID={testID}
-          style={{ 
-            paddingVertical: 14, 
-            paddingHorizontal: 16, 
-            fontSize: 15, 
-            color: Colors.text_primary, 
+          style={{
+            paddingVertical: 14,
+            paddingHorizontal: 16,
+            fontSize: 15,
+            color: isDark ? C.textPrimary : '#1a1a2e',
             backgroundColor: 'transparent',
             width: '100%',
           }}
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor={Colors.text_hint}
+          placeholderTextColor={isDark ? C.textHint : '#9fa5ae'}
           secureTextEntry={secureTextEntry}
           autoCapitalize="none"
           keyboardType={keyboardType}
@@ -51,17 +69,3 @@ export const AuthInput = ({ label, value, onChangeText, placeholder, secureTextE
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  inputFocused: {
-    borderColor: Colors.primary,
-    borderWidth: 2,
-    borderRadius: 26,
-    backgroundColor: 'rgba(255, 255, 255, 0.6)', // Sáng hơn và rõ ràng hơn
-    shadowColor: Colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 8,
-  },
-});

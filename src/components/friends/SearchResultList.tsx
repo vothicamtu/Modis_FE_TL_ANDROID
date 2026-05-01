@@ -5,6 +5,7 @@ import friendsController from "../../controller/friends.controller";
 import { emit, on } from "../../utils/eventBus";
 import { SearchUser } from "../../types/user/SearchUser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useColors } from "../../hook/useColors";
 
 type Props = {
   users: SearchUser[];
@@ -13,6 +14,7 @@ type Props = {
 export default function SearchResultList({ users }: Props) {
   const [sentIds, setSentIds] = useState<string[]>([]);
   const [friendIds, setFriendIds] = useState<string[]>([]);
+  const C = useColors();
 
   useEffect(() => {
     loadAll();
@@ -51,7 +53,7 @@ export default function SearchResultList({ users }: Props) {
 
   return (
     <View>
-      <Text style={styles.sectionTitle}>Kết quả tìm kiếm</Text>
+      <Text style={[styles.sectionTitle, { color: C.primary }]}>Kết quả tìm kiếm</Text>
 
       <FlatList
         data={users}
@@ -74,14 +76,14 @@ export default function SearchResultList({ users }: Props) {
                     ? { uri: item.avatarUrl }
                     : require("../../assets/image/avt.png")
                 }
-                style={styles.avatar}
+                style={[styles.avatar, { borderColor: C.primary }]}
               />
 
               <View style={{ flex: 1 }}>
-                <Text style={styles.name}>
+                <Text style={[styles.name, { color: C.textPrimary }]}>
                   {item.fullname || item.username}
                 </Text>
-                <Text style={styles.username}>@{item.username}</Text>
+                <Text style={[styles.username, { color: C.textHint }]}>@{item.username}</Text>
               </View>
 
               <TouchableOpacity
@@ -89,10 +91,10 @@ export default function SearchResultList({ users }: Props) {
                 onPress={() => handleAddFriend(item.id)}
                 style={[
                   styles.addBtn,
-                  disabled && { backgroundColor: "#ccc" },
+                  { backgroundColor: disabled ? C.btnDisabled : C.primary },
                 ]}
               >
-                <Text style={styles.addText}>{buttonText}</Text>
+                <Text style={[styles.addText, { color: C.btnPrimaryText }]}>{buttonText}</Text>
               </TouchableOpacity>
             </View>
           );

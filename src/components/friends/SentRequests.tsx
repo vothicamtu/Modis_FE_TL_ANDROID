@@ -6,8 +6,10 @@ import SentRequestItem from "./SentRequestItem";
 import friendsController from "../../controller/friends.controller";
 import { FriendReq } from "../../types/friend/FriendReq";
 import { emit, on } from "../../utils/eventBus";
+import { useColors } from "../../hook/useColors";
 
 export default function SentRequests() {
+  const C = useColors();
   const [requests, setRequests] = useState<FriendReq[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
@@ -57,10 +59,10 @@ export default function SentRequests() {
 
   return (
     <View>
-      <Text style={styles.sectionTitle}>Lời mời đã gửi</Text>
+      <Text style={[styles.sectionTitle, { color: C.primary }]}>Lời mời đã gửi</Text>
 
       {processingId && (
-        <ActivityIndicator size="small" color="#888" style={{ marginVertical: 8 }} />
+        <ActivityIndicator size="small" color={C.textHint} style={{ marginVertical: 8 }} />
       )}
 
       <FlatList
@@ -76,7 +78,7 @@ export default function SentRequests() {
         )}
         ListEmptyComponent={
           !loading ? (
-            <Text style={{ color: "#888", marginLeft: 16 }}>
+            <Text style={{ color: C.textHint, marginLeft: 16 }}>
               Bạn chưa gửi lời mời nào
             </Text>
           ) : null

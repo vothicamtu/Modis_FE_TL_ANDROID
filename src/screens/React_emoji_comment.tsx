@@ -5,7 +5,6 @@ import {
   Keyboard, Animated, Dimensions, Modal, TouchableOpacity, Alert,
   KeyboardEvent, Platform, PermissionsAndroid,
 } from "react-native";
-import Colors from "../styles/color";
 import EmojiPicker from "rn-emoji-keyboard";
 import { useNavigation, NavigationProp, useFocusEffect } from "@react-navigation/native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
@@ -22,6 +21,7 @@ import MessageService from "../services/messageService";
 import { CameraRoll } from "@react-native-camera-roll/camera-roll";
 import RNFS from "react-native-fs";
 import LinearGradient from "react-native-linear-gradient";
+import { useColors } from "../hook/useColors";
 
 const { height } = Dimensions.get("window");
 
@@ -35,9 +35,10 @@ type Props = {
 function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const insets = useSafeAreaInsets();
+  const C = useColors();
 
   const topBarHeight = 60; // paddingTop:4 + icon:44 + paddingBottom:12
-  const imageHeight  = Math.floor(height * 0.52);
+  const imageHeight  = Math.floor(height * 0.55);
 
   const [userId, setUserId]               = useState<string | null>(null);
   const [friends, setFriends]             = useState<any[]>([]);
@@ -300,12 +301,12 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
   ).current;
 
   return (
-    <View style={{ flex: 1 }} testID="home-feed-screen">
-      <LinearGradient colors={['#ede8ff', '#e8f4ff', '#e8fff8']} style={styles.container}>
-        <StatusBar backgroundColor="transparent" barStyle="dark-content" translucent />
+    <View style={{ flex: 1, backgroundColor: C.bgGradient[0] }} testID="home-feed-screen">
+      <LinearGradient colors={C.bgGradient} style={styles.container}>
+        <StatusBar backgroundColor={C.bgGradient[0]} barStyle={C.statusBar} translucent />
 
         {/* Header — giống Profile/AllImage: SafeAreaView transparent, hòa vào gradient */}
-        <SafeAreaView edges={['top']}>
+        <SafeAreaView edges={['top']} style={{ backgroundColor: C.bgGradient[0] }}>
           <View style={{ paddingTop: 4 }}>
             <TopBar
                 variant="filter"
@@ -343,7 +344,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
           }}
           renderItem={({ item }) => (
             <View testID={`feed-post-item-${item._id}`} style={[styles.post_item, { height }]}>
-              <View style={{ flex: 1, flexDirection: 'column' }}>
+              <View style={{ flex: 1, flexDirection: 'column', paddingBottom: 32, paddingTop: 12 }}>
 
                 <View style={{ height: 0 }} />
 
@@ -362,25 +363,47 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                       {item.caption}
                     </Text>
                   </View>
+                  {/* Nút ... góc trên phải ảnh */}
+                  <Pressable testID="feed-menu-button" onPress={() => setShowMenu(true)} style={[styles.menu_btn_overlay, { backgroundColor: C.menuBtnOverlay }]}>
+                    <Image
+                      source={require("../assets/image/pending.png")}
+                      style={{ width: "55%", height: "55%", tintColor: C.textPrimary }}
+                      resizeMode="contain"
+                    />
+                  </Pressable>
                 </View>
 
                 <View style={styles.infoImage}>
                   <View style={styles.gray_circle_border}>
                     <Image testID="feed-sender-avatar" source={{ uri: optimizeCloudinaryUrl(item.senderAvatar) }} style={{ width: "100%", height: "100%" }} />
                   </View>
-                  <Text testID="feed-sender-name" style={[styles.general_text, { marginLeft: 5, color: Colors.text_primary }]}>
-                    {item.senderId === userId ? "Tôi" : item.senderName}
+                  <Text testID="feed-sender-name" style={[styles.general_text, { marginLeft: 5, color: C.textPrimary }]}>
+                    {(() => {
+                      const name = item.senderId === userId ? "Tôi" : item.senderName;
+                      if (!name) return name;
+                      const words = name.trim().split(/\s+/);
+                      return words.length >= 3 ? words.slice(-2).join(' ') : name;
+                    })()}
                   </Text>
-                  <Text testID="feed-post-time" style={{ fontSize: 12, fontWeight: "600", color: Colors.text_hint, marginLeft: 8 }}>
+                  <Text testID="feed-post-time" style={{ fontSize: 12, fontWeight: "600", color: C.textHint, marginLeft: 8 }}>
                     {timeAgo(item.created_at)}
                   </Text>
+                  {/* Nút grid bên phải hàng info */}
+                  <Pressable testID="feed-grid-view-button" onPress={() => navigation.navigate("AllImagesScreen")} style={[styles.grid_btn, { backgroundColor: C.btnGhostBg, borderColor: C.btnGhostBorder }]}>
+                    <Image
+                      source={require("../assets/image/grid_view.png")}
+                      style={{ width: 18, height: 18, tintColor: C.btnGhostIcon }}
+                      resizeMode="contain"
+                    />
+                    <Text style={{ color: C.btnGhostIcon, fontSize: 14, fontWeight: "600", marginLeft: 6 }}>Xem tất cả</Text>
+                  </Pressable>
                 </View>
 
                 <View style={styles.action_row}>
                   {isMe ? (
-                    <View testID="feed-reactions-received" style={styles.reacted_for_me_box}>
+                    <View testID="feed-reactions-received" style={[styles.reacted_for_me_box, { backgroundColor: C.surfaceStrong, borderColor: C.primary, shadowColor: C.primary }]}>
                       {reactedByUser.length === 0 ? (
-                        <Text style={{ color: Colors.text_secondary, fontSize: 14, fontWeight: "600" }}>
+                        <Text style={{ color: C.textSecondary, fontSize: 14, fontWeight: "600" }}>
                           Chưa có hoạt động nào
                         </Text>
                       ) : (
@@ -393,9 +416,9 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                             return (
                               <View key={index} style={{
                                 width: 36, height: 36, borderRadius: 18,
-                                borderWidth: 2, borderColor: Colors.surface_strong,
+                                borderWidth: 2, borderColor: C.surfaceStrong,
                                 marginLeft: index > 0 ? -10 : 0,
-                                backgroundColor: Colors.neutral_dark3,
+                                backgroundColor: C.border,
                                 overflow: "hidden",
                               }}>
                                 <Image source={{ uri: avatarUri }} style={{ width: "100%", height: "100%" }} />
@@ -406,9 +429,9 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                       )}
                     </View>
                   ) : (
-                    <View testID="feed-react-comment-box" style={styles.react_comment_box}>
+                    <View testID="feed-react-comment-box" style={[styles.react_comment_box, { backgroundColor: C.surfaceStrong, borderColor: C.primary, shadowColor: C.primary }]}>
                       <Pressable testID="feed-comment-button" onPress={handlePress} style={styles.comment}>
-                        <Text style={{ color: Colors.text_hint, fontSize: 15 }}>Gửi tin nhắn...</Text>
+                        <Text style={{ color: C.textHint, fontSize: 15 }}>Gửi tin nhắn...</Text>
                       </Pressable>
                       {["❤️", "😊", "🤩"].map((emoji) => (
                         <Pressable testID={`feed-emoji-${emoji}`} key={emoji} onPress={() => handleReact(emoji)} style={styles.emoji_box}>
@@ -418,28 +441,11 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                       <Pressable testID="feed-more-emoji-button" onPress={() => setIsPickerOpen(true)} style={styles.emoji_box_icon}>
                         <Image
                           source={require("../assets/image/add_reaction.png")}
-                          style={{ width: 22, height: 22, tintColor: Colors.text_secondary }}
+                          style={{ width: 22, height: 22, tintColor: C.textSecondary }}
                         />
                       </Pressable>
                     </View>
                   )}
-                </View>
-
-                <View style={styles.take_area}>
-                  <Pressable testID="feed-grid-view-button" onPress={() => navigation.navigate("AllImagesScreen")} style={styles.flash_btn}>
-                    <Image
-                      source={require("../assets/image/grid_view.png")}
-                      style={{ width: "60%", height: "60%", tintColor: Colors.white }}
-                      resizeMode="contain"
-                    />
-                  </Pressable>
-                  <Pressable testID="feed-menu-button" onPress={() => setShowMenu(true)} style={styles.flash_btn}>
-                    <Image
-                      source={require("../assets/image/pending.png")}
-                      style={{ width: "60%", height: "60%", tintColor: Colors.white }}
-                      resizeMode="contain"
-                    />
-                  </Pressable>
                 </View>
 
               </View>
@@ -449,12 +455,17 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
 
         <View style={[
           styles.react_comment_box_hidden,
-          { bottom: showInput && keyboardHeight > 0 ? keyboardHeight + 10 : (Platform.OS === 'ios' ? 40 : 60) },
+          { 
+            bottom: showInput && keyboardHeight > 0 ? keyboardHeight + 10 : (Platform.OS === 'ios' ? 40 : 60),
+            backgroundColor: C.surfaceStrong,
+            borderColor: C.secondary,
+            shadowColor: C.secondary,
+          },
           !showInput && { opacity: 0, pointerEvents: 'none' },
           focused && { 
-            borderColor: Colors.primary, 
-            backgroundColor: Colors.white, 
-            shadowColor: Colors.primary, 
+            borderColor: C.primary, 
+            backgroundColor: C.surfaceStrong, 
+            shadowColor: C.primary, 
             shadowOpacity: 0.4, 
             shadowRadius: 10, 
             elevation: 12 
@@ -463,20 +474,20 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
             <TextInput
               testID="feed-comment-input"
               ref={inputRef}
-              style={styles.comment_input}
+              style={[styles.comment_input, { color: C.textPrimary }]}
               value={commentText}
-              onChangeText={handleCommentChange}
+              onPress={handleCommentChange}
               onFocus={() => setFocused(true)}
               onBlur={() => setFocused(false)}
               placeholder="Gửi tin nhắn..."
-              placeholderTextColor={Colors.text_hint}
+              placeholderTextColor={C.textHint}
               returnKeyType="send"
               onSubmitEditing={handleSendComment}
             />
-            <Pressable testID="feed-send-comment-button" style={styles.send_icon_wrapper} onPress={handleSendComment}>
+            <Pressable testID="feed-send-comment-button" style={[styles.send_icon_wrapper, { backgroundColor: C.primary }]} onPress={handleSendComment}>
               <Image
                 source={require("../assets/image/send_message.png")}
-                style={{ width: 20, height: 20, tintColor: Colors.white }}
+                style={{ width: 20, height: 20, tintColor: C.btnPrimaryText }}
               />
             </Pressable>
           </View>
@@ -500,21 +511,21 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
               activeOpacity={1}
               onPress={() => setShowMenu(false)}
             >
-              <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.45)" }} />
+              <View style={{ flex: 1, backgroundColor: C.modalOverlay }} />
             </TouchableOpacity>
             <View style={{
-              backgroundColor: Colors.surface_strong,
+              backgroundColor: C.surfaceStrong,
               borderTopLeftRadius: 20, borderTopRightRadius: 20,
               paddingBottom: insets.bottom + 24, paddingTop: 8,
-              borderTopWidth: 1, borderColor: 'rgba(159,165,174,0.2)',
+              borderTopWidth: 1, borderColor: C.border,
             }}>
-              <View style={{ width: 40, height: 4, borderRadius: 2, backgroundColor: Colors.neutral_light1, alignSelf: "center", marginBottom: 16 }} />
+              <View style={{ width: 40, height: 4, borderRadius: 2, backgroundColor: C.dragHandle, alignSelf: "center", marginBottom: 16 }} />
               <TouchableOpacity
                 testID="feed-menu-save-image"
                 onPress={() => { setShowMenu(false); setTimeout(handleSaveImage, 300); }}
                 style={{ paddingVertical: 16, paddingHorizontal: 24 }}
               >
-                <Text style={{ color: Colors.text_primary, fontSize: 17 }}>Lưu ảnh</Text>
+                <Text style={{ color: C.textPrimary, fontSize: 17 }}>Lưu ảnh</Text>
               </TouchableOpacity>
               {isMe && (
                 <TouchableOpacity
@@ -522,7 +533,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                   onPress={() => { setShowMenu(false); setTimeout(handleDeleteImage, 300); }}
                   style={{ paddingVertical: 16, paddingHorizontal: 24 }}
                 >
-                  <Text style={{ color: Colors.red, fontSize: 17 }}>Xóa ảnh</Text>
+                  <Text style={{ color: C.danger, fontSize: 17 }}>Xóa ảnh</Text>
                 </TouchableOpacity>
               )}
               <TouchableOpacity
@@ -530,7 +541,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                 onPress={() => setShowMenu(false)}
                 style={{ paddingVertical: 16, paddingHorizontal: 24, marginTop: 4 }}
               >
-                <Text style={{ color: Colors.text_hint, fontSize: 17, textAlign: "center" }}>Hủy</Text>
+                <Text style={{ color: C.textHint, fontSize: 17, textAlign: "center" }}>Hủy</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -539,14 +550,13 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
 
       <Animated.View pointerEvents="none" style={{
         position: "absolute", alignSelf: "center", bottom: 160,
-        backgroundColor: Colors.neutral_dark1, borderRadius: 24,
+        backgroundColor: C.toastBg, borderRadius: 24,
         paddingHorizontal: 24, paddingVertical: 12, opacity: saveOpacity,
         flexDirection: 'row', alignItems: 'center',
-        shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3, shadowRadius: 8, elevation: 12,
-        zIndex: 999,
+        shadowColor: C.primary, shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3, shadowRadius: 8, elevation: 12, zIndex: 999,
       }}>
-        <Text style={{ fontSize: 15, color: Colors.white, fontWeight: "700" }}>Lưu ảnh thành công</Text>
+        <Text style={{ fontSize: 15, color: C.textPrimary, fontWeight: "700" }}>Lưu ảnh thành công</Text>
       </Animated.View>
     </View>
   );

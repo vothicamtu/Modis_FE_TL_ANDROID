@@ -1,11 +1,10 @@
 import { StyleSheet } from "react-native";
-import Colors from "../styles/color";
 
 export const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: 100,
-    backgroundColor: 'transparent', // vẫn trong suốt để gradient thấy
+    backgroundColor: 'transparent',
     position: 'absolute',
     zIndex: 100,
     top: 35,
@@ -23,7 +22,6 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 999,
-    borderColor: Colors.primary,   // đổi viền hồng pastel chính
     borderWidth: 3,
     overflow: 'hidden',
     justifyContent: 'center',

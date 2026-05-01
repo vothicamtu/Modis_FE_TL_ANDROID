@@ -10,14 +10,11 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../navigation/types';
 import StompService from "../../../socket/service/StompService";
-import color from "../../../styles/color";
-
 import LinearGradient from 'react-native-linear-gradient';
+import { useColors } from '../../../hook/useColors';
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    }
+    container: { flex: 1 }
 });
 
 type MessageScreenProps = {
@@ -28,13 +25,11 @@ function MessageScreen({ goToHome }: MessageScreenProps) {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const [conversation, setConversation] = useState<ConversationItem[]>([]);
     const [loading, setLoading] = useState(false);
+    const C = useColors();
 
     const handleGoBack = () => {
-        if (goToHome) {
-            goToHome();
-        } else {
-            navigation.goBack();
-        }
+        if (goToHome) goToHome();
+        else navigation.goBack();
     };
 
     const handleConversationPress = (item: ConversationItem) => {
@@ -46,7 +41,6 @@ function MessageScreen({ goToHome }: MessageScreenProps) {
         });
     };
 
-    // useFocusEffect tự reload khi quay lại tab này
     useFocusEffect(
         React.useCallback(() => {
             const fetchConversations = async () => {
@@ -66,17 +60,13 @@ function MessageScreen({ goToHome }: MessageScreenProps) {
     );
 
     return (
-        <LinearGradient colors={['#ede8ff', '#e8f4ff', '#e8fff8']} style={styles.container}>
+        <LinearGradient colors={C.msgBgGradient} style={styles.container}>
             <SafeAreaView style={{ flex: 1 }} edges={['top']}>
                 <View style={{ paddingTop: 4 }}>
                     <MessagesHeader goToHome={handleGoBack} />
                 </View>
                 <View style={{ flex: 1 }}>
-                    <MessagesList
-                        messages={conversation}
-                        onItemPress={handleConversationPress}
-                        loading={loading}
-                    />
+                    <MessagesList messages={conversation} onItemPress={handleConversationPress} loading={loading} />
                 </View>
             </SafeAreaView>
         </LinearGradient>

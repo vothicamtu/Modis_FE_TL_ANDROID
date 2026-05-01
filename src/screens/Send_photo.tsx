@@ -23,6 +23,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import postController from "../controller/post.controller";
 import { PostRequest } from "../types";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useColors } from "../hook/useColors";
 
 type SendPhotoScreenProps = {
   route: {
@@ -35,6 +36,7 @@ type SendPhotoScreenProps = {
 function SendPhotoScreen({ route }: SendPhotoScreenProps) {
   const { photoUri } = route.params;
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const C = useColors();
 
   const [showInput, setShowInput] = useState(false);
   const inputRef = useRef<TextInput>(null);
@@ -176,44 +178,40 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
   };
 
   return (
-    <SafeAreaView style={styles.container} testID="send-photo-screen">
+    <SafeAreaView style={[styles.container, { backgroundColor: C.containerBg }]} testID="send-photo-screen">
       <View style={styles.send_to}>
-        <Text style={{ fontSize: 20, fontWeight: "bold", color: Colors.text_primary }}>
+        <Text style={{ fontSize: 20, fontWeight: "bold", color: C.textPrimary }}>
           Gửi đến ...
         </Text>
 
-        <Pressable testID="send-photo-download-button" onPress={saveImage} style={styles.download_btn}>
-          <Image
-            source={require("../assets/image/download.png")}
-            style={{ width: 22, height: 22, tintColor: Colors.text_primary }}
-          />
+        <Pressable testID="send-photo-download-button" onPress={saveImage} style={[styles.download_btn, { backgroundColor: C.primary, shadowColor: C.primary }]}>
+          <Image source={require("../assets/image/download.png")} style={{ width: 22, height: 22, tintColor: C.btnPrimaryText }} />
         </Pressable>
       </View>
 
       <View style={styles.image_area} testID="send-photo-preview-area">
         <Image testID="send-photo-preview-image" source={{ uri: photoUri }} style={styles.image} />
 
-        <Animated.View style={[styles.saveImageNoti, { opacity }]}>
-          <Text style={{ fontSize: 18, color: Colors.text_primary, fontWeight: "bold" }}>
+        <Animated.View style={[styles.saveImageNoti, { opacity, backgroundColor: C.toastBg }]}>
+          <Text style={{ fontSize: 18, color: C.textPrimary, fontWeight: "bold" }}>
             Đã lưu ảnh
           </Text>
         </Animated.View>
 
-        <View style={[styles.caption_image, { bottom: showInput ? 100 : 80 }]}>
+        <View style={[styles.caption_image, { bottom: showInput ? 100 : 80, backgroundColor: C.captionOverlay }]}>
           <TextInput
             testID="send-photo-caption-input"
             ref={inputRef}
             style={{
-              color: Colors.white,
+              color: C.textPrimary,
               fontSize: 16,
               fontWeight: 'bold',
               textAlign: "center",
               minWidth: 100,
-            }}
-            value={caption}
+            }}            value={caption}
             onChangeText={setCaption}
             placeholder="Thêm một tin nhắn"
-            placeholderTextColor="rgba(255,255,255,0.7)"
+            placeholderTextColor={C.textHint}
           />
         </View>
       </View>
@@ -222,43 +220,27 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
         <Pressable
           testID="send-photo-close-button"
           onPress={() => navigation.goBack()}
-          style={[styles.close_btn, loading && { opacity: 0.4 }]}
+          style={[styles.close_btn, { backgroundColor: C.btnGhostBg, borderWidth: 1.5, borderColor: C.btnGhostBorder }, loading && { opacity: 0.4 }]}
           disabled={loading}
         >
-          <Image
-            source={require("../assets/image/close.png")}
-            style={{ width: "55%", height: "55%", tintColor: Colors.white }}
-            resizeMode="contain"
-          />
+          <Image source={require("../assets/image/close.png")} style={{ width: "55%", height: "55%", tintColor: C.btnGhostIcon }} resizeMode="contain" />
         </Pressable>
 
-        <Pressable
-          testID="send-photo-send-button"
-          onPress={sendPost}
-          style={styles.send_btn}
-          disabled={loading}
-        >
+        <Pressable testID="send-photo-send-button" onPress={sendPost} style={[styles.send_btn, { backgroundColor: C.primary, shadowColor: C.primary }]} disabled={loading}>
           {loading ? (
-            <ActivityIndicator size="large" color="#4DA6FF" />
+            <ActivityIndicator size="large" color={C.secondary} />
           ) : (
-            <Image
-              source={require("../assets/image/send.png")}
-              style={{ width: "60%", height: "60%" }}
-            />
+            <Image source={require("../assets/image/send.png")} style={{ width: "60%", height: "60%" }} />
           )}
         </Pressable>
 
         <Pressable
           testID="send-photo-caption-pattern-button"
           onPress={turnOnCaptionPattern}
-          style={[styles.close_btn, loading && { opacity: 0.4 }]}
+          style={[styles.close_btn, { backgroundColor: C.btnGhostBg, borderWidth: 1.5, borderColor: C.btnGhostBorder }, loading && { opacity: 0.4 }]}
           disabled={loading}
         >
-          <Image
-            source={require("../assets/image/sparkle.png")}
-            style={{ width: "55%", height: "55%", tintColor: Colors.white }}
-            resizeMode="contain"
-          />
+          <Image source={require("../assets/image/sparkle.png")} style={{ width: "55%", height: "55%", tintColor: C.btnGhostIcon }} resizeMode="contain" />
         </Pressable>
       </View>
 
@@ -269,7 +251,7 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
             onPress={chooseAllFriend}
             style={[
               styles.gray_circle_border,
-              { borderColor: allFriend ? Colors.accent_blue : Colors.light_gray },
+              { borderColor: allFriend ? C.primary : C.border },
             ]}
           >
             <Image
@@ -278,7 +260,7 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
               resizeMode="contain"
             />
           </Pressable>
-          <Text style={{ fontSize: 14, color: Colors.text_primary }}>Tất cả</Text>
+              <Text style={{ fontSize: 14, color: C.textPrimary }}>Tất cả</Text>
         </View>
 
         <FlatList
@@ -296,8 +278,8 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
                   styles.gray_circle_border,
                   {
                     borderColor: !allFriend && checkReceiver(item.userId)
-                      ? Colors.accent_blue
-                      : Colors.light_gray,
+                      ? C.primary
+                      : C.border,
                   },
                 ]}
               >
@@ -310,7 +292,7 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
                   style={{ width: "100%", height: "100%", borderRadius: 100 }}
                 />
               </Pressable>
-              <Text style={{ fontSize: 14, color: Colors.text_primary }}>
+              <Text style={{ fontSize: 14, color: C.textPrimary }}>
                 {item.username}
               </Text>
             </View>
@@ -324,94 +306,41 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
             setOnCaptionPattern(false);
             setShowInput(false);
           }}
-          style={styles.mask}
+          style={[styles.mask, { backgroundColor: C.modalOverlay }]}
         />
       )}
 
       {onCaptionPattern && (
-        <View style={styles.caption_pattern} testID="send-photo-caption-panel">
-          <View
-            style={{
-              width: 45,
-              height: 7,
-              borderRadius: 5,
-              backgroundColor: Colors.light_gray,
-              marginTop: 10,
-            }}
-          />
-
-          <Text style={[styles.general_text, { margin: 15, fontSize: 20 }]}>
-            Chú thích
-          </Text>
-
+        <View style={[styles.caption_pattern, { backgroundColor: C.panelBg, borderColor: C.panelBorder }]} testID="send-photo-caption-panel">
+          <View style={{ width: 45, height: 7, borderRadius: 5, backgroundColor: C.dragHandle, marginTop: 10 }} />
+          <Text style={[styles.general_text, { margin: 15, fontSize: 20, color: C.textPrimary }]}>Chú thích</Text>
           <View style={styles.general}>
-            <Text style={[styles.general_text, { color: Colors.light_gray }]}>
-              General
-            </Text>
+            <Text style={[styles.general_text, { color: C.textHint }]}>General</Text>
             <View style={styles.box_area}>
-              <Pressable
-                testID="caption-text-button"
-                onPress={() => {
-                  setOnCaptionPattern(false);
-                  setTimeout(() => inputRef.current?.focus(), 300);
-                }}
-                style={styles.box_radius}
-              >
-                <Text style={styles.text_caption}>Aa Văn bản</Text>
+              <Pressable testID="caption-text-button" onPress={() => { setOnCaptionPattern(false); setTimeout(() => inputRef.current?.focus(), 300); }}
+                style={[styles.box_radius, { backgroundColor: C.captionBoxBg, borderColor: C.captionBoxBorder }]}>
+                <Text style={[styles.text_caption, { color: C.captionBoxText }]}>Aa Văn bản</Text>
               </Pressable>
-
-              <Pressable
-                testID="caption-time-button"
-                onPress={() => {
-                  const now = new Date();
-                  const time = now.toLocaleTimeString("vi-VN", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: false,
-                  });
-                  applyCaption(`⏰ ${time}`);
-                }}
-                style={styles.box_radius}
-              >
-                <Text style={styles.text_caption}>⏰ 10:27</Text>
+              <Pressable testID="caption-time-button" onPress={() => { const now = new Date(); applyCaption(`⏰ ${now.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit", hour12: false })}`); }}
+                style={[styles.box_radius, { backgroundColor: C.captionBoxBg, borderColor: C.captionBoxBorder }]}>
+                <Text style={[styles.text_caption, { color: C.captionBoxText }]}>⏰ 10:27</Text>
               </Pressable>
             </View>
           </View>
           <View style={styles.decorative}>
-            <Text style={[styles.general_text, { color: Colors.light_gray }]}>
-              Decorative
-            </Text>
+            <Text style={[styles.general_text, { color: C.textHint }]}>Decorative</Text>
             <View style={styles.box_area}>
-              <Pressable
-                testID="caption-party-button"
-                onPress={() => applyCaption("Party Time!")}
-                style={[styles.box_radius, { backgroundColor: Colors.cyan }]}
-              >
+              <Pressable testID="caption-party-button" onPress={() => applyCaption("Party Time!")} style={[styles.box_radius, { backgroundColor: Colors.cyan }]}>
                 <Text style={[styles.text_caption, { color: Colors.black }]}>Party Time!</Text>
               </Pressable>
-
-              <Pressable
-                testID="caption-ootd-button"
-                onPress={() => applyCaption("🕶️ OOTD")}
-                style={[styles.box_radius, { backgroundColor: Colors.white }]}
-              >
+              <Pressable testID="caption-ootd-button" onPress={() => applyCaption("🕶️ OOTD")} style={[styles.box_radius, { backgroundColor: Colors.white }]}>
                 <Text style={[styles.text_caption, { color: Colors.black }]}>🕶️ OOTD</Text>
               </Pressable>
-
-              <Pressable
-                testID="caption-missyou-button"
-                onPress={() => applyCaption("🥰 Miss you")}
-                style={[styles.box_radius, { backgroundColor: Colors.organce }]}
-              >
-                <Text style={styles.text_caption}>🥰 Miss you</Text>
+              <Pressable testID="caption-missyou-button" onPress={() => applyCaption("🥰 Miss you")} style={[styles.box_radius, { backgroundColor: Colors.organce }]}>
+                <Text style={[styles.text_caption, { color: '#1a1a2e' }]}>🥰 Miss you</Text>
               </Pressable>
-
-              <Pressable
-                testID="caption-iloveyou-button"
-                onPress={() => applyCaption("😍 I love you")}
-                style={[styles.box_radius, { backgroundColor: Colors.red }]}
-              >
-                <Text style={styles.text_caption}>😍 I love you</Text>
+              <Pressable testID="caption-iloveyou-button" onPress={() => applyCaption("😍 I love you")} style={[styles.box_radius, { backgroundColor: Colors.red }]}>
+                <Text style={[styles.text_caption, { color: '#ffffff' }]}>😍 I love you</Text>
               </Pressable>
             </View>
           </View>

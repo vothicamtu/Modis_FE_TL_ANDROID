@@ -1,17 +1,14 @@
 import { StyleSheet } from "react-native";
-import Colors from "../styles/color";
 import { scale } from "../utils/scale";
 
 export const styles = StyleSheet.create({
     general_text: {
-        color: Colors.white,
         fontSize: 16,
         fontWeight: 'bold',
     },
     container: {
         width: '100%',
         height: '100%',
-        backgroundColor: Colors.surface_strong,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -28,10 +25,8 @@ export const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: Colors.primary,
         justifyContent: 'center',
         alignItems: 'center',
-        shadowColor: Colors.primary,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -51,7 +46,6 @@ export const styles = StyleSheet.create({
         padding: 10,
         position: 'absolute',
         top: '45%',
-        backgroundColor: Colors.primary,
         borderRadius: 20,
     },
     image: {
@@ -68,7 +62,6 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: Colors.black_blur,
     },
     send_btn_area: {
         width: '100%',
@@ -83,8 +76,6 @@ export const styles = StyleSheet.create({
         borderRadius: 22,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: Colors.primary,
-        shadowColor: Colors.primary,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -98,13 +89,11 @@ export const styles = StyleSheet.create({
         paddingRight: 5,
         paddingTop: 5,
         borderRadius: 50,
-        backgroundColor: Colors.primary,
         overflow: 'hidden',
         justifyContent: 'center',
         alignItems: 'center',
-        shadowColor: Colors.primary,
         shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.5,
+        shadowOpacity: 0.35,
         shadowRadius: 8,
         elevation: 6,
     },
@@ -126,7 +115,6 @@ export const styles = StyleSheet.create({
         height: 35,
         borderRadius: 999,
         borderWidth: 3,
-        borderColor: Colors.primary,
         overflow: 'hidden',
         justifyContent: 'center',
         alignItems: 'center',
@@ -137,12 +125,10 @@ export const styles = StyleSheet.create({
         bottom: 0,
         width: '100%',
         height: 300,
-        backgroundColor: Colors.neutral_dark2,
         borderTopEndRadius: 40,
         borderTopStartRadius: 40,
         alignItems: 'center',
         borderTopWidth: 1,
-        borderColor: Colors.primary,
     },
     loadingOverlay: {
         position: 'absolute',
@@ -159,7 +145,6 @@ export const styles = StyleSheet.create({
     mask: {
         width: '100%',
         height: '100%',
-        backgroundColor: Colors.black_blur,
         position: 'absolute',
     },
     general: {
@@ -174,7 +159,6 @@ export const styles = StyleSheet.create({
     },
     box_radius: {
         height: 40,
-        backgroundColor: Colors.neutral_dark3,
         padding: 8,
         paddingEnd: 10,
         paddingStart: 10,
@@ -183,7 +167,6 @@ export const styles = StyleSheet.create({
         marginBottom: 8,
         justifyContent: 'center',
         borderWidth: 1,
-        borderColor: Colors.secondary,
     },
     box_area: {
         width: '100%',
@@ -193,7 +176,6 @@ export const styles = StyleSheet.create({
     },
     text_caption: {
         fontWeight: "800",
-        color: Colors.text_primary,
         fontSize: 15,
     },
 });

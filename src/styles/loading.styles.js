@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import Colors from "./color";
 
 export const styles = StyleSheet.create({
   container: {
@@ -23,7 +22,6 @@ export const styles = StyleSheet.create({
   brandName: {
     fontSize: 56,
     fontWeight: '800',
-    color: Colors.text_primary,
     marginTop: 0,
     letterSpacing: -1,
   },
@@ -34,13 +32,11 @@ export const styles = StyleSheet.create({
   tagline: {
     fontSize: 20,
     fontWeight: '700',
-    color: Colors.text_primary,
     textAlign: 'center',
     lineHeight: 28,
   },
   subTagline: {
     fontSize: 16,
-    color: Colors.text_secondary,
     textAlign: 'center',
     marginTop: 6,
   },
@@ -50,41 +46,31 @@ export const styles = StyleSheet.create({
     gap: 14,
   },
   buttonPrimary: {
-    backgroundColor: Colors.primary,
     paddingVertical: 18,
     borderRadius: 30,
     width: '100%',
     alignItems: 'center',
-    shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.4,
+    shadowOpacity: 0.35,
     shadowRadius: 12,
     elevation: 7,
   },
   buttonSecondary: {
-    backgroundColor: Colors.surface_strong,
+    backgroundColor: 'transparent',
     paddingVertical: 18,
     borderRadius: 30,
     width: '100%',
     alignItems: 'center',
     borderWidth: 1.5,
-    borderColor: Colors.secondary,
-    shadowColor: Colors.secondary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 2,
   },
   buttonTextPrimary: {
     fontSize: 17,
     fontWeight: '700',
-    color: Colors.text_primary,
     letterSpacing: 0.2,
   },
   buttonTextSecondary: {
     fontSize: 17,
-    fontWeight: '700',
-    color: Colors.secondary_dark,
+    fontWeight: '600',
     letterSpacing: 0.2,
   },
 });

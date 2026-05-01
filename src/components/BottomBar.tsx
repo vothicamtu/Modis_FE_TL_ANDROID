@@ -1,21 +1,29 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import Colors from '../styles/color';
 import { RootStackParamList } from '../navigation/types';
+import { useColors } from '../hook/useColors';
 
 const BottomBar = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const C = useColors();
 
   return (
-    <View testID="bottom-bar" style={styles.container}>
+    <View testID="bottom-bar" style={[styles.container, {
+      backgroundColor: C.surfaceStrong,
+      borderTopColor: C.border,
+    }]}>
       <TouchableOpacity
         testID="bottom-bar-home-button"
-        style={styles.outerCircle}
+        style={[styles.outerCircle, {
+          borderColor: C.primary,
+          backgroundColor: C.surfaceStrong,
+          shadowColor: C.primary,
+        }]}
         onPress={() => navigation.navigate("HomeScreen")}
         activeOpacity={0.7}
       >
-        <View style={styles.innerCircle} />
+        <View style={[styles.innerCircle, { backgroundColor: C.primary }]} />
       </TouchableOpacity>
     </View>
   );
@@ -24,37 +32,22 @@ const BottomBar = () => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
+    bottom: 0, left: 0, right: 0,
     height: 100,
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 24,
-    backgroundColor: Colors.surface_strong,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(159,165,174,0.2)',
   },
   outerCircle: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 60, height: 60, borderRadius: 30,
     borderWidth: 3,
-    borderColor: Colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Colors.surface_strong,
-    shadowColor: Colors.primary,
+    justifyContent: 'center', alignItems: 'center',
     shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.25,
-    shadowRadius: 6,
-    elevation: 4,
+    shadowOpacity: 0.25, shadowRadius: 6, elevation: 4,
   },
   innerCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: Colors.primary,
+    width: 44, height: 44, borderRadius: 22,
   },
 });
 

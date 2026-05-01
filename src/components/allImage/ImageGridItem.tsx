@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { ImageItem } from '../../types';
-import Colors from '../../styles/color';
 import { optimizeCloudinaryUrl } from '../../utils/cloudinary';
+import { useColors } from '../../hook/useColors';
 
 const { width } = Dimensions.get('window');
 const COLUMN_COUNT = 3;
@@ -16,9 +16,10 @@ interface Props {
 }
 
 const ImageGridItem: React.FC<Props> = ({ item, onPress }) => {
+  const C = useColors();
   return (
     <TouchableOpacity testID={`image-grid-item-${item._id}`} onPress={onPress} style={styles.container}>
-      <View style={styles.card}>
+      <View style={[styles.card, { backgroundColor: C.surfaceStrong }]}>
         <Image
           testID={`image-grid-image-${item._id}`}
           source={{ uri: optimizeCloudinaryUrl(item.uri) }}
@@ -41,7 +42,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
     elevation: 2,
-    backgroundColor: Colors.surface_strong,  // nền sáng — đồng bộ light theme
   },
   image: {
     width: '100%',

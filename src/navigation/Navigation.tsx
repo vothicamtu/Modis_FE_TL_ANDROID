@@ -16,32 +16,52 @@ import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import { RootStackParamList } from './types';
+import { ThemeProvider, useTheme } from '../context/ThemeContext';
+import { useColors } from '../hook/useColors';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-export default function AppNavigation() {
+function NavigationContent() {
+    const C = useColors();
+    
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
-            <NavigationContainer>
-                <Stack.Navigator
-                    initialRouteName="LoadingScreen"
-                    screenOptions={{
-                        headerShown: false,
-                        animation: 'fade',
-                    }}
-                >
+        <NavigationContainer>
+            <Stack.Navigator
+                initialRouteName="LoadingScreen"
+                screenOptions={{
+                    headerShown: false,
+                    animation: 'fade',
+                    statusBarTranslucent: true,
+                    statusBarColor: 'transparent',
+                    headerTintColor: C.textPrimary,
+                    headerStyle: {
+                        backgroundColor: C.bg,
+                    },
+                }}
+            >
                     <Stack.Screen name="LoadingScreen" component={LoadingScreen} />
                     <Stack.Screen name="LoginScreen" component={LoginScreen} />
                     <Stack.Screen name="SignupScreen" component={SignupScreen} />
                     <Stack.Screen name="HomeScreen" component={HomeScreen} />
                     <Stack.Screen name="SendPhotoScreen" component={SendPhotoScreen} />
-                    <Stack.Screen name="AllImagesScreen" component={AllImagesScreen} />
-                    <Stack.Screen name="FriendsScreen" component={FriendsScreen} />
+                    <Stack.Screen name="AllImagesScreen" component={AllImagesScreen} 
+                        options={{ statusBarTranslucent: true, statusBarColor: 'transparent' }} />
+                    <Stack.Screen name="FriendsScreen" component={FriendsScreen}
+                        options={{ statusBarTranslucent: true, statusBarColor: 'transparent' }} />
                     <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
                     <Stack.Screen name="MessageScreen" component={MessageScreen} />
                     <Stack.Screen name="ConversationScreen" component={ConversationScreen} />
                 </Stack.Navigator>
             </NavigationContainer>
-        </GestureHandlerRootView>
+    );
+}
+
+export default function AppNavigation() {
+    return (
+        <ThemeProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <NavigationContent />
+            </GestureHandlerRootView>
+        </ThemeProvider>
     );
 }

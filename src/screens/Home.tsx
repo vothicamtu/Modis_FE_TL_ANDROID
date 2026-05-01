@@ -10,10 +10,12 @@ import MessageScreen from '../components/messages/chat_list/MessageScreen';
 import React_emoji_comment from './React_emoji_comment';
 import ProfileScreen from './ProfileScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useColors } from '../hook/useColors';
 
 const { width, height } = Dimensions.get('window');
 
 function HomeScreen() {
+    const C = useColors();
     // Hàng (dọc) và Cột (ngang)
     const activeRow = useSharedValue(0); // 0 = top row, 1 = bottom row
     const activeCol = useSharedValue(1); // 0 = trái, 1 = giữa, 2 = phải
@@ -99,10 +101,10 @@ function HomeScreen() {
 
     }
     return (
-        <SafeAreaView style={{ flex: 1, overflow: 'hidden' }}>
-            <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
+        <SafeAreaView style={{ flex: 1, overflow: 'hidden', backgroundColor: C.bg }}>
+            <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
 
-            <GestureHandlerRootView style={{ flex: 1 }}>
+            <GestureHandlerRootView style={{ flex: 1, backgroundColor: C.bg }}>
                 <GestureDetector gesture={gesture}>
                     <Animated.View
                         style={[
@@ -130,9 +132,8 @@ function HomeScreen() {
                         <View style={{ width, height }}>
                             <ProfileScreen goToHome={goToHome} />
                         </View>
-                        <View style={{ width, height }}>
+                        <View style={{ width, height, overflow: 'hidden' }}>
                             <React_emoji_comment goToHome={goToHome} goToMessage={goToMessage} goToProfile={goToProfile} panGesture={gesture} />
-
                         </View>
                         <View style={{ width, height }}>
                             <MessageScreen goToHome={goToHome}/>

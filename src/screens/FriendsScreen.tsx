@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View, ScrollView, StyleSheet, TouchableOpacity, Dimensions, StatusBar } from "react-native";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { runOnJS } from "react-native-reanimated";
 import styles from "../styles/FriendsScreen.styles.js";
-import Colors from "../styles/color";
 import FriendsHeader from "../components/friends/FriendsHeader";
 import FriendsSearch from "../components/friends/FriendsSearch";
 import FriendsList from "../components/friends/FriendsList";
@@ -14,14 +13,16 @@ import SentRequests from "../components/friends/SentRequests";
 import ShareAppRow from "../components/friends/ShareAppRow";
 import InviteApps from "../components/friends/InviteApps";
 import SearchResultList from "../components/friends/SearchResultList";
-
 import Icon from "react-native-vector-icons/MaterialIcons";
-
 import LinearGradient from "react-native-linear-gradient";
+import { useColors } from "../hook/useColors";
 
 export default function FriendsScreen() {
   const navigation = useNavigation();
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  const insets = useSafeAreaInsets();
+  const C = useColors();
+  console.log('[FriendsScreen] insets.top =', insets.top);
 
   const goBack = () => {
     if (navigation.canGoBack()) {
@@ -43,45 +44,42 @@ export default function FriendsScreen() {
     });
 
   return (
-    <GestureDetector gesture={swipeDown}>
-      <LinearGradient colors={['#ede8ff', '#e8f4ff', '#e8fff8']} style={styles.container}>
-        <SafeAreaView style={styles.safeAreaAbsolute} edges={["top"]}>
-          <View style={{ paddingTop: 4 }}>
-            <View style={styles.headerBarModern}>
+      <LinearGradient colors={C.bgGradient} style={styles.container}>
+        <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
+        <View style={{ height: insets.top, backgroundColor: C.bgGradient[0] }} />
+        <View style={{ flex: 1, paddingTop: 28 }}>
+          <View style={styles.headerBarModern}>
               <TouchableOpacity
                 testID="friends-back-button"
                 onPress={goBack}
-                style={styles.backButtonModern}
+                style={[styles.backButtonModern, { backgroundColor: C.backBtn, shadowColor: C.backBtnShadow }]}
               >
-                <Icon name="arrow-back" size={24} color={Colors.text_primary} />
+                <Icon name="arrow-back" size={24} color={C.textPrimary} />
               </TouchableOpacity>
               <View style={{ width: 44, marginRight: 12 }} />
             </View>
-          </View>
-        </SafeAreaView>
-
-        <ScrollView
-          testID="friends-scroll"
-          showsVerticalScrollIndicator={false}
-          scrollEventThrottle={16}
-          contentContainerStyle={styles.scrollContent}
-        >
-          <FriendsHeader />
-          <FriendsSearch onResult={setSearchResults} />
-          {searchResults.length > 0 && searchResults[0] !== null ? (
-            <SearchResultList users={searchResults} />
-          ) : (
-            <>
-              <ShareAppRow />
-              <FriendsList />
-              <FriendRequests />
-              <SentRequests />
-              <InviteApps />
-            </>
-          )}
-        </ScrollView>
+          <ScrollView
+            testID="friends-scroll"
+            showsVerticalScrollIndicator={false}
+            scrollEventThrottle={16}
+            contentContainerStyle={styles.scrollContent}
+          >
+            <FriendsHeader />
+            <FriendsSearch onResult={setSearchResults} />
+            {searchResults.length > 0 && searchResults[0] !== null ? (
+              <SearchResultList users={searchResults} />
+            ) : (
+              <>
+                <ShareAppRow />
+                <FriendsList />
+                <FriendRequests />
+                <SentRequests />
+                <InviteApps />
+              </>
+            )}
+          </ScrollView>
+        </View>
       </LinearGradient>
-    </GestureDetector>
   );
 }
 

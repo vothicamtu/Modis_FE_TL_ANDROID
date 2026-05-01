@@ -5,9 +5,10 @@ import styles from "../../styles/FriendsScreen.styles";
 import friendsController from "../../controller/friends.controller";
 import { Friend } from "../../types/friend/Friend";
 import { on } from "../../utils/eventBus";
+import { useColors } from "../../hook/useColors";
 
 export default function FriendsHeader() {
-
+  const C = useColors();
   // State lưu số lượng bạn bè
   const [count, setCount] = useState<number>(0);
 
@@ -33,8 +34,8 @@ export default function FriendsHeader() {
 
   return (
     <>
-      <Text style={styles.title}>Bạn bè của bạn</Text>
-      <Text style={styles.subTitle}>{count} người bạn</Text>
+      <Text style={[styles.title, { color: C.textPrimary }]}>Bạn bè của bạn</Text>
+      <Text style={[styles.subTitle, { color: C.textSecondary }]}>{count} người bạn</Text>
     </>
   );
 }

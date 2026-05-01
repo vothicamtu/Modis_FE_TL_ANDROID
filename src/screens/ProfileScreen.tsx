@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Modal,
   TextInput,
+  Switch,
 } from 'react-native';
 import { ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -20,7 +21,8 @@ import { authController } from '../controller/auth.controller';
 import { profileController } from '../controller/profile.controller';
 import { launchImageLibrary } from 'react-native-image-picker';
 import ShareAppRow from '../components/friends/ShareAppRow';
-import Colors from '../styles/color';
+import { useTheme } from '../context/ThemeContext';
+import { useColors } from '../hook/useColors';
 
 type Profile = {
   id: string;
@@ -37,6 +39,8 @@ type Props = {
 
 export default function ProfileScreen({ goToHome }: Props) {
   const navigation = useNavigation();
+  const { isDark, toggleTheme } = useTheme();
+  const C = useColors();
 
   const handleBack = () => {
     if (goToHome) {
@@ -76,11 +80,11 @@ export default function ProfileScreen({ goToHome }: Props) {
     onPress?: () => void;
     testID?: string;
   }) => (
-    <TouchableOpacity testID={testID} style={styles.item} onPress={onPress}>
-      <Icon name={icon} size={22} color={danger ? '#ff4d4f' : Colors.primary} />
+    <TouchableOpacity testID={testID} style={[styles.item, { backgroundColor: C.surface, borderLeftColor: danger ? C.danger : C.primary }]} onPress={onPress}>
+      <Icon name={icon} size={22} color={danger ? C.danger : C.primary} />
       <View style={{ marginLeft: 12 }}>
-        <Text style={styles.label}>{label}</Text>
-        {value && <Text style={styles.value}>{value}</Text>}
+        <Text style={[styles.label, { color: C.textPrimary }]}>{label}</Text>
+        {value && <Text style={[styles.value, { color: C.textSecondary }]}>{value}</Text>}
       </View>
     </TouchableOpacity>
   );
@@ -176,17 +180,17 @@ export default function ProfileScreen({ goToHome }: Props) {
 
   if (loading && !isModalVisible) {
     return (
-      <LinearGradient colors={['#ede8ff', '#e8f4ff', '#e8fff8']} style={styles.container}>
+      <LinearGradient colors={C.bgGradient} style={styles.container}>
         <SafeAreaView style={{ flex: 1, justifyContent: 'center' }} edges={[]}>
-          <ActivityIndicator size="large" color="#FE9EC7" />
+          <ActivityIndicator size="large" color={C.primary} />
         </SafeAreaView>
       </LinearGradient>
     );
   }
 
   return (
-    <LinearGradient colors={['#ede8ff', '#e8f4ff', '#e8fff8']} style={{ flex: 1 }}>
-      <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
+    <LinearGradient colors={C.bgGradient} style={{ flex: 1 }}>
+      <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
       <View style={{ flex: 1 }}>
         <SafeAreaView style={{ zIndex: 10, width: '100%', backgroundColor: 'transparent' }} edges={['top']}>
           <View style={{ paddingTop: 4 }}>
@@ -194,9 +198,9 @@ export default function ProfileScreen({ goToHome }: Props) {
               <TouchableOpacity
                 testID="profile-back-button"
                 onPress={handleBack}
-                style={styles.backButtonModern}
+                style={[styles.backButtonModern, { backgroundColor: C.backBtn, shadowColor: C.backBtnShadow }]}
               >
-                <Icon name="arrow-back" size={24} color={Colors.text_primary} />
+                <Icon name="arrow-back" size={24} color={C.textPrimary} />
               </TouchableOpacity>
             </View>
           </View>
@@ -204,7 +208,7 @@ export default function ProfileScreen({ goToHome }: Props) {
 
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 40, paddingTop: 0 }}
+          contentContainerStyle={{ paddingBottom: 80, paddingTop: 0 }}
           style={{ flex: 1 }}
           bounces={false}
           overScrollMode="never"
@@ -219,11 +223,11 @@ export default function ProfileScreen({ goToHome }: Props) {
                   ? { uri: profile.avatarUrl }
                   : require('../assets/image/avt.png')
               }
-              style={styles.avatar}
+              style={[styles.avatar, { borderColor: C.primary }]}
             />
-            <Text testID="profile-username" style={styles.name}>{profile?.username}</Text>
+            <Text testID="profile-username" style={[styles.name, { color: C.textPrimary }]}>{profile?.username}</Text>
             <TouchableOpacity testID="profile-edit-avatar-button" onPress={handleEditAvatar}>
-              <Text style={styles.edit}>Chỉnh ảnh</Text>
+              <Text style={[styles.edit, { color: C.primary }]}>Chỉnh ảnh</Text>
             </TouchableOpacity>
 
             <View style={styles.iinviteWrapper}>
@@ -232,14 +236,14 @@ export default function ProfileScreen({ goToHome }: Props) {
                 style={styles.invite}
                 onPress={() => setShareModal(true)}
               >
-                <Text style={styles.inviteText}>Mời bạn bè tham gia Locket!</Text>
-                <Icon name="share" size={18} color="#555" />
+                <Text style={[styles.inviteText, { color: C.textPrimary }]}>Mời bạn bè tham gia Locket!</Text>
+                <Icon name="share" size={18} color={C.textSecondary} />
               </TouchableOpacity>
             </View>
           </View>
 
           {/* List Items */}
-          <Text style={styles.section}>Tổng quát</Text>
+          <Text style={[styles.section, { color: C.textSecondary }]}>Tổng quát</Text>
           <Item
             icon="person"
             label="Sửa tên"
@@ -262,7 +266,7 @@ export default function ProfileScreen({ goToHome }: Props) {
             testID="profile-edit-email-item"
           />
 
-          <Text style={styles.section}>Riêng tư & bảo mật</Text>
+          <Text style={[styles.section, { color: C.textSecondary }]}>Riêng tư & bảo mật</Text>
           <Item
             icon="lock"
             label="Đổi mật khẩu"
@@ -271,122 +275,130 @@ export default function ProfileScreen({ goToHome }: Props) {
             testID="profile-change-password-item"
           />
 
-          <Text style={styles.section}>Vùng nguy hiểm</Text>
+          {/* Giao diện */}
+          <Text style={[styles.section, { color: C.textSecondary }]}>Giao diện</Text>
+          <View style={[styles.item, { backgroundColor: C.surface, borderLeftColor: C.primary }]}>
+            <Icon name={isDark ? 'dark-mode' : 'light-mode'} size={22} color={C.primary} />
+            <View style={{ marginLeft: 12, flex: 1 }}>
+              <Text style={[styles.label, { color: C.textPrimary }]}>Chế độ tối</Text>
+              <Text style={[styles.value, { color: C.textSecondary }]}>{isDark ? 'Đang bật' : 'Đang tắt'}</Text>
+            </View>
+            <Switch
+              value={isDark}
+              onValueChange={toggleTheme}
+              trackColor={{ false: '#9fa5ae', true: C.primary }}
+              thumbColor={isDark ? C.primary : '#ffffff'}
+            />
+          </View>
+
+          <Text style={[styles.section, { color: C.textSecondary }]}>Vùng nguy hiểm</Text>
           <Item icon="delete" label="Xóa tài khoản" danger onPress={() => { }} testID="profile-delete-account-item" />
           <Item icon="logout" label="Đăng xuất" onPress={() => authController.logout(navigation)} testID="profile-logout-item" />
         </ScrollView>
 
-        {/* Modals — nằm ngoài ScrollView để không ảnh hưởng scroll */}
+        {/* Modals */}
         <Modal
           visible={isModalVisible}
           transparent
           animationType="fade"
           onRequestClose={() => setIsModalVisible(false)}
         >
-          <View style={styles.overlay} testID="profile-edit-modal">
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>
+          <View style={[styles.overlay, { backgroundColor: C.modalOverlay }]} testID="profile-edit-modal">
+            <View style={[styles.modalContent, { backgroundColor: C.surfaceStrong, borderColor: C.borderAccent }]}>
+              <Text style={[styles.modalTitle, { color: C.textPrimary }]}>
                 Cập nhật{' '}
-                {currentField === 'username'
-                  ? 'tên'
-                  : currentField === 'sdt'
-                    ? 'SĐT'
-                    : 'Email'}
+                {currentField === 'username' ? 'tên' : currentField === 'sdt' ? 'SĐT' : 'Email'}
               </Text>
               <TextInput
                 testID="profile-edit-modal-input"
-                style={styles.input}
+                style={[styles.input, { backgroundColor: C.inputBg, borderColor: C.inputBorder, color: C.textPrimary }]}
                 value={tempValue}
                 onChangeText={setTempValue}
                 autoFocus
                 placeholder="Nhập thông tin mới..."
-                placeholderTextColor="#999"
+                placeholderTextColor={C.textHint}
               />
               <View style={styles.modalButtons}>
                 <TouchableOpacity
                   testID="profile-edit-modal-cancel"
-                  style={[styles.btn, styles.btnCancel]}
+                  style={[styles.btn, { backgroundColor: C.btnCancel }]}
                   onPress={() => setIsModalVisible(false)}
                 >
-                  <Text style={styles.btnTextCancel}>Hủy</Text>
+                  <Text style={[styles.btnTextCancel, { color: C.btnCancelText }]}>Hủy</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   testID="profile-edit-modal-save"
-                  style={[styles.btn, styles.btnSave]}
+                  style={[styles.btn, styles.btnSave, { backgroundColor: C.primary }]}
                   onPress={handleSave}
                 >
-                  <Text style={styles.btnTextSave}>Lưu</Text>
+                  <Text style={[styles.btnTextSave, { color: C.btnPrimaryText }]}>Lưu</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
         </Modal>
 
-        {/* --- MODAL ĐỔI MẬT KHẨU --- */}
         <Modal visible={passwordModal} transparent animationType="slide">
-          <View style={styles.overlay} testID="profile-password-modal">
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Đổi mật khẩu</Text>
+          <View style={[styles.overlay, { backgroundColor: C.modalOverlay }]} testID="profile-password-modal">
+            <View style={[styles.modalContent, { backgroundColor: C.surfaceStrong, borderColor: C.borderAccent }]}>
+              <Text style={[styles.modalTitle, { color: C.textPrimary }]}>Đổi mật khẩu</Text>
               <TextInput
                 testID="profile-old-password-input"
-                style={styles.input}
+                style={[styles.input, { backgroundColor: C.inputBg, borderColor: C.inputBorder, color: C.textPrimary }]}
                 placeholder="Mật khẩu hiện tại"
-                placeholderTextColor="#999"
+                placeholderTextColor={C.textHint}
                 secureTextEntry
                 value={passwordData.oldPass}
                 onChangeText={(text) => setPasswordData({ ...passwordData, oldPass: text })}
               />
               <TextInput
                 testID="profile-new-password-input"
-                style={styles.input}
+                style={[styles.input, { backgroundColor: C.inputBg, borderColor: C.inputBorder, color: C.textPrimary }]}
                 placeholder="Mật khẩu mới"
-                placeholderTextColor="#999"
+                placeholderTextColor={C.textHint}
                 secureTextEntry
                 value={passwordData.newPass}
                 onChangeText={(text) => setPasswordData({ ...passwordData, newPass: text })}
               />
               <TextInput
                 testID="profile-confirm-password-input"
-                style={styles.input}
+                style={[styles.input, { backgroundColor: C.inputBg, borderColor: C.inputBorder, color: C.textPrimary }]}
                 placeholder="Xác nhận mật khẩu mới"
-                placeholderTextColor="#999"
+                placeholderTextColor={C.textHint}
                 secureTextEntry
                 value={passwordData.confirmPass}
-                onChangeText={(text) =>
-                  setPasswordData({ ...passwordData, confirmPass: text })
-                }
+                onChangeText={(text) => setPasswordData({ ...passwordData, confirmPass: text })}
               />
               <View style={styles.modalButtons}>
                 <TouchableOpacity
                   testID="profile-password-modal-cancel"
-                  style={[styles.btn, styles.btnCancel]}
+                  style={[styles.btn, { backgroundColor: C.btnCancel }]}
                   onPress={() => setPasswordModal(false)}
                 >
-                  <Text style={styles.btnTextCancel}>Hủy</Text>
+                  <Text style={[styles.btnTextCancel, { color: C.btnCancelText }]}>Hủy</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   testID="profile-password-modal-save"
-                  style={[styles.btn, styles.btnSave]}
+                  style={[styles.btn, styles.btnSave, { backgroundColor: C.primary }]}
                   onPress={handleChangePassword}
                 >
-                  <Text style={styles.btnTextSave}>Cập nhật</Text>
+                  <Text style={[styles.btnTextSave, { color: C.btnPrimaryText }]}>Cập nhật</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
         </Modal>
 
-        {/* --- MODAL SHARE APP --- */}
         <Modal visible={shareModal} transparent animationType="slide">
-          <View style={styles.overlay} testID="profile-share-modal">
-            <View style={[styles.modalContent, { paddingBottom: 30 }]}>
+          <View style={[styles.overlay, { backgroundColor: C.modalOverlay }]} testID="profile-share-modal">
+            <View style={[styles.modalContent, { backgroundColor: C.surfaceStrong, borderColor: C.borderAccent, paddingBottom: 30 }]}>
               <ShareAppRow />
               <TouchableOpacity
                 testID="profile-share-modal-close"
-                style={[styles.btn, styles.btnCancel, { marginTop: 20 }]}
+                style={[styles.btn, { backgroundColor: C.btnCancel, marginTop: 20 }]}
                 onPress={() => setShareModal(false)}
               >
-                <Text style={styles.btnTextCancel}>Đóng</Text>
+                <Text style={[styles.btnTextCancel, { color: C.btnCancelText }]}>Đóng</Text>
               </TouchableOpacity>
             </View>
           </View>

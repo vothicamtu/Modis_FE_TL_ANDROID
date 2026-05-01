@@ -18,13 +18,8 @@ export const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
     elevation: 3,
   },
   avatarImage: {
@@ -35,7 +30,6 @@ export const styles = StyleSheet.create({
   iconImage: {
     width: 26,
     height: 26,
-    tintColor: Colors.text_secondary,
   },
 
   filterButton: {
@@ -43,19 +37,15 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 18,
     borderRadius: 22,
     borderWidth: 1.5,
-    borderColor: Colors.primary,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.surface_strong,
-    shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 2,
   },
   title: {
-    color: Colors.text_primary,
     fontSize: 15,
     fontWeight: '600',
     marginRight: 6,
@@ -71,19 +61,15 @@ export const styles = StyleSheet.create({
     borderTopWidth: 7,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderTopColor: Colors.text_secondary,
   },
 
   homeFriendsButton: {
     height: 44,
     paddingHorizontal: 18,
     borderRadius: 22,
-    backgroundColor: Colors.surface_strong,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1.5,
-    borderColor: Colors.primary,
-    shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 4,
@@ -95,32 +81,26 @@ export const styles = StyleSheet.create({
   },
   homeTextCount: {
     paddingLeft: 8,
-    color: Colors.text_primary,
     fontSize: 15,
     fontWeight: '700',
   },
   homeTextLabel: {
     paddingLeft: 4,
     fontWeight: '600',
-    color: Colors.text_secondary,
     fontSize: 15,
   },
 
   mask: {
     flex: 1,
-    backgroundColor: 'rgba(26,26,46,0.35)',
     alignItems: 'center',
     paddingTop: 110,
   },
   dropdownBoard: {
     width: 280,
-    backgroundColor: Colors.surface_strong,
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: 'rgba(254,158,199,0.25)',
     overflow: 'hidden',
     height: 300,
-    shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.15,
     shadowRadius: 16,
@@ -128,6 +108,5 @@ export const styles = StyleSheet.create({
   },
   separator: {
     height: 1,
-    backgroundColor: 'rgba(159,165,174,0.25)',
   },
 });
