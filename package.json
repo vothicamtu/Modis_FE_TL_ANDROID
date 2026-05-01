@@ -10,8 +10,7 @@
     "ios-check": "bash scripts/check-ios-build.sh",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest",
-    "postinstall": "cd ios && pod install --repo-update && cd .."
+    "test": "jest"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",

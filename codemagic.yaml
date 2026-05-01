@@ -26,14 +26,15 @@ workflows:
       - name: Install npm dependencies
         script: |
           echo " Installing npm dependencies..."
-          npm install --ignore-scripts
-      
+          npm install
+
       # Bước 2: Install CocoaPods dependencies
       - name: Install CocoaPods dependencies
         script: |
           echo " Installing CocoaPods dependencies..."
           cd ios
           pod install --repo-update
+          ls -la
           cd ..
 
       - name: Verify workspace exists   # Thêm bước kiểm tra
@@ -49,6 +50,8 @@ workflows:
       # Bước 3: Build và Archive (unsigned)
       - name: Build iOS Archive (unsigned)
         script: |
+          # Double check
+          ls -la ios/
           echo " Building iOS archive without code signing..."
           xcodebuild archive \
             -workspace $XCODE_WORKSPACE \
