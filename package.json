@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "postinstall": "if command -v pod >/dev/null 2>&1; then cd ios && pod install --repo-update && cd ..; else echo 'CocoaPods not found, skipping pod install'; fi"
+    "postinstall": "node -e \"const { execSync } = require('child_process'); try { execSync('pod --version', { stdio: 'ignore' }); console.log('Installing CocoaPods dependencies...'); execSync('cd ios && pod install --repo-update', { stdio: 'inherit' }); } catch (e) { console.log('CocoaPods not found, skipping pod install'); }\""
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
