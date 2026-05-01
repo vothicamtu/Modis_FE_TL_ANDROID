@@ -15,9 +15,9 @@ workflows:
         # Disable Flipper cho build ổn định
         NO_FLIPPER: 1
         # Disable code signing - sẽ dùng Sideloadly re-sign sau
-        CODE_SIGNING_REQUIRED: NO
-        CODE_SIGN_IDENTITY: ""
-        CODE_SIGNING_ALLOWED: NO
+#        CODE_SIGNING_REQUIRED: NO
+#        CODE_SIGN_IDENTITY: ""
+#        CODE_SIGNING_ALLOWED: NO
       node: v20.11.0
       xcode: latest
       cocoapods: default
