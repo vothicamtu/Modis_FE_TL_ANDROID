@@ -1,6 +1,6 @@
 module.exports = {
   dependencies: {
-    // Disable Flipper for cloud builds to avoid compilation issues
+    // Disable Flipper completely for React Native 0.81.4
     ...(process.env.NO_FLIPPER ? { 
       'react-native-flipper': { 
         platforms: { 
