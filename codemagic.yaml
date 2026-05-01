@@ -20,17 +20,16 @@ workflows:
 
       - name: Install CocoaPods dependencies
         script: |
-          echo "=== Current directory ==="
+          echo "Current directory:"
           pwd
-          echo "=== Node version ==="
+          echo "Node version:"
           node --version
-          echo "=== Checking node_modules ==="
-          ls node_modules/@react-native-community/ || echo "CLI not found!"
-          echo "=== Running pod install ==="
+          echo "Checking CLI:"
+          ls node_modules/@react-native-community/
+          echo "Running pod install..."
           cd ios
-          pod install --repo-update 2>&1   # in cả stderr ra
-          echo "=== Exit code: $? ==="
-          echo "=== Files after pod install ==="
+          pod install --repo-update
+          echo "Files after pod install:"
           ls -la
           cd ..
 
