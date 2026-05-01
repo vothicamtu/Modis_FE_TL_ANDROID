@@ -5,11 +5,14 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
+# Add source repository - FIXED
+source 'https://github.com/CocoaPods/Specs.git'
+
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
-# Disable Flipper for cloud builds to avoid compilation issues
-# flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
+# Disable Flipper for cloud builds - FIXED
+flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
@@ -28,8 +31,8 @@ target 'Modis' do
     # Hermes is now enabled by default. Disable by setting this flag to false.
     :hermes_enabled => flags[:hermes_enabled],
     :fabric_enabled => flags[:fabric_enabled],
-    # Disable Flipper for cloud builds
-#     :flipper_configuration => flipper_config,
+    # FIXED: Enable Flipper configuration properly
+    :flipper_configuration => flipper_config,
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
@@ -74,9 +77,11 @@ target 'Modis' do
         # General iOS 15.1+ compatibility fixes
         config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64' if config.name == 'Debug'
         
-        # Code signing fixes for cloud builds
-        config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
-        config.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'
+        # FIXED: Code signing for unsigned builds
+        if ENV['CODE_SIGNING_REQUIRED'] == 'NO'
+          config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+          config.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'
+        end
         
         # Disable bitcode (deprecated in Xcode 14+)
         config.build_settings['ENABLE_BITCODE'] = 'NO'
