@@ -35,7 +35,17 @@ workflows:
           cd ios
           pod install --repo-update
           cd ..
-      
+
+      - name: Verify workspace exists   # Thêm bước kiểm tra
+        script: |
+            echo "Checking workspace..."
+            ls -la ios/
+            if [ ! -d "ios/Modis.xcworkspace" ]; then
+              echo "ERROR: xcworkspace not found!"
+              exit 1
+            fi
+            echo "Workspace found!"
+
       # Bước 3: Build và Archive (unsigned)
       - name: Build iOS Archive (unsigned)
         script: |
