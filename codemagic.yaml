@@ -31,9 +31,17 @@ workflows:
       # Bước 2: Install CocoaPods dependencies
       - name: Install CocoaPods dependencies
         script: |
-          echo " Installing CocoaPods dependencies..."
+          echo "=== Current directory ==="
+          pwd
+          echo "=== Node version ==="
+          node --version
+          echo "=== Checking node_modules ==="
+          ls node_modules/@react-native-community/ || echo "CLI not found!"
+          echo "=== Running pod install ==="
           cd ios
-          pod install --repo-update
+          pod install --repo-update 2>&1   # in cả stderr ra
+          echo "=== Exit code: $? ==="
+          echo "=== Files after pod install ==="
           ls -la
           cd ..
 
