@@ -15,53 +15,62 @@ workflows:
     scripts:
       - name: Clean previous builds
         script: |
-          echo "🧹 Cleaning previous builds..."
+          echo " Cleaning previous builds..."
           rm -rf ios/Pods ios/Podfile.lock
           rm -rf node_modules
           rm -rf ios/build ios/DerivedData
 
       - name: Install npm dependencies
         script: |
-          echo "📦 Installing npm dependencies..."
+          echo " Installing npm dependencies..."
           echo "Node version: $(node --version)"
           echo "NPM version: $(npm --version)"
           
           # Try npm ci first, fallback to npm install if fails
           if npm ci --prefer-offline --no-audit 2>/dev/null; then
-            echo "✅ npm ci successful"
+            echo " npm ci successful"
           else
             echo "⚠️ npm ci failed, falling back to npm install"
             rm -f package-lock.json
             npm install --prefer-offline --no-audit
-            echo "✅ npm install successful"
+            echo " npm install successful"
+          fi
+          
+          # Verify CLI installation
+          echo " Verifying React Native CLI..."
+          if npx react-native --version; then
+            echo " React Native CLI working"
+          else
+            echo " React Native CLI not working"
+            exit 1
           fi
 
       - name: Install CocoaPods dependencies
         script: |
-          echo "🍫 Installing CocoaPods dependencies..."
+          echo " Installing CocoaPods dependencies..."
           echo "Current directory: $(pwd)"
           echo "Node version: $(node --version)"
           echo "CocoaPods version: $(pod --version)"
           
           cd ios
-          echo "📋 iOS directory before pod install:"
+          echo " iOS directory before pod install:"
           ls -la
           
-          echo "🔧 Running pod install..."
+          echo " Running pod install..."
           pod install --repo-update --verbose
           
-          echo "📋 iOS directory after pod install:"
+          echo " iOS directory after pod install:"
           ls -la
           
           # Verify workspace was created
           if [ ! -d "Modis.xcworkspace" ]; then
-            echo "❌ ERROR: Modis.xcworkspace not created!"
-            echo "📋 Checking for any .xcworkspace files:"
+            echo " ERROR: Modis.xcworkspace not created!"
+            echo " Checking for any .xcworkspace files:"
             find . -name "*.xcworkspace" -type d
             exit 1
           else
-            echo "✅ SUCCESS: Modis.xcworkspace created!"
-            echo "📁 Workspace contents:"
+            echo " SUCCESS: Modis.xcworkspace created!"
+            echo " Workspace contents:"
             ls -la Modis.xcworkspace/
           fi
           cd ..
