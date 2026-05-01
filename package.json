@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "postinstall": "cd ios && pod install --repo-update && cd .."
+    "postinstall": "if command -v pod >/dev/null 2>&1; then cd ios && pod install --repo-update && cd ..; else echo 'CocoaPods not found, skipping pod install'; fi"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",

@@ -1,6 +1,6 @@
 workflows:
-  ios-unsigned-build:
-    name: iOS Unsigned IPA Build
+  ios-unsigned-build-stable:
+    name: iOS Unsigned IPA Build (Stable)
     max_build_duration: 60
     instance_type: mac_mini_m1
     environment:
@@ -9,7 +9,9 @@ workflows:
         XCODE_SCHEME: "Modis"
         APP_NAME: "Modis"
         NO_FLIPPER: 1
-      node: v20.19.4
+        # Force npm install instead of npm ci
+        USE_NPM_INSTALL: 1
+      node: v20.11.0  # Stable LTS version
       xcode: latest
       cocoapods: default
     scripts:
@@ -20,27 +22,20 @@ workflows:
           rm -rf node_modules
           rm -rf ios/build ios/DerivedData
 
-      - name: Install npm dependencies
+      - name: Install npm dependencies (stable method)
         script: |
-          echo "📦 Installing npm dependencies..."
+          echo "📦 Installing npm dependencies with stable method..."
           echo "Node version: $(node --version)"
           echo "NPM version: $(npm --version)"
           
-          # Try npm ci first, fallback to npm install if fails
-          if npm ci --prefer-offline --no-audit 2>/dev/null; then
-            echo "✅ npm ci successful"
-          else
-            echo "⚠️ npm ci failed, falling back to npm install"
-            rm -f package-lock.json
-            npm install --prefer-offline --no-audit
-            echo "✅ npm install successful"
-          fi
+          # Always use npm install for maximum compatibility
+          npm install --prefer-offline --no-audit --legacy-peer-deps
+          echo "✅ npm install completed successfully"
 
       - name: Install CocoaPods dependencies
         script: |
           echo "🍫 Installing CocoaPods dependencies..."
           echo "Current directory: $(pwd)"
-          echo "Node version: $(node --version)"
           echo "CocoaPods version: $(pod --version)"
           
           cd ios
@@ -79,7 +74,7 @@ workflows:
       - name: Build iOS Archive (unsigned)
         script: |
           ls -la ios/
-          echo " Building iOS archive without code signing..."
+          echo "🔨 Building iOS archive without code signing..."
           xcodebuild archive \
             -workspace $XCODE_WORKSPACE \
             -scheme $XCODE_SCHEME \
@@ -94,7 +89,7 @@ workflows:
       
       - name: Create unsigned IPA manually
         script: |
-          echo " Creating unsigned IPA file..."
+          echo "📦 Creating unsigned IPA file..."
           
           mkdir -p "$CM_BUILD_DIR/Payload"
           
@@ -106,7 +101,7 @@ workflows:
           mkdir -p "$CM_BUILD_DIR/build/ios/ipa"
           mv "${APP_NAME}_unsigned.ipa" "$CM_BUILD_DIR/build/ios/ipa/"
           
-          echo "Unsigned IPA created: ${APP_NAME}_unsigned.ipa"
+          echo "✅ Unsigned IPA created: ${APP_NAME}_unsigned.ipa"
           
           ls -la "$CM_BUILD_DIR/build/ios/ipa/"
     
