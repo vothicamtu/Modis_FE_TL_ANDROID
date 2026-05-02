@@ -36,10 +36,7 @@ target 'Modis' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'ModisTests' do
-    inherit! :complete
-    # Pods for testing
-  end
+
 
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
