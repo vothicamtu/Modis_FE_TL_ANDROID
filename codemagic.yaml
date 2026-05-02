@@ -45,6 +45,26 @@ workflows:
             exit 1
           fi
 
+      - name: Debug React Native CLI
+        script: |
+          echo "=== DEBUG REACT NATIVE CLI ==="
+          node -v
+          npm -v
+          pwd
+          ls -la
+          
+          echo "=== NODE_MODULES CHECK ==="
+          ls -la node_modules/@react-native-community || echo "CLI directory not found"
+          
+          echo "=== CLI REQUIRE TEST ==="
+          node -e "console.log('CLI path:', require.resolve('@react-native-community/cli'))" || echo "require.resolve failed"
+          
+          echo "=== NPX REACT-NATIVE CONFIG TEST ==="
+          npx react-native config || echo "npx react-native config failed"
+          
+          echo "=== CLI.RUN DIRECT TEST ==="
+          node -e "process.argv=['', '', 'config'];require('@react-native-community/cli').run()" || echo "CLI.run failed"
+
       - name: Install CocoaPods dependencies
         script: |
           echo " Installing CocoaPods dependencies..."
