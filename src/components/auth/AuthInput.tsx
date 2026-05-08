@@ -21,7 +21,7 @@ export const AuthInput = ({ label, value, onChangeText, placeholder, secureTextE
 
   return (
     <View style={formStyles.inputContainer}>
-      <Text style={[formStyles.label, { color: isDark ? C.textSecondary : '#4a4a6a' }]}>{label}</Text>
+      <Text style={[formStyles.label, { color: C.textSecondary }]}>{label}</Text>
       <View
         style={[
           formStyles.input,
@@ -29,8 +29,8 @@ export const AuthInput = ({ label, value, onChangeText, placeholder, secureTextE
             paddingHorizontal: 0, 
             paddingVertical: 0, 
             overflow: 'hidden', 
-            borderColor: isDark ? C.inputBorder : 'rgba(137,212,255,0.5)', 
-            backgroundColor: isDark ? C.inputBg : 'rgba(255,255,255,0.6)' 
+            borderColor: C.inputBorder, 
+            backgroundColor: C.inputBg 
           },
           focused && { 
             borderColor: C.primary, 
@@ -50,14 +50,14 @@ export const AuthInput = ({ label, value, onChangeText, placeholder, secureTextE
             paddingVertical: 14,
             paddingHorizontal: 16,
             fontSize: 15,
-            color: isDark ? C.textPrimary : '#1a1a2e',
+            color: C.textPrimary,
             backgroundColor: 'transparent',
             width: '100%',
           }}
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor={isDark ? C.textHint : '#9fa5ae'}
+          placeholderTextColor={C.textHint}
           secureTextEntry={secureTextEntry}
           autoCapitalize="none"
           keyboardType={keyboardType}

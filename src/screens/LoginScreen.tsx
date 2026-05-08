@@ -48,11 +48,11 @@ export default function LoginScreen() {
           </View>
 
           <View style={[styles.card, {
-            backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.75)',
-            borderColor: isDark ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.9)',
-            shadowColor: isDark ? '#000000' : '#a0a0c0',
-            shadowOpacity: isDark ? 0.12 : 0.15,
-            shadowRadius: isDark ? 12 : 20,
+            backgroundColor: C.surface,
+            borderColor: C.border,
+            shadowColor: C.primary,
+            shadowOpacity: 0.15,
+            shadowRadius: 20,
           }]}>
             <AuthInput testID="login-username-input" label="Tên đăng nhập" value={username} onChangeText={setUsername} placeholder="Nhập tên đăng nhập" />
             <AuthInput testID="login-password-input" label="Mật khẩu" value={password} onChangeText={setPassword} placeholder="Nhập mật khẩu" secureTextEntry />
@@ -62,7 +62,7 @@ export default function LoginScreen() {
               style={[styles.button, isValid
                 ? { backgroundColor: C.primary, shadowColor: C.primary, shadowOpacity: 0.35, elevation: 5 }
                 : { 
-                    backgroundColor: isDark ? 'rgba(255,158,197,0.4)' : 'rgba(254,158,199,0.45)', 
+                    backgroundColor: C.btnDisabled, 
                     elevation: 0, 
                     shadowOpacity: 0 
                   }
@@ -73,7 +73,7 @@ export default function LoginScreen() {
               {loading ? (
                 <ActivityIndicator color={C.btnPrimaryText} />
               ) : (
-                <Text style={[styles.buttonText, { color: isValid ? C.btnPrimaryText : 'rgba(26,26,46,0.5)' }]}>Đăng nhập</Text>
+                <Text style={[styles.buttonText, { color: isValid ? C.btnPrimaryText : C.btnCancelText }]}>Đăng nhập</Text>
               )}
             </TouchableOpacity>
           </View>
