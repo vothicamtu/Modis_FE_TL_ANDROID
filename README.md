@@ -42,27 +42,6 @@ npm install --global yarn
      cd MyApp
      npx react-native run-android
      ```
-     
-- Chạy trên iOS (chỉ trên macOS)
-  
-  **Hướng dẫn chi tiết chạy trên máy ảo macOS (VMware):**
-  
-  1. **Chuẩn bị môi trường trên Mac:**
-     - Cài Xcode (từ App Store)
-     - Cài CocoaPods: `sudo gem install cocoapods`
-     - Cài Node.js & Watchman: `brew install node watchman`
-
-  2. **Chép code từ Windows sang Mac:**
-     - Nén thư mục project (BỎ folder `node_modules`).
-     - Copy sang máy Mac/VMware và giải nén.
-
-  3. **Cài đặt thư viện (trên Terminal của Mac):**
-     - Vào thư mục project: `npm install`
-     - Cài thư viện iOS: `cd ios && pod install`
-
-  4. **Chạy App:**
-     - Cách 1: `npx react-native run-ios`
-     - Cách 2: Mở `ios/Modis.xcworkspace` bằng Xcode và bấm nút Run (Play).
   
 # Một số lỗi có thể gặp
 **1. Đã bật Android Emulator nhưng khi chạy "npx react-native run-android" thì React native không nhận máy ảo.**
