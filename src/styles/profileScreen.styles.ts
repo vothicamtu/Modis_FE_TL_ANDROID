@@ -78,7 +78,7 @@ export const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 15,
     borderLeftWidth: 3,
-    shadowColor: '#000000',
+    shadowColor: '#000000', // Revert to working version - will fix with proper theme integration later
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 4,

@@ -25,7 +25,7 @@ interface ConversationProps {
     isLoading?: boolean;
 }
 
-function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessage, isConnected, isLoading }: ConversationProps) {
+function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessage, isLoading }: ConversationProps) {
     const [inputText, setInputText] = useState('');
     const flatListRef = useRef<FlatList>(null);
     const inputRef = useRef<TextInput>(null);
@@ -103,11 +103,6 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                         )}
                         <View style={styles.headerText}>
                             <Text testID="conversation-username" style={[styles.userName, { color: C.msgName }]}>{userName}</Text>
-                            {isConnected !== undefined && (
-                                <Text testID="conversation-online-status" style={[styles.onlineStatus, { color: C.convOnline }]}>
-                                    {isConnected ? '● Online' : 'Offline'}
-                                </Text>
-                            )}
                         </View>
                     </View>
                 </View>
@@ -168,11 +163,12 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                         <TextInput
                             ref={inputRef}
                             testID="chat-input"
-                            style={[styles.textInput, { color: C.isDark ? '#FFFFFF' : '#000000' }]}
+                            style={[styles.textInput, { color: C.textPrimary }]}
                             value={inputText}
                             onChangeText={setInputText}
                             placeholder="Nhắn tin..."
-                            placeholderTextColor={C.isDark ? '#E5E7EB' : '#666666'}
+                            placeholderTextColor={C.textHint}
+                            keyboardAppearance={C.statusBar === 'dark-content' ? 'light' : 'dark'}
                             multiline
                             returnKeyType="send"
                             blurOnSubmit={false}
@@ -189,7 +185,12 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                                 zIndex: 1002,
                                 pointerEvents: 'auto',
                             }, 
-                            !inputText.trim() && { opacity: 0.5 }
+                            !inputText.trim() && { 
+                                opacity: 0.5,
+                                backgroundColor: C.btnDisabled,
+                                shadowOpacity: 0,
+                                elevation: 0
+                            }
                         ]}
                         onPress={handleSend}
                         disabled={!inputText.trim()}

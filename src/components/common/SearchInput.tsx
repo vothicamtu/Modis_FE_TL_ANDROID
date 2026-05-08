@@ -29,6 +29,7 @@ interface SearchInputProps {
   rightIcon?: string;
   rightIconSize?: number;
   onRightIconPress?: () => void;
+  testID?: string;
 }
 
 export const SearchInput: React.FC<SearchInputProps> = ({
@@ -49,6 +50,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   rightIcon,
   rightIconSize = 20,
   onRightIconPress,
+  testID,
 }) => {
   const C = useColors();
   const inputRef = useRef<TextInput>(null);
@@ -88,7 +90,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         {
           flexDirection: 'row',
           alignItems: 'center',
-          backgroundColor: C.isDark ? C.inputBg : C.inputBg,
+          backgroundColor: C.inputBg,
           borderRadius: scale(12),
           borderWidth: 1,
           borderColor: isFocused ? C.primary : C.inputBorder,
@@ -112,11 +114,13 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 
       {/* Text Input */}
       <TextInput
+        testID={testID}
         ref={inputRef}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor={C.isDark ? '#E5E7EB' : '#666666'}
+        placeholderTextColor={C.textHint}
+        keyboardAppearance={C.statusBar === 'dark-content' ? 'light' : 'dark'}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onSubmitEditing={onSubmitEditing}
@@ -126,7 +130,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
           {
             flex: 1,
             fontSize: getFontSize(16),
-            color: C.isDark ? '#FFFFFF' : '#000000',
+            color: C.textPrimary,
             paddingVertical: Platform.OS === 'ios' ? scale(12) : scale(8),
           },
           inputStyle,
@@ -155,12 +159,12 @@ export const SearchInput: React.FC<SearchInputProps> = ({
                 width: scale(20),
                 height: scale(20),
                 borderRadius: scale(10),
-                backgroundColor: C.textHint,
+                backgroundColor: C.textSecondary, // Better contrast than textHint
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Icon name="close" size={14} color={C.isDark ? '#000000' : '#FFFFFF'} />
+              <Icon name="close" size={14} color={C.surface} /> {/* Use surface for better contrast */}
             </View>
           </TouchableOpacity>
         </Animated.View>

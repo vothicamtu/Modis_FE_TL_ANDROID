@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, StatusBar, Platform } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { View, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { useColors } from '../../hook/useColors';
+import { useTheme } from '../../context/ThemeContext';
 
 interface SafeContainerProps {
   children: React.ReactNode;
@@ -20,9 +21,10 @@ export const SafeContainer: React.FC<SafeContainerProps> = ({
   statusBarStyle,
 }) => {
   const C = useColors();
+  const { isDark } = useTheme();
   const insets = useSafeAreaInsets();
 
-  const statusBar = statusBarStyle || (C.isDark ? 'light-content' : 'dark-content');
+  const statusBar = statusBarStyle || (isDark ? 'light-content' : 'dark-content');
   const bgColor = backgroundColor || C.bg;
 
   if (useGradient) {
@@ -65,9 +67,10 @@ export const ManualSafeArea: React.FC<{
   backgroundColor?: string;
 }> = ({ children, useGradient = true, backgroundColor }) => {
   const C = useColors();
+  const { isDark } = useTheme();
   const insets = useSafeAreaInsets();
   
-  const statusBar = C.isDark ? 'light-content' : 'dark-content';
+  const statusBar = isDark ? 'light-content' : 'dark-content';
   const bgColor = backgroundColor || C.bg;
 
   if (useGradient) {

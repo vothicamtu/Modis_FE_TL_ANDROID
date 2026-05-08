@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput } from 'react-native';
 import { styles as formStyles } from '../../styles/loginScreen.styles';
 import { useColors } from '../../hook/useColors';
-import { useTheme } from '../../context/ThemeContext';
 
 interface Props {
   label: string;
@@ -17,7 +16,6 @@ interface Props {
 export const AuthInput = ({ label, value, onChangeText, placeholder, secureTextEntry, keyboardType, testID }: Props) => {
   const [focused, setFocused] = useState(false);
   const C = useColors();
-  const { isDark } = useTheme();
 
   return (
     <View style={formStyles.inputContainer}>
@@ -58,6 +56,7 @@ export const AuthInput = ({ label, value, onChangeText, placeholder, secureTextE
           onChangeText={onChangeText}
           placeholder={placeholder}
           placeholderTextColor={C.textHint}
+          keyboardAppearance={C.statusBar === 'dark-content' ? 'light' : 'dark'}
           secureTextEntry={secureTextEntry}
           autoCapitalize="none"
           keyboardType={keyboardType}

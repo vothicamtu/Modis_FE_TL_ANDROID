@@ -92,7 +92,7 @@ export const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 24,
     borderWidth: 0.5,
-    shadowColor: '#000000',
+    shadowColor: '#000000', // Revert to working version
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.12,
     shadowRadius: 12,

@@ -286,8 +286,8 @@ export default function ProfileScreen({ goToHome }: Props) {
             <Switch
               value={isDark}
               onValueChange={toggleTheme}
-              trackColor={{ false: '#9fa5ae', true: C.primary }}
-              thumbColor={isDark ? C.primary : '#ffffff'}
+              trackColor={{ false: C.textHint, true: C.primary }}
+              thumbColor={C.primary}
             />
           </View>
 
@@ -317,6 +317,7 @@ export default function ProfileScreen({ goToHome }: Props) {
                 autoFocus
                 placeholder="Nhập thông tin mới..."
                 placeholderTextColor={C.textHint}
+                keyboardAppearance={C.statusBar === 'dark-content' ? 'light' : 'dark'}
               />
               <View style={styles.modalButtons}>
                 <TouchableOpacity
@@ -347,6 +348,7 @@ export default function ProfileScreen({ goToHome }: Props) {
                 style={[styles.input, { backgroundColor: C.inputBg, borderColor: C.inputBorder, color: C.textPrimary }]}
                 placeholder="Mật khẩu hiện tại"
                 placeholderTextColor={C.textHint}
+                keyboardAppearance={C.statusBar === 'dark-content' ? 'light' : 'dark'}
                 secureTextEntry
                 value={passwordData.oldPass}
                 onChangeText={(text) => setPasswordData({ ...passwordData, oldPass: text })}
@@ -356,6 +358,7 @@ export default function ProfileScreen({ goToHome }: Props) {
                 style={[styles.input, { backgroundColor: C.inputBg, borderColor: C.inputBorder, color: C.textPrimary }]}
                 placeholder="Mật khẩu mới"
                 placeholderTextColor={C.textHint}
+                keyboardAppearance={C.statusBar === 'dark-content' ? 'light' : 'dark'}
                 secureTextEntry
                 value={passwordData.newPass}
                 onChangeText={(text) => setPasswordData({ ...passwordData, newPass: text })}
@@ -365,6 +368,7 @@ export default function ProfileScreen({ goToHome }: Props) {
                 style={[styles.input, { backgroundColor: C.inputBg, borderColor: C.inputBorder, color: C.textPrimary }]}
                 placeholder="Xác nhận mật khẩu mới"
                 placeholderTextColor={C.textHint}
+                keyboardAppearance={C.statusBar === 'dark-content' ? 'light' : 'dark'}
                 secureTextEntry
                 value={passwordData.confirmPass}
                 onChangeText={(text) => setPasswordData({ ...passwordData, confirmPass: text })}

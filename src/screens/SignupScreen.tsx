@@ -7,7 +7,6 @@ import {
   Alert,
   ScrollView,
   View,
-  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthInput } from '../components/auth/AuthInput';
@@ -17,15 +16,12 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
 import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useColors } from '../hook/useColors';
-import { useTheme } from '../context/ThemeContext';
 
 export default function SignupScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [isValid, setIsValid] = useState(false);
   const C = useColors();
-  const { isDark } = useTheme();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     username: '',

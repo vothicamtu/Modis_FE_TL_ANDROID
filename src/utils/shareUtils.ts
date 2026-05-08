@@ -19,7 +19,7 @@ export const shareToApp = async (_preferredApp?: string) => {
     // Mở hộp thoại chia sẻ hệ thống
     await Share.open({
       message: text,           // Nội dung cần chia sẻ
-      chooserTitle: "Chia sẻ qua", // Tiêu đề hiển thị trên Android
+      title: "Chia sẻ qua", // Tiêu đề hiển thị
     });
   } catch (err) {
     console.log("Share cancelled or failed:", err);

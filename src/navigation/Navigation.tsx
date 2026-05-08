@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Alert } from 'react-native';
 import FriendsScreen from "../screens/FriendsScreen"
 import HomeScreen from '../screens/Home'
 import SendPhotoScreen from '../screens/Send_photo';
@@ -16,7 +15,7 @@ import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import { RootStackParamList } from './types';
-import { ThemeProvider, useTheme } from '../context/ThemeContext';
+import { ThemeProvider } from '../context/ThemeContext';
 import { useColors } from '../hook/useColors';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -32,7 +31,6 @@ function NavigationContent() {
                     headerShown: false,
                     animation: 'fade',
                     statusBarTranslucent: true,
-                    statusBarColor: 'transparent',
                     headerTintColor: C.textPrimary,
                     headerStyle: {
                         backgroundColor: C.bg,
@@ -45,9 +43,9 @@ function NavigationContent() {
                     <Stack.Screen name="HomeScreen" component={HomeScreen} />
                     <Stack.Screen name="SendPhotoScreen" component={SendPhotoScreen} />
                     <Stack.Screen name="AllImagesScreen" component={AllImagesScreen} 
-                        options={{ statusBarTranslucent: true, statusBarColor: 'transparent' }} />
+                        options={{ statusBarTranslucent: true }} />
                     <Stack.Screen name="FriendsScreen" component={FriendsScreen}
-                        options={{ statusBarTranslucent: true, statusBarColor: 'transparent' }} />
+                        options={{ statusBarTranslucent: true }} />
                     <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
                     <Stack.Screen name="MessageScreen" component={MessageScreen} />
                     <Stack.Screen name="ConversationScreen" component={ConversationScreen} />

@@ -15,18 +15,19 @@ export default function ShareAppRow() {
 
   return (
     <>
-      <Text style={[styles.sectionTitle, { color: C.primary }]}>Tìm bạn bè từ các ứng dụng khác</Text>
-      <View style={styles.appRow}>
+      <Text style={[styles.sectionTitle, { color: C.primary, marginBottom: 16 }]}>Tìm bạn bè từ các ứng dụng khác</Text>
+      <View style={[styles.appRow, { paddingHorizontal: 8 }]}>
         {apps.map((app, i) => (
           <Pressable 
             key={i} 
             style={[
               styles.shareItem,
               { 
-                paddingHorizontal: 6,
-                paddingVertical: 6,
+                paddingHorizontal: 8,
+                paddingVertical: 12,
                 flex: 1,
                 maxWidth: '25%',
+                alignItems: 'center',
               }
             ]} 
             onPress={app.onPress}
@@ -35,14 +36,13 @@ export default function ShareAppRow() {
               source={app.icon}
               style={[styles.shareIcon, app.title === 'Share' && { tintColor: C.textPrimary }]}
             />
-            {/* Tạm ẩn text để tránh tràn, chỉ hiện icon */}
-            {/* <Text 
-              style={[styles.shareText, { color: C.textSecondary }]}
+            <Text 
+              style={[styles.shareText, { color: C.textSecondary, fontSize: 12, marginTop: 4, textAlign: 'center' }]}
               numberOfLines={1}
               ellipsizeMode="tail"
             >
               {app.title}
-            </Text> */}
+            </Text>
           </Pressable>
         ))}
       </View>

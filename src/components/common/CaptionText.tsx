@@ -4,12 +4,13 @@ import { useColors } from '../../hook/useColors';
 
 interface CaptionTextProps {
   children: React.ReactNode;
-  style?: TextStyle;
+  style?: TextStyle | TextStyle[];
   backgroundColor?: string;
   useOverlay?: boolean;
   overlayOpacity?: number;
   textShadow?: boolean;
   shadowIntensity?: 'light' | 'medium' | 'strong';
+  adaptiveColor?: boolean; // New prop for adaptive coloring
 }
 
 export const CaptionText: React.FC<CaptionTextProps> = ({
@@ -20,23 +21,24 @@ export const CaptionText: React.FC<CaptionTextProps> = ({
   overlayOpacity = 0.6,
   textShadow = true,
   shadowIntensity = 'medium',
+  adaptiveColor = false,
 }) => {
   const C = useColors();
 
-  // Shadow configurations
+  // Shadow configurations with theme-aware colors
   const shadowConfigs = {
     light: {
-      textShadowColor: 'rgba(0,0,0,0.4)',
+      textShadowColor: C.captionOverlay,
       textShadowOffset: { width: 0, height: 1 },
       textShadowRadius: 2,
     },
     medium: {
-      textShadowColor: 'rgba(0,0,0,0.6)',
+      textShadowColor: C.captionOverlay,
       textShadowOffset: { width: 0, height: 1 },
       textShadowRadius: 4,
     },
     strong: {
-      textShadowColor: 'rgba(0,0,0,0.8)',
+      textShadowColor: C.captionOverlay,
       textShadowOffset: { width: 0, height: 2 },
       textShadowRadius: 6,
     },
@@ -45,18 +47,18 @@ export const CaptionText: React.FC<CaptionTextProps> = ({
   const shadowStyle = textShadow ? shadowConfigs[shadowIntensity] : {};
 
   const textStyle: TextStyle = {
-    color: '#ffffff',
+    color: adaptiveColor ? C.textPrimary : '#ffffff', // Adaptive or always white for maximum contrast on images
     fontWeight: '600',
     textAlign: 'center',
     ...shadowStyle,
-    ...style,
+    ...(Array.isArray(style) ? Object.assign({}, ...style) : style),
   };
 
   if (useOverlay) {
     return (
       <View
         style={{
-          backgroundColor: backgroundColor || `rgba(0,0,0,${overlayOpacity})`,
+          backgroundColor: backgroundColor || C.captionOverlay,
           paddingHorizontal: 12,
           paddingVertical: 6,
           borderRadius: 16,
@@ -75,7 +77,7 @@ export const CaptionText: React.FC<CaptionTextProps> = ({
 // Preset components for common use cases
 export const CaptionOverlay: React.FC<{
   text: string;
-  style?: TextStyle;
+  style?: TextStyle | TextStyle[];
   containerStyle?: any;
 }> = ({ text, style, containerStyle }) => (
   <View
@@ -91,7 +93,7 @@ export const CaptionOverlay: React.FC<{
     ]}
   >
     <CaptionText
-      style={[{ fontSize: 16 }, style]}
+      style={[{ fontSize: 16 }, ...(Array.isArray(style) ? style : style ? [style] : [])]}
       useOverlay={true}
       overlayOpacity={0.7}
       shadowIntensity="strong"
@@ -104,11 +106,11 @@ export const CaptionOverlay: React.FC<{
 export const FloatingCaption: React.FC<{
   text: string;
   position?: 'top' | 'center' | 'bottom';
-  style?: TextStyle;
+  style?: TextStyle | TextStyle[];
 }> = ({ text, position = 'bottom', style }) => {
   const positionStyle = {
     top: { top: 20 },
-    center: { top: '50%', transform: [{ translateY: -12 }] },
+    center: { top: '50%' as const, transform: [{ translateY: -12 }] },
     bottom: { bottom: 20 },
   };
 
@@ -125,7 +127,7 @@ export const FloatingCaption: React.FC<{
       ]}
     >
       <CaptionText
-        style={[{ fontSize: 14 }, style]}
+        style={[{ fontSize: 14 }, ...(Array.isArray(style) ? style : style ? [style] : [])]}
         useOverlay={false}
         textShadow={true}
         shadowIntensity="strong"

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StatusBar, Alert, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StatusBar, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthInput } from '../components/auth/AuthInput';
 import { styles } from '../styles/loginScreen.styles';
@@ -8,9 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
 import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useColors } from '../hook/useColors';
-import { useTheme } from '../context/ThemeContext';
 
 export default function LoginScreen() {
   const [username, setUsername] = useState('');
@@ -18,7 +16,6 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const C = useColors();
-  const { isDark } = useTheme();
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 

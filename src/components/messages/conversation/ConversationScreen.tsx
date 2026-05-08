@@ -5,7 +5,7 @@ import { GestureHandlerRootView, GestureDetector, Gesture } from 'react-native-g
 import { useChat } from '../../../socket/hooks/useChat';
 import { runOnJS } from 'react-native-reanimated';
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../../navigation/Navigation';
+import { RootStackParamList } from '../../../navigation/types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useColors } from '../../../hook/useColors';
 

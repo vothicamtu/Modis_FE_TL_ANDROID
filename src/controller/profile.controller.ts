@@ -59,7 +59,7 @@ class ProfileController {
       // lưu vào AsyncStorage để TopBar dùng
       if (avatarUrl) {
         await AsyncStorage.setItem(`avatarUrl_${userId}`, avatarUrl);
-        emit('avatarUpdated', avatarUrl);
+        emit('avatarUpdated');
       }
 
       return avatarUrl;

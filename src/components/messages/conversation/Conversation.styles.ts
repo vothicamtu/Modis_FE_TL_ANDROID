@@ -32,10 +32,6 @@ export const styles = StyleSheet.create({
         fontWeight: '700',
         letterSpacing: 0.2,
     },
-    onlineStatus: {
-        fontSize: 12,
-        marginTop: 2,
-    },
     backButtonModern: {
         width: 44, height: 44,
         justifyContent: 'center',

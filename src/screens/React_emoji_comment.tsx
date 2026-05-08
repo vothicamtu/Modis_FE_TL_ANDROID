@@ -359,7 +359,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                     }}
                   />
                   <View style={styles.caption_image}>
-                    <Text testID="feed-post-caption" style={[styles.general_text, { fontSize: 16, textAlign: "center", color: '#FFFFFF' }]}>
+                    <Text testID="feed-post-caption" style={[styles.general_text, { fontSize: 16, textAlign: "center", color: '#FFFFFF' }]}> {/* Always white for caption overlay on images */}
                       {item.caption}
                     </Text>
                   </View>
@@ -367,7 +367,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                   <Pressable testID="feed-menu-button" onPress={() => setShowMenu(true)} style={[styles.menu_btn_overlay, { backgroundColor: C.menuBtnOverlay }]}>
                     <Image
                       source={require("../assets/image/pending.png")}
-                      style={{ width: "55%", height: "55%", tintColor: '#FFFFFF' }}
+                      style={{ width: "55%", height: "55%", tintColor: C.textPrimary }}
                       resizeMode="contain"
                     />
                   </Pressable>
@@ -431,7 +431,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                   ) : (
                     <View testID="feed-react-comment-box" style={[styles.react_comment_box, { backgroundColor: C.surfaceStrong, borderColor: C.primary, shadowColor: C.primary }]}>
                       <Pressable testID="feed-comment-button" onPress={handlePress} style={styles.comment}>
-                        <Text style={{ color: C.isDark ? '#E5E7EB' : '#666666', fontSize: 15 }}>Gửi tin nhắn...</Text>
+                        <Text style={{ color: C.textHint, fontSize: 15 }}>Gửi tin nhắn...</Text>
                       </Pressable>
                       {["❤️", "😊", "🤩"].map((emoji) => (
                         <Pressable testID={`feed-emoji-${emoji}`} key={emoji} onPress={() => handleReact(emoji)} style={styles.emoji_box}>
@@ -476,13 +476,14 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
             <TextInput
               testID="feed-comment-input"
               ref={inputRef}
-              style={[styles.comment_input, { color: C.isDark ? '#FFFFFF' : '#000000' }]}
+              style={[styles.comment_input, { color: C.textPrimary }]}
               value={commentText}
               onChangeText={handleCommentChange}
               onFocus={() => setFocused(true)}
               onBlur={() => setFocused(false)}
               placeholder="Gửi tin nhắn..."
-              placeholderTextColor={C.isDark ? '#E5E7EB' : '#666666'}
+              placeholderTextColor={C.textHint}
+              keyboardAppearance={C.statusBar === 'dark-content' ? 'light' : 'dark'}
               returnKeyType="send"
               blurOnSubmit={false}
               onSubmitEditing={handleSendComment}

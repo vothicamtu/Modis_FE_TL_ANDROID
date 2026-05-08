@@ -14,23 +14,24 @@ const light = {
   secondaryDark:    '#44ACFF' as string,
   secondarySurface: 'rgba(137,212,255,0.15)' as string,
   accent:           '#7C6FAB' as string,
-  // Text
+  // Text - IMPROVED CONTRAST
   textPrimary:      '#1a1a2e' as string,
   textSecondary:    '#4a4a6a' as string,
-  textHint:         '#7a7a9a' as string,
-  // Nút
+  textHint:         '#6b7280' as string, // Better contrast
+  // Buttons
   btnPrimaryText:   '#1a1a2e' as string,
   btnGhostBg:       '#89D4FF' as string,
   btnGhostBorder:   '#44ACFF' as string,
   btnGhostIcon:     '#ffffff' as string,
   btnDisabled:      'rgba(62,80,107,0.35)' as string,
+  btnDisabledText:  '#9ca3af' as string, // Better disabled text contrast
   btnCancel:        'rgba(26,26,46,0.08)' as string,
   btnCancelText:    '#4a4a6a' as string,
   // Border / divider
   border:           'rgba(159,165,174,0.3)' as string,
   borderAccent:     'rgba(254,158,199,0.25)' as string,
   inputBorder:      'rgba(137,212,255,0.5)' as string,
-  inputBg:          'rgba(255,255,255,0.3)' as string,
+  inputBg:          'rgba(255,255,255,0.8)' as string, // Better contrast
   // Overlay
   modalOverlay:     'rgba(26,26,46,0.45)' as string,
   captionOverlay:   'rgba(8,16,28,0.75)' as string,
@@ -38,7 +39,7 @@ const light = {
   menuBtnOverlay:   'rgba(8,16,28,0.75)' as string,
   // Misc
   backBtn:          '#ffffff' as string,
-  backBtnShadow:    '#000000' as string,
+  backBtnShadow:    '#7C6FAB' as string, // Use theme color instead of black
   dragHandle:       '#9fa5ae' as string,
   iconWrapper:      'rgba(74,74,106,0.12)' as string,
   emojiBg:          'rgba(26,26,46,0.10)' as string,
@@ -60,7 +61,7 @@ const light = {
   msgBg:            '#ede8ff' as string,
   msgBgGradient:    ['#ede8ff', '#e8f4ff', '#e8fff8'] as string[],
   msgBackBtn:       'rgba(255,255,255,0.9)' as string,
-  msgBackBtnShadow: '#000000' as string,
+  msgBackBtnShadow: '#7C6FAB' as string, // Use theme color instead of black
   msgIcon:          '#1a1a2e' as string,
   msgTitle:         '#1a1a2e' as string,
   msgDivider:       'rgba(159,165,174,0.2)' as string,
@@ -73,7 +74,6 @@ const light = {
   msgEmptyText:     '#4a4a6a' as string,
   msgEmptyHint:     '#7a7a9a' as string,
   convBg:           '#ede8ff' as string,
-  convOnline:       '#7C6FAB' as string,
   bubbleRecvBg:     'rgba(255,255,255,0.90)' as string,
   bubbleRecvBorder: 'rgba(159,165,174,0.25)' as string,
   bubbleRecvShadow: '#7C6FAB' as string,
@@ -105,12 +105,13 @@ const dark = {
   accent:           '#9B8FC4' as string,
   textPrimary:      '#FFFFFF' as string,
   textSecondary:    '#E5E7EB' as string,
-  textHint:         '#E5E7EB' as string,
+  textHint:         '#9CA3AF' as string, // Better contrast for dark mode
   btnPrimaryText:   '#0d1520' as string,
   btnGhostBg:       'rgba(137,212,255,0.18)' as string,
   btnGhostBorder:   '#7DD8FF' as string,
   btnGhostIcon:     '#7DD8FF' as string,
   btnDisabled:      'rgba(255,158,197,0.35)' as string,
+  btnDisabledText:  '#6B7280' as string, // Better disabled text contrast
   btnCancel:        'rgba(255,255,255,0.06)' as string,
   btnCancelText:    '#9fb3cc' as string,
   border:           '#2e3d52' as string,
@@ -141,7 +142,7 @@ const dark = {
   msgBg:            '#08101c' as string,
   msgBgGradient:    ['#08101c', '#0d1520', '#091820'] as string[],
   msgBackBtn:       '#1a2840' as string,
-  msgBackBtnShadow: 'rgba(0,0,0,0.35)' as string,
+  msgBackBtnShadow: 'rgba(155,143,196,0.35)' as string, // Use theme color instead of black
   msgIcon:          '#e2eaf5' as string,
   msgTitle:         '#e2eaf5' as string,
   msgDivider:       'rgba(255,255,255,0.06)' as string,
@@ -154,7 +155,6 @@ const dark = {
   msgEmptyText:     '#9fb3cc' as string,
   msgEmptyHint:     '#5c7391' as string,
   convBg:           '#0d1520' as string,
-  convOnline:       '#9B8FC4' as string,
   bubbleRecvBg:     '#1a2840' as string,
   bubbleRecvBorder: 'rgba(255,255,255,0.07)' as string,
   bubbleRecvShadow: 'rgba(155,143,196,0.15)' as string,
