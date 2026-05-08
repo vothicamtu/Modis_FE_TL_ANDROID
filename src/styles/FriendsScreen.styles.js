@@ -162,6 +162,8 @@ export default StyleSheet.create({
 
   shareItem: {
     alignItems: "center",
+    paddingHorizontal: scale(8),
+    paddingVertical: scale(4),
   },
 
   shareIcon: {

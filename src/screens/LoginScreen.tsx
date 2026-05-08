@@ -43,7 +43,6 @@ export default function LoginScreen() {
       <SafeAreaView style={styles.safeArea}>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
           <View style={styles.topSection}>
-            <Image source={require('../assets/image/LOGO_MODIS_TACH_NEN.png')} style={styles.logoImage} resizeMode="contain" />
             <Text testID="login-title" style={[styles.title, { color: C.textPrimary }]}>Chào mừng trở lại</Text>
             <Text style={[styles.subtitle, { color: C.textHint }]}>Đăng nhập để tiếp tục kết nối</Text>
           </View>

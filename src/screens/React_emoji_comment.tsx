@@ -359,7 +359,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                     }}
                   />
                   <View style={styles.caption_image}>
-                    <Text testID="feed-post-caption" style={[styles.general_text, { fontSize: 16, textAlign: "center" }]}>
+                    <Text testID="feed-post-caption" style={[styles.general_text, { fontSize: 16, textAlign: "center", color: '#FFFFFF' }]}>
                       {item.caption}
                     </Text>
                   </View>
@@ -367,7 +367,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                   <Pressable testID="feed-menu-button" onPress={() => setShowMenu(true)} style={[styles.menu_btn_overlay, { backgroundColor: C.menuBtnOverlay }]}>
                     <Image
                       source={require("../assets/image/pending.png")}
-                      style={{ width: "55%", height: "55%", tintColor: C.textPrimary }}
+                      style={{ width: "55%", height: "55%", tintColor: '#FFFFFF' }}
                       resizeMode="contain"
                     />
                   </Pressable>
@@ -431,7 +431,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                   ) : (
                     <View testID="feed-react-comment-box" style={[styles.react_comment_box, { backgroundColor: C.surfaceStrong, borderColor: C.primary, shadowColor: C.primary }]}>
                       <Pressable testID="feed-comment-button" onPress={handlePress} style={styles.comment}>
-                        <Text style={{ color: C.textHint, fontSize: 15 }}>Gửi tin nhắn...</Text>
+                        <Text style={{ color: C.isDark ? '#E5E7EB' : '#666666', fontSize: 15 }}>Gửi tin nhắn...</Text>
                       </Pressable>
                       {["❤️", "😊", "🤩"].map((emoji) => (
                         <Pressable testID={`feed-emoji-${emoji}`} key={emoji} onPress={() => handleReact(emoji)} style={styles.emoji_box}>
@@ -456,10 +456,12 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
         <View style={[
           styles.react_comment_box_hidden,
           { 
-            bottom: showInput && keyboardHeight > 0 ? keyboardHeight + 10 : (Platform.OS === 'ios' ? 40 : 60),
+            bottom: showInput && keyboardHeight > 0 ? keyboardHeight + insets.bottom + 16 : (Platform.OS === 'ios' ? insets.bottom + 40 : insets.bottom + 60),
             backgroundColor: C.surfaceStrong,
             borderColor: C.secondary,
             shadowColor: C.secondary,
+            zIndex: 1000,
+            elevation: 15,
           },
           !showInput && { opacity: 0, pointerEvents: 'none' },
           focused && { 
@@ -474,17 +476,30 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
             <TextInput
               testID="feed-comment-input"
               ref={inputRef}
-              style={[styles.comment_input, { color: C.textPrimary }]}
+              style={[styles.comment_input, { color: C.isDark ? '#FFFFFF' : '#000000' }]}
               value={commentText}
-              onPress={handleCommentChange}
+              onChangeText={handleCommentChange}
               onFocus={() => setFocused(true)}
               onBlur={() => setFocused(false)}
               placeholder="Gửi tin nhắn..."
-              placeholderTextColor={C.textHint}
+              placeholderTextColor={C.isDark ? '#E5E7EB' : '#666666'}
               returnKeyType="send"
+              blurOnSubmit={false}
               onSubmitEditing={handleSendComment}
             />
-            <Pressable testID="feed-send-comment-button" style={[styles.send_icon_wrapper, { backgroundColor: C.primary }]} onPress={handleSendComment}>
+            <Pressable 
+              testID="feed-send-comment-button" 
+              style={[
+                styles.send_icon_wrapper, 
+                { 
+                  backgroundColor: C.primary,
+                  zIndex: 1001,
+                  pointerEvents: 'auto',
+                }
+              ]} 
+              onPress={handleSendComment}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
               <Image
                 source={require("../assets/image/send_message.png")}
                 style={{ width: 20, height: 20, tintColor: C.btnPrimaryText }}

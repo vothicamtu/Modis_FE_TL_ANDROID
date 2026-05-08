@@ -89,12 +89,20 @@ export default function SearchResultList({ users, keyword, onClearSearch }: Prop
               height: minTouchArea,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: C.surface,
+              backgroundColor: C.isDark ? '#0d1826' : C.surface,
               borderRadius: minTouchArea / 2,
+              borderWidth: C.isDark ? 1 : 0,
+              borderColor: C.isDark ? 'rgba(255,255,255,0.15)' : 'transparent',
+              shadowColor: C.isDark ? C.primary : '#000000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: C.isDark ? 0.2 : 0.1,
+              shadowRadius: 4,
+              elevation: 3,
             }}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            activeOpacity={0.7}
           >
-            <Icon name="close" size={iconSize} color={C.textSecondary} />
+            <Icon name="close" size={iconSize} color={C.isDark ? '#FFFFFF' : '#000000'} />
           </TouchableOpacity>
         )}
       </View>

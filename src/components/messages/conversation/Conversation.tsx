@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { styles } from './Conversation.styles';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
     Image, View, Text, ActivityIndicator, FlatList,
     Pressable, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform,
@@ -28,10 +28,12 @@ interface ConversationProps {
 function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessage, isConnected, isLoading }: ConversationProps) {
     const [inputText, setInputText] = useState('');
     const flatListRef = useRef<FlatList>(null);
+    const inputRef = useRef<TextInput>(null);
     const imageSource = avatarSource ? avatarSource : { uri: avatarUrl };
     const [isNearBottom, setIsNearBottom] = useState(true);
     const navigation = useNavigation();
     const C = useColors();
+    const insets = useSafeAreaInsets();
 
     useEffect(() => {
         if (isNearBottom) {
@@ -74,7 +76,7 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 24}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
             >
                 {/* Header */}
                 <View style={{ paddingTop: 4 }}>
@@ -125,7 +127,12 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                         renderItem={renderMessageItem}
                         keyExtractor={(item) => item.id}
                         style={{ flex: 1 }}
-                        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 16, gap: 2 }}
+                        contentContainerStyle={{ 
+                            paddingHorizontal: 16, 
+                            paddingVertical: 16, 
+                            gap: 2,
+                            paddingBottom: Math.max(16, insets.bottom)
+                        }}
                         onScroll={(event) => {
                             const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
                             setIsNearBottom(layoutMeasurement.height + contentOffset.y >= contentSize.height - 50);
@@ -141,31 +148,52 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                     />
                 )}
 
-                {/* Input bar */}
-                <View style={styles.inputContainer}>
+                {/* Input bar - Fixed positioning */}
+                <View style={[
+                    styles.inputContainer,
+                    {
+                        paddingBottom: Math.max(10, insets.bottom),
+                        backgroundColor: C.convBg,
+                        zIndex: 1000,
+                        elevation: 10,
+                    }
+                ]}>
                     <View style={[styles.textInputWrapper, {
                         backgroundColor: C.inputWrapBg,
                         borderColor: C.inputWrapBorder,
                         shadowColor: C.inputWrapShadow,
                         shadowOpacity: 0.15,
+                        zIndex: 1001,
                     }]}>
                         <TextInput
+                            ref={inputRef}
                             testID="chat-input"
-                            style={[styles.textInput, { color: C.inputText }]}
+                            style={[styles.textInput, { color: C.isDark ? '#FFFFFF' : '#000000' }]}
                             value={inputText}
                             onChangeText={setInputText}
                             placeholder="Nhắn tin..."
-                            placeholderTextColor={C.inputPlaceholder}
+                            placeholderTextColor={C.isDark ? '#E5E7EB' : '#666666'}
                             multiline
                             returnKeyType="send"
+                            blurOnSubmit={false}
                             onSubmitEditing={handleSend}
                         />
                     </View>
                     <TouchableOpacity
                         testID="send-button"
-                        style={[styles.sendButton, { backgroundColor: C.sendBtnBg, shadowColor: C.sendBtnShadow }, !inputText.trim() && { opacity: 0.5 }]}
+                        style={[
+                            styles.sendButton, 
+                            { 
+                                backgroundColor: C.sendBtnBg, 
+                                shadowColor: C.sendBtnShadow,
+                                zIndex: 1002,
+                                pointerEvents: 'auto',
+                            }, 
+                            !inputText.trim() && { opacity: 0.5 }
+                        ]}
                         onPress={handleSend}
                         disabled={!inputText.trim()}
+                        activeOpacity={0.7}
                     >
                         <Image
                             source={require('../../../assets/image/send_message.png')}

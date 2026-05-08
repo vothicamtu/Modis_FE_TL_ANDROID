@@ -74,7 +74,6 @@ export default function SignupScreen() {
       <SafeAreaView style={styles.safeArea}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.topSection}>
-            <Image source={require('../assets/image/LOGO_MODIS_TACH_NEN.png')} style={styles.logoImage} resizeMode="contain" />
             <Text testID="signup-title" style={[styles.title, { color: C.textPrimary }]}>Tạo tài khoản</Text>
             <Text style={[styles.subtitle, { color: C.textHint }]}>Bắt đầu kết nối với mọi người</Text>
           </View>

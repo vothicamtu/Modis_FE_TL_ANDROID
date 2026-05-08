@@ -71,7 +71,8 @@ export const styles = StyleSheet.create({
     marginLeft: 50,
     marginRight: 50,
     borderRadius: 50,
-    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   outerCircle: {
     width: 100,
@@ -88,7 +89,7 @@ export const styles = StyleSheet.create({
   innerCircle: {
     width: 75,
     height: 75,
-    borderRadius: 35,
+    borderRadius: 37.5,
   },
   history: {
     width: "100%",

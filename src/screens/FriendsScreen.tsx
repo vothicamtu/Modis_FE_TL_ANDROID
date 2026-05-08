@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { View, ScrollView, TouchableOpacity, Keyboard } from "react-native";
+import { View, ScrollView, TouchableOpacity, Keyboard, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -61,7 +61,11 @@ export default function FriendsScreen() {
 
   return (
     <SafeContainer useGradient={true}>
-      <KeyboardDismissView useScrollView={false}>
+      <KeyboardDismissView 
+        useKeyboardAvoidingView={true}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+        useScrollView={false}
+      >
         <GestureDetector gesture={swipeDown}>
           <View style={{ flex: 1, paddingTop: scale(28) }}>
             {/* Header with back button */}

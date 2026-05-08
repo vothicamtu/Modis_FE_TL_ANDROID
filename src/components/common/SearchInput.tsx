@@ -88,7 +88,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         {
           flexDirection: 'row',
           alignItems: 'center',
-          backgroundColor: C.inputBg,
+          backgroundColor: C.isDark ? C.inputBg : C.inputBg,
           borderRadius: scale(12),
           borderWidth: 1,
           borderColor: isFocused ? C.primary : C.inputBorder,
@@ -116,7 +116,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor={C.textHint}
+        placeholderTextColor={C.isDark ? '#E5E7EB' : '#666666'}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onSubmitEditing={onSubmitEditing}
@@ -126,7 +126,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
           {
             flex: 1,
             fontSize: getFontSize(16),
-            color: C.textPrimary,
+            color: C.isDark ? '#FFFFFF' : '#000000',
             paddingVertical: Platform.OS === 'ios' ? scale(12) : scale(8),
           },
           inputStyle,
@@ -160,7 +160,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
                 justifyContent: 'center',
               }}
             >
-              <Icon name="close" size={14} color={C.surface} />
+              <Icon name="close" size={14} color={C.isDark ? '#000000' : '#FFFFFF'} />
             </View>
           </TouchableOpacity>
         </Animated.View>

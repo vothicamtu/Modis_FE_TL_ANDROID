@@ -390,8 +390,17 @@ export default function ProfileScreen({ goToHome }: Props) {
         </Modal>
 
         <Modal visible={shareModal} transparent animationType="slide">
-          <View style={[styles.overlay, { backgroundColor: C.modalOverlay }]} testID="profile-share-modal">
-            <View style={[styles.modalContent, { backgroundColor: C.surfaceStrong, borderColor: C.borderAccent, paddingBottom: 30 }]}>
+          <TouchableOpacity 
+            style={[styles.overlay, { backgroundColor: C.modalOverlay }]} 
+            testID="profile-share-modal"
+            activeOpacity={1}
+            onPress={() => setShareModal(false)}
+          >
+            <TouchableOpacity 
+              style={[styles.modalContent, { backgroundColor: C.surfaceStrong, borderColor: C.borderAccent, paddingBottom: 30 }]}
+              activeOpacity={1}
+              onPress={(e) => e.stopPropagation()}
+            >
               <ShareAppRow />
               <TouchableOpacity
                 testID="profile-share-modal-close"
@@ -400,8 +409,8 @@ export default function ProfileScreen({ goToHome }: Props) {
               >
                 <Text style={[styles.btnTextCancel, { color: C.btnCancelText }]}>Đóng</Text>
               </TouchableOpacity>
-            </View>
-          </View>
+            </TouchableOpacity>
+          </TouchableOpacity>
         </Modal>
       </View>
     </LinearGradient>

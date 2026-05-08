@@ -223,15 +223,16 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
             testID="send-photo-caption-input"
             ref={inputRef}
             style={{
-              color: C.textPrimary,
+              color: '#FFFFFF',
               fontSize: 16,
               fontWeight: 'bold',
               textAlign: "center",
               minWidth: 100,
-            }}            value={caption}
+            }}
+            value={caption}
             onChangeText={setCaption}
             placeholder="Thêm một tin nhắn"
-            placeholderTextColor={C.textHint}
+            placeholderTextColor="#E5E7EB"
           />
         </View>
       </View>
@@ -333,9 +334,9 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
       {onCaptionPattern && (
         <View style={[styles.caption_pattern, { backgroundColor: C.panelBg, borderColor: C.panelBorder }]} testID="send-photo-caption-panel">
           <View style={{ width: 45, height: 7, borderRadius: 5, backgroundColor: C.dragHandle, marginTop: 10 }} />
-          <Text style={[styles.general_text, { margin: 15, fontSize: 20, color: C.textPrimary }]}>Chú thích</Text>
+          <Text style={[styles.general_text, { margin: 15, fontSize: 20, color: '#FFFFFF' }]}>Chú thích</Text>
           <View style={styles.general}>
-            <Text style={[styles.general_text, { color: C.textHint }]}>General</Text>
+            <Text style={[styles.general_text, { color: '#E5E7EB' }]}>General</Text>
             <View style={styles.box_area}>
               <Pressable testID="caption-text-button" onPress={() => { setOnCaptionPattern(false); setTimeout(() => inputRef.current?.focus(), 300); }}
                 style={[styles.box_radius, { backgroundColor: C.captionBoxBg, borderColor: C.captionBoxBorder }]}>
@@ -348,7 +349,7 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
             </View>
           </View>
           <View style={styles.decorative}>
-            <Text style={[styles.general_text, { color: C.textHint }]}>Decorative</Text>
+            <Text style={[styles.general_text, { color: '#E5E7EB' }]}>Decorative</Text>
             <View style={styles.box_area}>
               <Pressable testID="caption-party-button" onPress={() => applyCaption("Party Time!")} style={[styles.box_radius, { backgroundColor: Colors.cyan }]}>
                 <Text style={[styles.text_caption, { color: Colors.black }]}>Party Time!</Text>
