@@ -24,7 +24,6 @@ DerivedData
 
 # Android/IntelliJ
 #
-build/
 .idea
 .gradle
 local.properties
@@ -81,3 +80,14 @@ yarn-error.log
 
 **/android/app/build.gradle
 !.vscode/settings.json
+
+# Gradle
+.gradle/
+
+# Android
+android/.gradle/
+android/app/build/
+
+
+# Logs
+*.log
