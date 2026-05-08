@@ -11,6 +11,7 @@ import {
   Animated,
   FlatList,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import Colors from "../styles/color";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
@@ -24,6 +25,18 @@ import postController from "../controller/post.controller";
 import { PostRequest } from "../types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useColors } from "../hook/useColors";
+import { KeyboardDismissView } from "../components/common/KeyboardDismissView";
+import { CaptionText, CaptionOverlay } from "../components/common/CaptionText";
+import { 
+  scale, 
+  verticalScale, 
+  getMinTouchArea, 
+  getFontSize, 
+  getIconSize,
+  getLayoutDimensions,
+  getKeyboardHeight,
+  isSmallDevice 
+} from "../utils/responsive";
 
 type SendPhotoScreenProps = {
   route: {
@@ -49,14 +62,21 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [loading, setLoading] = useState(false);
   const [caption, setCaption] = useState("");
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  const { screenHeight, isLandscape } = getLayoutDimensions();
+  const minTouchArea = getMinTouchArea();
+  const iconSize = getIconSize(22);
 
   useEffect(() => {
-    const showSub = Keyboard.addListener("keyboardDidShow", () => {
+    const showSub = Keyboard.addListener("keyboardDidShow", (e) => {
       setShowInput(true);
+      setKeyboardHeight(e.endCoordinates.height);
     });
 
     const hideSub = Keyboard.addListener("keyboardDidHide", () => {
       setShowInput(false);
+      setKeyboardHeight(0);
       inputRef.current?.blur();
     });
 
