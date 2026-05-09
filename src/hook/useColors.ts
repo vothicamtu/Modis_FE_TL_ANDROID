@@ -30,7 +30,7 @@ const light = {
   // Border / divider
   border:           'rgba(159,165,174,0.25)' as string, // Lighter for subtle card borders
   borderAccent:     'rgba(254,158,199,0.25)' as string,
-  inputBorder:      'rgba(137,212,255,0.4)' as string, // Subtle input borders
+  inputBorder:      'rgba(137,212,255,0.7)' as string, // Subtle input borders
   inputBg:          'rgba(255,255,255,0.9)' as string, // Better contrast for inputs
   // Overlay
   modalOverlay:     'rgba(26,26,46,0.45)' as string,
@@ -116,7 +116,7 @@ const dark = {
   btnCancelText:    '#9fb3cc' as string,
   border:           'rgba(255,255,255,0.08)' as string, // Subtle card borders
   borderAccent:     'rgba(254,158,199,0.20)' as string,
-  inputBorder:      'rgba(125,216,255,0.3)' as string, // Subtle input borders
+  inputBorder:      'rgba(125,216,255,0.6)' as string, // Subtle input borders
   inputBg:          '#0d1826' as string, // Unified input background
   modalOverlay:     'rgba(0,0,0,0.80)' as string,
   captionOverlay:   'rgba(8,16,28,0.75)' as string,
