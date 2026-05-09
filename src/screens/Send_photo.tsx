@@ -205,7 +205,7 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
         </Text>
 
         <Pressable testID="send-photo-download-button" onPress={saveImage} style={[styles.download_btn, { backgroundColor: C.primary, shadowColor: C.primary }]}>
-          <Image source={require("../assets/image/download.png")} style={{ width: 22, height: 22, tintColor: C.btnPrimaryText }} />
+          <Image source={require("../assets/image/download.png")} style={{ width: 22, height: 22, tintColor: '#ffffff' }} />
         </Pressable>
       </View>
 
