@@ -27,18 +27,16 @@ export const AuthInput = ({ label, value, onChangeText, placeholder, secureTextE
             paddingHorizontal: 0, 
             paddingVertical: 0, 
             overflow: 'hidden', 
-            borderColor: C.inputBorder, 
-            backgroundColor: C.inputBg 
+            borderColor: focused ? C.primary : C.inputBorder, // Dynamic border color
+            backgroundColor: C.inputBg,
+            borderWidth: focused ? 2 : 1.5, // Dynamic border width
           },
           focused && { 
-            borderColor: C.primary, 
-            borderWidth: 2, 
-            borderRadius: 26, 
             shadowColor: C.primary, 
             shadowOffset: { width: 0, height: 4 }, 
-            shadowOpacity: 0.3, 
-            shadowRadius: 10, 
-            elevation: 8 
+            shadowOpacity: 0.2, // Reduced shadow opacity
+            shadowRadius: 8, // Reduced shadow radius
+            elevation: 4 // Reduced elevation
           },
         ]}
       >

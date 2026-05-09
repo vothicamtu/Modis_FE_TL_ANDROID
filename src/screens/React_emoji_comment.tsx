@@ -359,15 +359,27 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                     }}
                   />
                   <View style={styles.caption_image}>
-                    <Text testID="feed-post-caption" style={[styles.general_text, { fontSize: 16, textAlign: "center", color: '#FFFFFF' }]}> {/* Always white for caption overlay on images */}
-                      {item.caption}
-                    </Text>
+                    <View style={{
+                      backgroundColor: 'rgba(0,0,0,0.4)', // Dark translucent overlay for both modes
+                      borderRadius: 12,
+                      paddingHorizontal: 12,
+                      paddingVertical: 6,
+                      maxWidth: '90%',
+                    }}>
+                      <Text testID="feed-post-caption" style={[styles.general_text, { 
+                        fontSize: 16, 
+                        textAlign: "center", 
+                        color: '#FFFFFF' // Always white text for readability
+                      }]}>
+                        {item.caption}
+                      </Text>
+                    </View>
                   </View>
-                  {/* Nút ... góc trên phải ảnh */}
-                  <Pressable testID="feed-menu-button" onPress={() => setShowMenu(true)} style={[styles.menu_btn_overlay, { backgroundColor: C.menuBtnOverlay }]}>
+                  {/* Menu button with white icon for both modes */}
+                  <Pressable testID="feed-menu-button" onPress={() => setShowMenu(true)} style={[styles.menu_btn_overlay, { backgroundColor: 'rgba(0,0,0,0.4)' }]}>
                     <Image
                       source={require("../assets/image/pending.png")}
-                      style={{ width: "55%", height: "55%", tintColor: C.textPrimary }}
+                      style={{ width: "55%", height: "55%", tintColor: '#FFFFFF' }} // Always white icon
                       resizeMode="contain"
                     />
                   </Pressable>

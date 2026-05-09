@@ -6,7 +6,7 @@ const light = {
   bgGradient:       ['#ede8ff', '#e8f4ff', '#e8fff8'] as string[],
   // Surface
   surface:          'rgba(255,255,255,0.72)' as string,
-  surfaceStrong:    'rgba(255,255,255,0.90)' as string,
+  surfaceStrong:    'rgba(255,255,255,0.95)' as string, // More opaque for unified cards
   // Brand
   primary:          '#FE9EC7' as string,
   primarySurface:   'rgba(254,158,199,0.15)' as string,
@@ -28,10 +28,10 @@ const light = {
   btnCancel:        'rgba(26,26,46,0.08)' as string,
   btnCancelText:    '#4a4a6a' as string,
   // Border / divider
-  border:           'rgba(159,165,174,0.3)' as string,
+  border:           'rgba(159,165,174,0.25)' as string, // Lighter for subtle card borders
   borderAccent:     'rgba(254,158,199,0.25)' as string,
-  inputBorder:      'rgba(137,212,255,0.5)' as string,
-  inputBg:          'rgba(255,255,255,0.8)' as string, // Better contrast
+  inputBorder:      'rgba(137,212,255,0.4)' as string, // Subtle input borders
+  inputBg:          'rgba(255,255,255,0.9)' as string, // Better contrast for inputs
   // Overlay
   modalOverlay:     'rgba(26,26,46,0.45)' as string,
   captionOverlay:   'rgba(8,16,28,0.75)' as string,
@@ -96,7 +96,7 @@ const dark = {
   bg:               '#08101c' as string,
   bgGradient:       ['#08101c', '#0d1520', '#091820'] as string[],
   surface:          'rgba(255,255,255,0.05)' as string,
-  surfaceStrong:    '#0d1826' as string,
+  surfaceStrong:    '#1a2840' as string, // Unified dark card background
   primary:          '#FF9EC5' as string,
   primarySurface:   'rgba(254,158,199,0.15)' as string,
   secondary:        '#7DD8FF' as string,
@@ -114,10 +114,10 @@ const dark = {
   btnDisabledText:  '#6B7280' as string, // Better disabled text contrast
   btnCancel:        'rgba(255,255,255,0.06)' as string,
   btnCancelText:    '#9fb3cc' as string,
-  border:           '#2e3d52' as string,
+  border:           'rgba(255,255,255,0.08)' as string, // Subtle card borders
   borderAccent:     'rgba(254,158,199,0.20)' as string,
-  inputBorder:      '#FF9EC5' as string,
-  inputBg:          '#0d1826' as string,
+  inputBorder:      'rgba(125,216,255,0.3)' as string, // Subtle input borders
+  inputBg:          '#0d1826' as string, // Unified input background
   modalOverlay:     'rgba(0,0,0,0.80)' as string,
   captionOverlay:   'rgba(8,16,28,0.75)' as string,
   loadingOverlay:   'rgba(13,21,32,0.80)' as string,

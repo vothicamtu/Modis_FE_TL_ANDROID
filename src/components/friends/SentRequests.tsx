@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, memo } from "react";
 import { View, Text, FlatList, Alert, ActivityIndicator } from "react-native";
 
 import styles from "../../styles/FriendsScreen.styles";
@@ -8,19 +8,27 @@ import { FriendReq } from "../../types/friend/FriendReq";
 import { emit, on } from "../../utils/eventBus";
 import { useColors } from "../../hook/useColors";
 
+// Memoize SentRequestItem wrapper
+const MemoizedSentRequestItem = memo(({ item, onCancel, disabled }: {
+  item: FriendReq;
+  onCancel: () => void;
+  disabled: boolean;
+}) => (
+  <SentRequestItem
+    name={item.receiverName || "Người dùng"}
+    avatarUrl={item.receiverAvatar}
+    disabled={disabled}
+    onCancel={onCancel}
+  />
+));
+
 export default function SentRequests() {
   const C = useColors();
   const [requests, setRequests] = useState<FriendReq[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadSentRequests(true);
-    const off = on("friendsUpdated", () => loadSentRequests(false));
-    return off;
-  }, []);
-
-  const loadSentRequests = async (isInitial = false) => {
+  const loadSentRequests = useCallback(async (isInitial = false) => {
     try {
       if (isInitial) setLoading(true);
       const data = await friendsController.getSentRequests();
@@ -31,9 +39,15 @@ export default function SentRequests() {
     } finally {
       if (isInitial) setLoading(false);
     }
-  };
+  }, []);
 
-  const handleCancel = (requestId: string) => {
+  useEffect(() => {
+    loadSentRequests(true);
+    const off = on("friendsUpdated", () => loadSentRequests(false));
+    return off;
+  }, [loadSentRequests]);
+
+  const handleCancel = useCallback((requestId: string) => {
     if (processingId) return;
     Alert.alert("Hủy lời mời", "Bạn có chắc muốn hủy lời mời kết bạn?", [
       { text: "Không", style: "cancel" },
@@ -55,7 +69,25 @@ export default function SentRequests() {
         },
       },
     ]);
-  };
+  }, [processingId]);
+
+  const renderRequestItem = useCallback(({ item }: { item: FriendReq }) => (
+    <MemoizedSentRequestItem
+      item={item}
+      onCancel={() => handleCancel(item.id)}
+      disabled={processingId === item.id}
+    />
+  ), [handleCancel, processingId]);
+
+  const keyExtractor = useCallback((item: FriendReq) => item.id, []);
+
+  const ListEmptyComponent = useCallback(() => (
+    !loading ? (
+      <Text style={{ color: C.textHint, marginLeft: 16 }}>
+        Bạn chưa gửi lời mời nào
+      </Text>
+    ) : null
+  ), [loading, C.textHint]);
 
   return (
     <View>
@@ -67,23 +99,14 @@ export default function SentRequests() {
 
       <FlatList
         data={requests}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <SentRequestItem
-            name={item.receiverName || "Người dùng"}
-            avatarUrl={item.receiverAvatar}
-            disabled={processingId === item.id}
-            onCancel={() => handleCancel(item.id)}
-          />
-        )}
-        ListEmptyComponent={
-          !loading ? (
-            <Text style={{ color: C.textHint, marginLeft: 16 }}>
-              Bạn chưa gửi lời mời nào
-            </Text>
-          ) : null
-        }
+        keyExtractor={keyExtractor}
+        renderItem={renderRequestItem}
+        ListEmptyComponent={ListEmptyComponent}
         scrollEnabled={false}
+        removeClippedSubviews={false} // Tắt để tránh conflict
+        maxToRenderPerBatch={10}
+        windowSize={10}
+        initialNumToRender={10}
       />
     </View>
   );

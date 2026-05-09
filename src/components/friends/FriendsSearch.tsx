@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import userController from "../../controller/user.controller";
 import { SearchUser } from "../../types/user/SearchUser";
@@ -15,43 +15,91 @@ export default function FriendsSearch({ onResult, onClear, keyword = "" }: Props
   const [searchText, setSearchText] = useState(keyword);
   const [isLoading, setIsLoading] = useState(false);
   const C = useColors();
+  
+  // Track the latest search request to prevent stale results
+  const latestSearchRef = useRef<string>(keyword);
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Only sync from parent when it's actually different and not from our own update
   useEffect(() => {
-    setSearchText(keyword);
+    if (keyword !== latestSearchRef.current) {
+      setSearchText(keyword);
+      latestSearchRef.current = keyword;
+    }
   }, [keyword]);
 
   const handleSearch = useCallback(async (text: string) => {
+    // Update local state immediately for responsive UI
     setSearchText(text);
+    latestSearchRef.current = text;
     
-    // If search is empty, reset to default state
+    // Clear any pending search timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    
+    // If search is empty, reset immediately
     if (!text.trim()) {
       onResult([], "");
       return;
     }
 
-    const userId = await AsyncStorage.getItem("userId");
-    if (!userId) {
-      onResult([], text);
-      return;
-    }
+    // Debounce API calls to prevent excessive requests
+    searchTimeoutRef.current = setTimeout(async () => {
+      // Double-check this is still the latest search
+      if (latestSearchRef.current !== text) {
+        return; // Stale request, ignore
+      }
 
-    setIsLoading(true);
-    try {
-      const users = await userController.searchUsers(text, userId);
-      onResult(users || [], text);
-    } catch (err) {
-      console.log("Search error:", err);
-      onResult([], text);
-    } finally {
-      setIsLoading(false);
-    }
+      const userId = await AsyncStorage.getItem("userId");
+      if (!userId) {
+        // Only update if this is still the current search
+        if (latestSearchRef.current === text) {
+          onResult([], text);
+        }
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const users = await userController.searchUsers(text, userId);
+        // Only update results if this is still the current search
+        if (latestSearchRef.current === text) {
+          onResult(users || [], text);
+        }
+      } catch (err) {
+        console.log("Search error:", err);
+        // Only update if this is still the current search
+        if (latestSearchRef.current === text) {
+          onResult([], text);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    }, 300); // 300ms debounce
   }, [onResult]);
 
   const handleClear = useCallback(() => {
     setSearchText("");
+    latestSearchRef.current = "";
+    
+    // Clear any pending search
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    
     onResult([], "");
     onClear?.();
   }, [onResult, onClear]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <SearchInput

@@ -75,11 +75,12 @@ export default function SignupScreen() {
           </View>
 
           <View style={[styles.card, {
-            backgroundColor: C.surface,
+            backgroundColor: C.surfaceStrong, // Use surfaceStrong for unified appearance
             borderColor: C.border,
             shadowColor: C.primary,
-            shadowOpacity: 0.15,
-            shadowRadius: 20,
+            shadowOpacity: 0.08, // Reduced shadow for cleaner look
+            shadowRadius: 16,
+            elevation: 2, // Reduced elevation
           }]}>
             <AuthInput
               testID="signup-username-input"

@@ -91,11 +91,11 @@ export const styles = StyleSheet.create({
   card: {
     borderRadius: 24,
     padding: 24,
-    borderWidth: 0.5,
-    shadowColor: '#000000', // Revert to working version
+    borderWidth: 1, // Subtle border for definition
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
-    elevation: 3,
+    shadowOpacity: 0.08, // Reduced shadow
+    shadowRadius: 16,
+    elevation: 2, // Reduced elevation for cleaner look
+    marginHorizontal: 4, // Small margin to prevent shadow clipping
   },
 });

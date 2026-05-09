@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   View,
   TextInput,
@@ -65,22 +65,22 @@ export const SearchInput: React.FC<SearchInputProps> = ({
     }).start();
   }, [value, fadeAnim]);
 
-  const handleFocus = () => {
+  const handleFocus = useCallback(() => {
     setIsFocused(true);
     onFocus?.();
-  };
+  }, [onFocus]);
 
-  const handleBlur = () => {
+  const handleBlur = useCallback(() => {
     setIsFocused(false);
     onBlur?.();
-  };
+  }, [onBlur]);
 
-  const handleClear = () => {
+  const handleClear = useCallback(() => {
     onChangeText('');
     onClear?.();
     Keyboard.dismiss();
     inputRef.current?.blur();
-  };
+  }, [onChangeText, onClear]);
 
   const minTouchArea = getMinTouchArea();
 
@@ -159,12 +159,12 @@ export const SearchInput: React.FC<SearchInputProps> = ({
                 width: scale(20),
                 height: scale(20),
                 borderRadius: scale(10),
-                backgroundColor: C.textSecondary, // Better contrast than textHint
+                backgroundColor: '#FFFFFF', // Always white background
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Icon name="close" size={14} color={C.surface} /> {/* Use surface for better contrast */}
+              <Icon name="close" size={14} color="#000000" /> {/* Always black X for contrast */}
             </View>
           </TouchableOpacity>
         </Animated.View>

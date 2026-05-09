@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, memo } from "react";
 import { View, Text, FlatList, Alert, ActivityIndicator } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -9,17 +9,29 @@ import { FriendReq } from "../../types/friend/FriendReq";
 import { emit, on } from "../../utils/eventBus";
 import { useColors } from "../../hook/useColors";
 
+// Memoize FriendRequestItem wrapper để tránh re-render
+const MemoizedFriendRequestItem = memo(({ item, onAccept, onReject, disabled }: {
+  item: FriendReq;
+  onAccept: () => void;
+  onReject: () => void;
+  disabled: boolean;
+}) => (
+  <FriendRequestItem
+    name={item.senderName || "Người dùng"}
+    avatar={item.senderAvatar}
+    disabled={disabled}
+    onAccept={onAccept}
+    onReject={onReject}
+  />
+));
+
 export default function FriendRequests() {
   const C = useColors();
   const [requests, setRequests] = useState<FriendReq[]>([]);
-
-  // State dùng để biết đang loading hay không
   const [loading, setLoading] = useState(true);
-
-  // Track id đang xử lý để disable button tránh double-tap
   const [processingId, setProcessingId] = useState<string | null>(null);
 
-  const loadRequests = async (isInitial = false) => {
+  const loadRequests = useCallback(async (isInitial = false) => {
     try {
       if (isInitial) setLoading(true);
       const data = await friendsController.getReceivedRequests();
@@ -29,32 +41,25 @@ export default function FriendRequests() {
     } finally {
       if (isInitial) setLoading(false);
     }
-  };
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
-      loadRequests(true); // load ngay khi vào màn hình
-
-      // Subscribe event: khi có event friendsUpdated → reload lại data background
+      loadRequests(true);
       const off = on("friendsUpdated", () => loadRequests(false));
-
-      // Cleanup khi rời màn hình → unsubscribe
       return off;
-    }, [])
+    }, [loadRequests])
   );
 
-  const handleAccept = async (id: string) => {
-    if (processingId) return; // tránh double-tap
+  const handleAccept = useCallback(async (id: string) => {
+    if (processingId) return;
     console.log("ACCEPT CLICK", id);
     try {
       setProcessingId(id);
       const res = await friendsController.acceptRequest(id);
       console.log("ACCEPT OK", res);
 
-      // Xóa request khỏi danh sách → UI render lại
       setRequests(prev => prev.filter(r => r.id !== id));
-
-      // Phát sự kiện cho màn hình khác biết
       emit("friendsUpdated");
     } catch (e: any) {
       console.log("ACCEPT FAILED | status:", e?.response?.status, "| data:", JSON.stringify(e?.response?.data), "| msg:", e?.message);
@@ -62,9 +67,9 @@ export default function FriendRequests() {
     } finally {
       setProcessingId(null);
     }
-  };
+  }, [processingId]);
 
-  const handleReject = async (id: string) => {
+  const handleReject = useCallback(async (id: string) => {
     if (processingId) return;
     Alert.alert("Từ chối lời mời", "Bạn có chắc muốn từ chối?", [
       { text: "Không", style: "cancel" },
@@ -75,11 +80,7 @@ export default function FriendRequests() {
           try {
             setProcessingId(id);
             await friendsController.rejectRequest(id);
-
-            // Update UI ngay, không cần reload API
             setRequests(prev => prev.filter(r => r.id !== id));
-
-            // Báo cho màn hình khác cập nhật
             emit("friendsUpdated");
           } catch (e) {
             console.log("Reject failed:", e);
@@ -90,7 +91,26 @@ export default function FriendRequests() {
         },
       },
     ]);
-  };
+  }, [processingId]);
+
+  const renderRequestItem = useCallback(({ item }: { item: FriendReq }) => (
+    <MemoizedFriendRequestItem
+      item={item}
+      onAccept={() => handleAccept(item.id)}
+      onReject={() => handleReject(item.id)}
+      disabled={processingId === item.id}
+    />
+  ), [handleAccept, handleReject, processingId]);
+
+  const keyExtractor = useCallback((item: FriendReq) => item.id, []);
+
+  const ListEmptyComponent = useCallback(() => (
+    !loading ? (
+      <Text style={{ color: C.textHint, marginLeft: 16 }}>
+        Chưa có lời mời kết bạn
+      </Text>
+    ) : null
+  ), [loading, C.textHint]);
 
   return (
     <View>
@@ -101,25 +121,15 @@ export default function FriendRequests() {
       )}
 
       <FlatList
-        data={requests} // danh sách lời mời
-        keyExtractor={(item) => item.id} // key cho React render
-        renderItem={({ item }) => (
-          <FriendRequestItem
-            name={item.senderName || "Người dùng"}
-            avatar={item.senderAvatar}
-            disabled={processingId === item.id}
-            onAccept={() => handleAccept(item.id)}
-            onReject={() => handleReject(item.id)}
-          />
-        )}
-        ListEmptyComponent={
-          !loading ? (
-            <Text style={{ color: C.textHint, marginLeft: 16 }}>
-              Chưa có lời mời kết bạn
-            </Text>
-          ) : null
-        }
+        data={requests}
+        keyExtractor={keyExtractor}
+        renderItem={renderRequestItem}
+        ListEmptyComponent={ListEmptyComponent}
         scrollEnabled={false}
+        removeClippedSubviews={false} // Tắt để tránh conflict
+        maxToRenderPerBatch={10}
+        windowSize={10}
+        initialNumToRender={10}
       />
     </View>
   );
