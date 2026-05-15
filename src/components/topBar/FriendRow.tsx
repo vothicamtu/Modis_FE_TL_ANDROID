@@ -7,9 +7,10 @@ import { useColors } from '../../hook/useColors';
 interface Props {
   item: FriendDTO;
   onPress: () => void;
+  testID?: string;
 }
 
-const FriendRow: React.FC<Props> = ({ item, onPress }) => {
+const FriendRow: React.FC<Props> = ({ item, onPress, testID }) => {
   const C = useColors();
 
   const getAvatarSource = () => {
@@ -20,8 +21,11 @@ const FriendRow: React.FC<Props> = ({ item, onPress }) => {
 
   return (
     <TouchableOpacity
+      testID={testID || `friend_row_${item._id}`}
       style={[styles.container, { borderBottomColor: C.border }]}
       onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={item._id === 'ALL' ? 'Chọn tất cả bạn bè' : `Chọn ${item.fullname}`}
     >
       <View style={[styles.avatarContainer, { backgroundColor: C.surface }]}>
         <Image
@@ -30,7 +34,12 @@ const FriendRow: React.FC<Props> = ({ item, onPress }) => {
           resizeMode={item._id === 'ALL' ? 'contain' : 'cover'}
         />
       </View>
-      <Text style={[styles.name, { color: C.textPrimary }]}>{item.fullname}</Text>
+      <Text 
+        style={[styles.name, { color: C.textPrimary }]}
+        accessibilityRole="text"
+      >
+        {item.fullname}
+      </Text>
       <Image
         source={require('../../assets/image/right_arrow.png')}
         style={[styles.arrow, { tintColor: C.textHint }]}

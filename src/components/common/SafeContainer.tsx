@@ -11,6 +11,9 @@ interface SafeContainerProps {
   backgroundColor?: string;
   edges?: ('top' | 'bottom' | 'left' | 'right')[];
   statusBarStyle?: 'light-content' | 'dark-content' | 'default';
+  testID?: string;
+  accessibilityRole?: 'none';
+  accessibilityLabel?: string;
 }
 
 export const SafeContainer: React.FC<SafeContainerProps> = ({
@@ -19,6 +22,9 @@ export const SafeContainer: React.FC<SafeContainerProps> = ({
   backgroundColor,
   edges = ['top', 'bottom'],
   statusBarStyle,
+  testID,
+  accessibilityRole,
+  accessibilityLabel,
 }) => {
   const C = useColors();
   const { isDark } = useTheme();
@@ -35,7 +41,13 @@ export const SafeContainer: React.FC<SafeContainerProps> = ({
           translucent 
           backgroundColor="transparent" 
         />
-        <LinearGradient colors={C.bgGradient} style={{ flex: 1 }}>
+        <LinearGradient 
+          colors={C.bgGradient} 
+          style={{ flex: 1 }}
+          testID={testID}
+          accessibilityRole={accessibilityRole}
+          accessibilityLabel={accessibilityLabel}
+        >
           <SafeAreaView style={{ flex: 1 }} edges={edges}>
             {children}
           </SafeAreaView>
@@ -51,7 +63,12 @@ export const SafeContainer: React.FC<SafeContainerProps> = ({
         translucent 
         backgroundColor="transparent" 
       />
-      <View style={{ flex: 1, backgroundColor: bgColor }}>
+      <View 
+        style={{ flex: 1, backgroundColor: bgColor }}
+        testID={testID}
+        accessibilityRole={accessibilityRole}
+        accessibilityLabel={accessibilityLabel}
+      >
         <SafeAreaView style={{ flex: 1 }} edges={edges}>
           {children}
         </SafeAreaView>

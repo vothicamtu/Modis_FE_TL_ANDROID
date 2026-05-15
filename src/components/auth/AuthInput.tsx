@@ -11,9 +11,21 @@ interface Props {
   secureTextEntry?: boolean;
   keyboardType?: any;
   testID?: string;
+  accessibilityLabel?: string;
+  accessibilityRole?: 'text' | 'search';
 }
 
-export const AuthInput = ({ label, value, onChangeText, placeholder, secureTextEntry, keyboardType, testID }: Props) => {
+export const AuthInput = ({ 
+  label, 
+  value, 
+  onChangeText, 
+  placeholder, 
+  secureTextEntry, 
+  keyboardType, 
+  testID,
+  accessibilityLabel,
+  accessibilityRole = 'text'
+}: Props) => {
   const [focused, setFocused] = useState(false);
   const C = useColors();
 
@@ -61,6 +73,9 @@ export const AuthInput = ({ label, value, onChangeText, placeholder, secureTextE
           underlineColorAndroid="transparent"
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
+          accessibilityLabel={accessibilityLabel || testID || placeholder}
+          accessibilityRole={accessibilityRole}
+          accessible={true}
         />
       </View>
     </View>

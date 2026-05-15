@@ -37,7 +37,11 @@ function ConversationScreen() {
         });
 
     return (
-        <GestureHandlerRootView style={{ flex: 1, backgroundColor: C.convBg }}>
+        <GestureHandlerRootView 
+            style={{ flex: 1, backgroundColor: C.convBg }}
+            testID="conversation_screen"
+            accessibilityLabel={`Cuộc trò chuyện với ${receiverName}`}
+        >
             <GestureDetector gesture={swipeGesture}>
                 <View style={{ flex: 1 }}>
                     <Conversation

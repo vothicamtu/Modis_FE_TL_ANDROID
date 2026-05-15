@@ -16,13 +16,18 @@ export default function LoadingScreen() {
   const signup = async () => { navigation.navigate('SignupScreen'); };
 
   return (
-    <LinearGradient colors={C.bgGradient} style={styles.container} testID="loading-screen">
+    <LinearGradient 
+      colors={C.bgGradient} 
+      style={styles.container} 
+      testID="loading_screen"
+      accessibilityLabel="Màn hình chào mừng"
+    >
       <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
 
       <SafeAreaView style={styles.content}>
         <View style={styles.topSection}>
           <Image
-            testID="loading-logo"
+            testID="loading_logo"
             source={require('../assets/image/LOGO_MODIS_TACH_NEN.png')}
             style={styles.logoImage}
             resizeMode="contain"
@@ -30,25 +35,41 @@ export default function LoadingScreen() {
         </View>
 
         <View style={styles.textContainer}>
-          <Text testID="loading-tagline-1" style={[styles.tagline, { color: C.textPrimary }]}>Kết nối mọi nơi!</Text>
-          <Text testID="loading-tagline-2" style={[styles.tagline, { color: C.textPrimary }]}>Xem ảnh trực tiếp của bạn bè</Text>
+          <Text 
+            testID="loading_tagline_1" 
+            style={[styles.tagline, { color: C.textPrimary }]}
+            accessibilityRole="header"
+          >
+            Kết nối mọi nơi!
+          </Text>
+          <Text 
+            testID="loading_tagline_2" 
+            style={[styles.tagline, { color: C.textPrimary }]}
+            accessibilityRole="text"
+          >
+            Xem ảnh trực tiếp của bạn bè
+          </Text>
         </View>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            testID="loading-signup-button"
+            testID="loading_signup_button"
             activeOpacity={0.7}
             onPress={signup}
             style={[styles.buttonPrimary, { backgroundColor: C.primary, shadowColor: C.primary }]}
+            accessibilityRole="button"
+            accessibilityLabel="Tạo tài khoản mới"
           >
             <Text style={[styles.buttonTextPrimary, { color: C.btnPrimaryText }]}>Create new account</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            testID="loading-login-button"
+            testID="loading_login_button"
             activeOpacity={0.7}
             onPress={login}
             style={[styles.buttonSecondary, { backgroundColor: 'transparent', borderColor: C.secondary }]}
+            accessibilityRole="button"
+            accessibilityLabel="Đăng nhập"
           >
             <Text style={[styles.buttonTextSecondary, { color: C.secondary }]}>Login</Text>
           </TouchableOpacity>

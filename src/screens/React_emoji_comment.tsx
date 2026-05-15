@@ -301,7 +301,11 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
   ).current;
 
   return (
-    <View style={{ flex: 1, backgroundColor: C.bgGradient[0] }} testID="home-feed-screen">
+    <View 
+      style={{ flex: 1, backgroundColor: C.bgGradient[0] }} 
+      testID="home_feed_screen"
+      accessibilityLabel="Màn hình bảng tin"
+    >
       <LinearGradient colors={C.bgGradient} style={styles.container}>
         <StatusBar backgroundColor={C.bgGradient[0]} barStyle={C.statusBar} translucent />
 
@@ -322,7 +326,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
 
         <FlatList
           ref={flatListRef}
-          testID="feed-flatlist"
+          testID="feed_flatlist"
           extraData={postList}
           style={styles.post_list}
           data={listActive ? postList.filter((p) => p?._id) : []}
@@ -342,15 +346,22 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
           onScrollToIndexFailed={(info) => {
             flatListRef.current?.scrollToOffset({ offset: info.averageItemLength * info.index, animated: false });
           }}
+          accessibilityRole="list"
+          accessibilityLabel="Danh sách bài đăng"
           renderItem={({ item }) => (
-            <View testID={`feed-post-item-${item._id}`} style={[styles.post_item, { height }]}>
+            <View 
+              testID={`feed_post_item_${item._id}`} 
+              style={[styles.post_item, { height }]}
+              accessibilityRole="none"
+              accessibilityLabel={`Bài đăng từ ${item.senderName || 'Tôi'}`}
+            >
               <View style={{ flex: 1, flexDirection: 'column', paddingBottom: 32, paddingTop: 12 }}>
 
                 <View style={{ height: 0 }} />
 
                 <View style={styles.image_area}>
                   <AnimatedImage
-                    testID="feed-post-image"
+                    testID={`feed_post_image_${item._id}`}
                     source={{ uri: optimizeCloudinaryUrl(item.urlImage) }}
                     style={[styles.image, { height: imageHeight, opacity }]}
                     resizeMode="cover"
@@ -366,17 +377,27 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                       paddingVertical: 6,
                       maxWidth: '90%',
                     }}>
-                      <Text testID="feed-post-caption" style={[styles.general_text, { 
-                        fontSize: 16, 
-                        textAlign: "center", 
-                        color: '#FFFFFF' // Always white text for readability
-                      }]}>
+                      <Text 
+                        testID={`feed_post_caption_${item._id}`} 
+                        style={[styles.general_text, { 
+                          fontSize: 16, 
+                          textAlign: "center", 
+                          color: '#FFFFFF' // Always white text for readability
+                        }]}
+                        accessibilityRole="text"
+                      >
                         {item.caption}
                       </Text>
                     </View>
                   </View>
                   {/* Menu button with white icon for both modes */}
-                  <Pressable testID="feed-menu-button" onPress={() => setShowMenu(true)} style={[styles.menu_btn_overlay, { backgroundColor: 'rgba(0,0,0,0.4)' }]}>
+                  <Pressable 
+                    testID={`feed_menu_button_${item._id}`} 
+                    onPress={() => setShowMenu(true)} 
+                    style={[styles.menu_btn_overlay, { backgroundColor: 'rgba(0,0,0,0.4)' }]}
+                    accessibilityRole="button"
+                    accessibilityLabel="Mở menu tùy chọn"
+                  >
                     <Image
                       source={require("../assets/image/pending.png")}
                       style={{ width: "55%", height: "55%", tintColor: '#FFFFFF' }} // Always white icon
@@ -387,9 +408,17 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
 
                 <View style={styles.infoImage}>
                   <View style={styles.gray_circle_border}>
-                    <Image testID="feed-sender-avatar" source={{ uri: optimizeCloudinaryUrl(item.senderAvatar) }} style={{ width: "100%", height: "100%" }} />
+                    <Image 
+                      testID={`feed_sender_avatar_${item._id}`} 
+                      source={{ uri: optimizeCloudinaryUrl(item.senderAvatar) }} 
+                      style={{ width: "100%", height: "100%" }} 
+                    />
                   </View>
-                  <Text testID="feed-sender-name" style={[styles.general_text, { marginLeft: 5, color: C.textPrimary }]}>
+                  <Text 
+                    testID={`feed_sender_name_${item._id}`} 
+                    style={[styles.general_text, { marginLeft: 5, color: C.textPrimary }]}
+                    accessibilityRole="text"
+                  >
                     {(() => {
                       const name = item.senderId === userId ? "Tôi" : item.senderName;
                       if (!name) return name;
@@ -397,11 +426,21 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                       return words.length >= 3 ? words.slice(-2).join(' ') : name;
                     })()}
                   </Text>
-                  <Text testID="feed-post-time" style={{ fontSize: 12, fontWeight: "600", color: C.textHint, marginLeft: 8 }}>
+                  <Text 
+                    testID={`feed_post_time_${item._id}`} 
+                    style={{ fontSize: 12, fontWeight: "600", color: C.textHint, marginLeft: 8 }}
+                    accessibilityRole="text"
+                  >
                     {timeAgo(item.created_at)}
                   </Text>
                   {/* Nút grid bên phải hàng info */}
-                  <Pressable testID="feed-grid-view-button" onPress={() => navigation.navigate("AllImagesScreen")} style={[styles.grid_btn, { backgroundColor: C.btnGhostBg, borderColor: C.btnGhostBorder }]}>
+                  <Pressable 
+                    testID="feed_grid_view_button" 
+                    onPress={() => navigation.navigate("AllImagesScreen")} 
+                    style={[styles.grid_btn, { backgroundColor: C.btnGhostBg, borderColor: C.btnGhostBorder }]}
+                    accessibilityRole="button"
+                    accessibilityLabel="Xem tất cả ảnh dạng lưới"
+                  >
                     <Image
                       source={require("../assets/image/grid_view.png")}
                       style={{ width: 18, height: 18, tintColor: C.btnGhostIcon }}
@@ -413,9 +452,17 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
 
                 <View style={styles.action_row}>
                   {isMe ? (
-                    <View testID="feed-reactions-received" style={[styles.reacted_for_me_box, { backgroundColor: C.surfaceStrong, borderColor: C.primary, shadowColor: C.primary }]}>
+                    <View 
+                      testID={`feed_reactions_received_${item._id}`} 
+                      style={[styles.reacted_for_me_box, { backgroundColor: C.surfaceStrong, borderColor: C.primary, shadowColor: C.primary }]}
+                      accessibilityRole="none"
+                      accessibilityLabel={reactedByUser.length === 0 ? "Chưa có phản ứng nào" : `${reactedByUser.length} người đã phản ứng`}
+                    >
                       {reactedByUser.length === 0 ? (
-                        <Text style={{ color: C.textSecondary, fontSize: 14, fontWeight: "600" }}>
+                        <Text 
+                          style={{ color: C.textSecondary, fontSize: 14, fontWeight: "600" }}
+                          accessibilityRole="text"
+                        >
                           Chưa có hoạt động nào
                         </Text>
                       ) : (
@@ -441,16 +488,40 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                       )}
                     </View>
                   ) : (
-                    <View testID="feed-react-comment-box" style={[styles.react_comment_box, { backgroundColor: C.surfaceStrong, borderColor: C.primary, shadowColor: C.primary }]}>
-                      <Pressable testID="feed-comment-button" onPress={handlePress} style={styles.comment}>
+                    <View 
+                      testID={`feed_react_comment_box_${item._id}`} 
+                      style={[styles.react_comment_box, { backgroundColor: C.surfaceStrong, borderColor: C.primary, shadowColor: C.primary }]}
+                      accessibilityRole="none"
+                      accessibilityLabel="Hộp phản ứng và bình luận"
+                    >
+                      <Pressable 
+                        testID={`feed_comment_button_${item._id}`} 
+                        onPress={handlePress} 
+                        style={styles.comment}
+                        accessibilityRole="button"
+                        accessibilityLabel="Gửi tin nhắn"
+                      >
                         <Text style={{ color: C.textHint, fontSize: 15 }}>Gửi tin nhắn...</Text>
                       </Pressable>
                       {["❤️", "😊", "🤩"].map((emoji) => (
-                        <Pressable testID={`feed-emoji-${emoji}`} key={emoji} onPress={() => handleReact(emoji)} style={styles.emoji_box}>
+                        <Pressable 
+                          testID={`feed_emoji_${emoji}_${item._id}`} 
+                          key={emoji} 
+                          onPress={() => handleReact(emoji)} 
+                          style={styles.emoji_box}
+                          accessibilityRole="button"
+                          accessibilityLabel={`Phản ứng bằng ${emoji}`}
+                        >
                           <Text style={styles.emoji}>{emoji}</Text>
                         </Pressable>
                       ))}
-                      <Pressable testID="feed-more-emoji-button" onPress={() => setIsPickerOpen(true)} style={styles.emoji_box_icon}>
+                      <Pressable 
+                        testID={`feed_more_emoji_button_${item._id}`} 
+                        onPress={() => setIsPickerOpen(true)} 
+                        style={styles.emoji_box_icon}
+                        accessibilityRole="button"
+                        accessibilityLabel="Chọn thêm emoji"
+                      >
                         <Image
                           source={require("../assets/image/add_reaction.png")}
                           style={{ width: 22, height: 22, tintColor: C.textSecondary }}
@@ -486,7 +557,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
           }
         ]}>
             <TextInput
-              testID="feed-comment-input"
+              testID="feed_comment_input"
               ref={inputRef}
               style={[styles.comment_input, { color: C.textPrimary }]}
               value={commentText}
@@ -499,9 +570,12 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
               returnKeyType="send"
               blurOnSubmit={false}
               onSubmitEditing={handleSendComment}
+              accessibilityRole="text"
+              accessibilityLabel="Nhập tin nhắn bình luận"
+              accessible={true}
             />
             <Pressable 
-              testID="feed-send-comment-button" 
+              testID="feed_send_comment_button" 
               style={[
                 styles.send_icon_wrapper, 
                 { 
@@ -512,6 +586,8 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
               ]} 
               onPress={handleSendComment}
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              accessibilityRole="button"
+              accessibilityLabel="Gửi tin nhắn"
             >
               <Image
                 source={require("../assets/image/send_message.png")}
@@ -532,7 +608,14 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
           </Animated.View>
         ))}
 
-        <Modal testID="feed-menu-modal" visible={showMenu} transparent animationType="slide" onRequestClose={() => setShowMenu(false)}>
+        <Modal 
+          testID="feed_menu_modal" 
+          visible={showMenu} 
+          transparent 
+          animationType="slide" 
+          onRequestClose={() => setShowMenu(false)}
+          accessibilityViewIsModal={true}
+        >
           <View style={{ flex: 1, justifyContent: "flex-end" }}>
             <TouchableOpacity
               style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }}
@@ -549,25 +632,31 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
             }}>
               <View style={{ width: 40, height: 4, borderRadius: 2, backgroundColor: C.dragHandle, alignSelf: "center", marginBottom: 16 }} />
               <TouchableOpacity
-                testID="feed-menu-save-image"
+                testID="feed_menu_save_image"
                 onPress={() => { setShowMenu(false); setTimeout(handleSaveImage, 300); }}
                 style={{ paddingVertical: 16, paddingHorizontal: 24 }}
+                accessibilityRole="button"
+                accessibilityLabel="Lưu ảnh vào thư viện"
               >
                 <Text style={{ color: C.textPrimary, fontSize: 17 }}>Lưu ảnh</Text>
               </TouchableOpacity>
               {isMe && (
                 <TouchableOpacity
-                  testID="feed-menu-delete-image"
+                  testID="feed_menu_delete_image"
                   onPress={() => { setShowMenu(false); setTimeout(handleDeleteImage, 300); }}
                   style={{ paddingVertical: 16, paddingHorizontal: 24 }}
+                  accessibilityRole="button"
+                  accessibilityLabel="Xóa ảnh này"
                 >
                   <Text style={{ color: C.danger, fontSize: 17 }}>Xóa ảnh</Text>
                 </TouchableOpacity>
               )}
               <TouchableOpacity
-                testID="feed-menu-cancel"
+                testID="feed_menu_cancel"
                 onPress={() => setShowMenu(false)}
                 style={{ paddingVertical: 16, paddingHorizontal: 24, marginTop: 4 }}
+                accessibilityRole="button"
+                accessibilityLabel="Hủy"
               >
                 <Text style={{ color: C.textHint, fontSize: 17, textAlign: "center" }}>Hủy</Text>
               </TouchableOpacity>

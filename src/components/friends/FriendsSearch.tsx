@@ -103,7 +103,7 @@ export default function FriendsSearch({ onResult, onClear, keyword = "" }: Props
 
   return (
     <SearchInput
-      testID="friends-search-input"
+      testID="friends_search_input"
       value={searchText}
       onChangeText={handleSearch}
       placeholder="Tìm kiếm bạn bè"
@@ -111,6 +111,8 @@ export default function FriendsSearch({ onResult, onClear, keyword = "" }: Props
       showClearButton={true}
       leftIcon="search"
       leftIconSize={20}
+      accessibilityLabel="Tìm kiếm bạn bè"
+      accessibilityRole="search"
       style={{
         marginHorizontal: 16,
         marginVertical: 8,

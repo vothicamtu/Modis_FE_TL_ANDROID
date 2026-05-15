@@ -71,7 +71,11 @@ export default function FriendsScreen() {
   }, [isSearching, searchResults, searchKeyword, handleClearSearch]);
 
   return (
-    <SafeContainer useGradient={true}>
+    <SafeContainer 
+      useGradient={true}
+      testID="friends_screen"
+      accessibilityLabel="Màn hình bạn bè"
+    >
       <View style={{ flex: 1, paddingTop: scale(28) }}>
         {/* Header with back button */}
         <View style={[styles.headerBarModern, { 
@@ -79,7 +83,7 @@ export default function FriendsScreen() {
           marginBottom: scale(8)
         }]}>
           <TouchableOpacity
-            testID="friends-back-button"
+            testID="friends_back_button"
             onPress={goBack}
             style={[
               styles.backButtonModern, 
@@ -92,6 +96,8 @@ export default function FriendsScreen() {
               }
             ]}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            accessibilityRole="button"
+            accessibilityLabel="Quay lại"
           >
             <Icon name="arrow-back" size={iconSize} color={C.textPrimary} />
           </TouchableOpacity>
@@ -99,7 +105,7 @@ export default function FriendsScreen() {
         </View>
 
         <ScrollView
-          testID="friends-scroll"
+          testID="friends_scroll"
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={1} // Giảm xuống 1 để responsive nhất
           keyboardShouldPersistTaps="handled"
@@ -110,6 +116,8 @@ export default function FriendsScreen() {
             styles.scrollContent,
             { paddingBottom: scale(20) }
           ]}
+          accessibilityRole="scrollbar"
+          accessibilityLabel="Cuộn để xem danh sách bạn bè"
         >
           <FriendsHeader />
           

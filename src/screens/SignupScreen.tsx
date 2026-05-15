@@ -65,13 +65,31 @@ export default function SignupScreen() {
   };
 
   return (
-    <LinearGradient colors={C.bgGradient} style={styles.containerSignup}>
+    <LinearGradient 
+      colors={C.bgGradient} 
+      style={styles.containerSignup}
+      testID="signup_screen"
+      accessibilityLabel="Màn hình đăng ký"
+    >
       <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
       <SafeAreaView style={styles.safeArea}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.topSection}>
-            <Text testID="signup-title" style={[styles.title, { color: C.textPrimary }]}>Tạo tài khoản</Text>
-            <Text style={[styles.subtitle, { color: C.textHint }]}>Bắt đầu kết nối với mọi người</Text>
+            <Text 
+              testID="signup_title_text" 
+              style={[styles.title, { color: C.textPrimary }]}
+              accessibilityRole="header"
+              accessibilityLabel="Tạo tài khoản"
+            >
+              Tạo tài khoản
+            </Text>
+            <Text 
+              style={[styles.subtitle, { color: C.textHint }]}
+              accessibilityRole="text"
+              accessibilityLabel="Bắt đầu kết nối với mọi người"
+            >
+              Bắt đầu kết nối với mọi người
+            </Text>
           </View>
 
           <View style={[styles.card, {
@@ -83,54 +101,66 @@ export default function SignupScreen() {
             elevation: 2, // Reduced elevation
           }]}>
             <AuthInput
-              testID="signup-username-input"
+              testID="signup_username_input"
               label="Tên đăng nhập"
               value={form.username}
               onChangeText={(val) => updateForm('username', val)}
               placeholder="Nhập tên đăng nhập"
+              accessibilityLabel="Nhập tên đăng nhập"
+              accessibilityRole="text"
             />
             <AuthInput
-              testID="signup-fullname-input"
+              testID="signup_fullname_input"
               label="Họ và tên"
               value={form.fullname}
               onChangeText={(val) => updateForm('fullname', val)}
               placeholder="Nhập họ và tên"
+              accessibilityLabel="Nhập họ và tên"
+              accessibilityRole="text"
             />
             <AuthInput
-              testID="signup-email-input"
+              testID="signup_email_input"
               label="Email"
               value={form.mail}
               onChangeText={(val) => updateForm('mail', val)}
               placeholder="Nhập email"
               keyboardType="email-address"
+              accessibilityLabel="Nhập email"
+              accessibilityRole="text"
             />
             <AuthInput
-              testID="signup-phone-input"
+              testID="signup_phone_input"
               label="Số điện thoại"
               value={form.sdt}
               onChangeText={(val) => updateForm('sdt', val)}
               placeholder="Nhập số điện thoại"
               keyboardType="phone-pad"
+              accessibilityLabel="Nhập số điện thoại"
+              accessibilityRole="text"
             />
             <AuthInput
-              testID="signup-password-input"
+              testID="signup_password_input"
               label="Mật khẩu"
               value={form.password}
               onChangeText={(val) => updateForm('password', val)}
               placeholder="Nhập mật khẩu"
               secureTextEntry
+              accessibilityLabel="Nhập mật khẩu"
+              accessibilityRole="text"
             />
             <AuthInput
-              testID="signup-confirm-password-input"
+              testID="signup_confirm_password_input"
               label="Xác nhận mật khẩu"
               value={form.confirmPassword}
               onChangeText={(val) => updateForm('confirmPassword', val)}
               placeholder="Nhập lại mật khẩu"
               secureTextEntry
+              accessibilityLabel="Nhập lại mật khẩu"
+              accessibilityRole="text"
             />
 
             <TouchableOpacity
-              testID="signup-submit-button"
+              testID="signup_submit_button"
               style={[styles.button, isValid
                 ? { backgroundColor: C.primary, shadowColor: C.primary, shadowOpacity: 0.35, elevation: 5 }
                 : { 
@@ -141,6 +171,9 @@ export default function SignupScreen() {
               ]}
               onPress={onSignupPress}
               disabled={!isValid || loading}
+              accessibilityRole="button"
+              accessibilityLabel={loading ? "Đang đăng ký" : "Đăng ký"}
+              accessibilityState={{ disabled: !isValid || loading }}
             >
               {loading ? (
                 <ActivityIndicator color={C.btnPrimaryText} />
@@ -151,8 +184,18 @@ export default function SignupScreen() {
           </View>
 
           <View style={[styles.footer, { marginBottom: 32 }]}>
-            <Text style={{ color: C.textSecondary }}>Đã có tài khoản?</Text>
-            <TouchableOpacity testID="signup-login-link" onPress={() => navigation.navigate('LoginScreen')}>
+            <Text 
+              style={{ color: C.textSecondary }}
+              accessibilityRole="text"
+            >
+              Đã có tài khoản?
+            </Text>
+            <TouchableOpacity 
+              testID="signup_login_link" 
+              onPress={() => navigation.navigate('LoginScreen')}
+              accessibilityRole="link"
+              accessibilityLabel="Đăng nhập ngay"
+            >
               <Text style={[styles.linkText, { color: C.primary, fontWeight: '600', textDecorationLine: 'none' }]}>Đăng nhập ngay</Text>
             </TouchableOpacity>
           </View>

@@ -48,12 +48,14 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
         }
     };
 
-    const renderMessageItem = ({ item }: { item: Message }) => {
+    const renderMessageItem = ({ item, index }: { item: Message; index: number }) => {
         const isUser = item.sender === 'user';
         return (
             <View
-                testID={isUser ? 'message-sent' : 'message-received'}
+                testID={`message_${index}_${isUser ? 'sent' : 'received'}`}
                 style={isUser ? styles.messageContainerRight : styles.messageContainer}
+                accessibilityRole="text"
+                accessibilityLabel={`${isUser ? 'Bạn' : userName}: ${item.text}`}
             >
                 {!isUser && (
                     <Image source={imageSource} style={[styles.smallAvatar, { borderColor: C.smallAvatarBd }]} />
@@ -80,12 +82,19 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
             >
                 {/* Header */}
                 <View style={{ paddingTop: 4 }}>
-                    <View testID="conversation-header" style={styles.headerContainer}>
+                    <View 
+                        testID="conversation_header" 
+                        style={styles.headerContainer}
+                        accessibilityRole="header"
+                        accessibilityLabel={`Cuộc trò chuyện với ${userName}`}
+                    >
                         <Pressable
-                            testID="conversation-back-button"
+                            testID="conversation_back_button"
                             onPress={() => navigation.goBack()}
                             hitSlop={8}
                             style={[styles.backButtonModern, { backgroundColor: C.msgBackBtn, shadowColor: C.msgBackBtnShadow }]}
+                            accessibilityRole="button"
+                            accessibilityLabel="Quay lại danh sách tin nhắn"
                         >
                             <Image
                                 style={{ width: 22, height: 22, tintColor: C.msgIcon }}
@@ -93,16 +102,29 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                             />
                         </Pressable>
                         {avatarUrl || avatarSource ? (
-                            <Image testID="conversation-avatar" source={imageSource} style={styles.avatar} />
+                            <Image 
+                                testID="conversation_avatar" 
+                                source={imageSource} 
+                                style={styles.avatar} 
+                            />
                         ) : (
-                            <View testID="conversation-avatar-fallback" style={[styles.avatar, styles.avatarFallback, { backgroundColor: C.msgAvatarFallBg }]}>
+                            <View 
+                                testID="conversation_avatar_fallback" 
+                                style={[styles.avatar, styles.avatarFallback, { backgroundColor: C.msgAvatarFallBg }]}
+                            >
                                 <Text style={[styles.avatarInitial, { color: C.msgAvatarInitial }]}>
                                     {(userName || '?')[0].toUpperCase()}
                                 </Text>
                             </View>
                         )}
                         <View style={styles.headerText}>
-                            <Text testID="conversation-username" style={[styles.userName, { color: C.msgName }]}>{userName}</Text>
+                            <Text 
+                                testID="conversation_username" 
+                                style={[styles.userName, { color: C.msgName }]}
+                                accessibilityRole="text"
+                            >
+                                {userName}
+                            </Text>
                         </View>
                     </View>
                 </View>
@@ -118,6 +140,7 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                 ) : (
                     <FlatList
                         ref={flatListRef}
+                        testID="conversation_messages_list"
                         data={messages}
                         renderItem={renderMessageItem}
                         keyExtractor={(item) => item.id}
@@ -133,9 +156,14 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                             setIsNearBottom(layoutMeasurement.height + contentOffset.y >= contentSize.height - 50);
                         }}
                         scrollEventThrottle={16}
+                        accessibilityRole="list"
+                        accessibilityLabel="Danh sách tin nhắn"
                         ListEmptyComponent={
                             <View style={{ alignItems: 'center', paddingTop: 60 }}>
-                                <Text style={{ color: C.msgEmptyHint, fontSize: 14 }}>
+                                <Text 
+                                    style={{ color: C.msgEmptyHint, fontSize: 14 }}
+                                    accessibilityRole="text"
+                                >
                                     Chưa có tin nhắn. Hãy bắt đầu cuộc trò chuyện!
                                 </Text>
                             </View>
@@ -162,7 +190,7 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                     }]}>
                         <TextInput
                             ref={inputRef}
-                            testID="chat-input"
+                            testID="chat_input"
                             style={[styles.textInput, { color: C.textPrimary }]}
                             value={inputText}
                             onChangeText={setInputText}
@@ -173,10 +201,13 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                             returnKeyType="send"
                             blurOnSubmit={false}
                             onSubmitEditing={handleSend}
+                            accessibilityRole="text"
+                            accessibilityLabel="Nhập tin nhắn"
+                            accessible={true}
                         />
                     </View>
                     <TouchableOpacity
-                        testID="send-button"
+                        testID="chat_send_button"
                         style={[
                             styles.sendButton, 
                             { 
@@ -195,6 +226,9 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                         onPress={handleSend}
                         disabled={!inputText.trim()}
                         activeOpacity={0.7}
+                        accessibilityRole="button"
+                        accessibilityLabel={inputText.trim() ? "Gửi tin nhắn" : "Nhập tin nhắn để gửi"}
+                        accessibilityState={{ disabled: !inputText.trim() }}
                     >
                         <Image
                             source={require('../../../assets/image/send_message.png')}

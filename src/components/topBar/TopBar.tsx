@@ -150,9 +150,11 @@ const TopBar: React.FC<Props> = ({
     if (variant === 'home') {
       return (
         <Pressable
-          testID="topbar-friends-button"
+          testID="topbar_friends_button"
           style={[styles.homeFriendsButton, { backgroundColor: C.surfaceStrong, borderColor: C.primary, shadowColor: C.primary }]}
           onPress={() => navigation.navigate('FriendsScreen')}
+          accessibilityRole="button"
+          accessibilityLabel={`Bạn bè, ${friendCount} người bạn`}
         >
           <View style={styles.box_friends}>
             <Image
@@ -160,16 +162,39 @@ const TopBar: React.FC<Props> = ({
               style={{ width: 48, height: 48, tintColor: C.primary }}
               resizeMode="contain"
             />
-            <Text testID="topbar-friend-count" style={[styles.homeTextCount, { color: C.textPrimary }]}>{friendCount}</Text>
-            <Text style={[styles.homeTextLabel, { color: C.textSecondary }]}>Bạn bè</Text>
+            <Text 
+              testID="topbar_friend_count" 
+              style={[styles.homeTextCount, { color: C.textPrimary }]}
+              accessibilityRole="text"
+            >
+              {friendCount}
+            </Text>
+            <Text 
+              style={[styles.homeTextLabel, { color: C.textSecondary }]}
+              accessibilityRole="text"
+            >
+              Bạn bè
+            </Text>
           </View>
         </Pressable>
       );
     }
 
     return (
-      <TouchableOpacity testID="topbar-filter-button" style={[styles.filterButton, { backgroundColor: C.surfaceStrong, borderColor: C.primary, shadowColor: C.primary }]} onPress={toggleDropdown}>
-        <Text testID="topbar-filter-label" style={[styles.title, { color: C.textPrimary }]} numberOfLines={1}>
+      <TouchableOpacity 
+        testID="topbar_filter_button" 
+        style={[styles.filterButton, { backgroundColor: C.surfaceStrong, borderColor: C.primary, shadowColor: C.primary }]} 
+        onPress={toggleDropdown}
+        accessibilityRole="button"
+        accessibilityLabel={`Lọc theo ${selectedLabel}`}
+        accessibilityState={{ expanded: dropdownVisible }}
+      >
+        <Text 
+          testID="topbar_filter_label" 
+          style={[styles.title, { color: C.textPrimary }]} 
+          numberOfLines={1}
+          accessibilityRole="text"
+        >
           {selectedLabel}
         </Text>
         <View style={[styles.arrowDown, { borderTopColor: C.textSecondary }]} />
@@ -178,19 +203,26 @@ const TopBar: React.FC<Props> = ({
   };
 
   return (
-    <View style={styles.container} testID="topbar">
+    <View 
+      style={styles.container} 
+      testID="topbar_container"
+      accessibilityRole="header"
+      accessibilityLabel="Thanh điều hướng"
+    >
       {/* Nút Back hoặc Avatar */}
       {showBackButton ? (
         <TouchableOpacity
-          testID="topbar-back-button"
+          testID="topbar_back_button"
           style={[styles.iconButton, { backgroundColor: C.backBtn, shadowColor: C.backBtnShadow }]}
           onPress={handleBack}
+          accessibilityRole="button"
+          accessibilityLabel="Quay lại"
         >
           <Icon name="arrow-back" size={24} color={C.textPrimary} />
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
-          testID="topbar-avatar-button"
+          testID="topbar_avatar_button"
           style={[styles.iconButton, { backgroundColor: C.backBtn, shadowColor: C.backBtnShadow }]}
           onPress={() => {
             if (canTransform && goToProfile) {
@@ -199,9 +231,11 @@ const TopBar: React.FC<Props> = ({
               navigation.navigate('ProfileScreen');
             }
           }}
+          accessibilityRole="imagebutton"
+          accessibilityLabel="Xem hồ sơ cá nhân"
         >
           <Image
-            testID="topbar-avatar-image"
+            testID="topbar_avatar_image"
             source={
               avatarUrl
                 ? { uri: avatarUrl }
@@ -216,7 +250,7 @@ const TopBar: React.FC<Props> = ({
 
       {/* Message */}
       <TouchableOpacity
-        testID="topbar-message-button"
+        testID="topbar_message_button"
         onPress={() => {
           if (canTransform && goToMessage) {
             goToMessage();
@@ -225,6 +259,8 @@ const TopBar: React.FC<Props> = ({
           }
         }}
         style={[styles.iconButton, { backgroundColor: C.backBtn, shadowColor: C.backBtnShadow }]}
+        accessibilityRole="button"
+        accessibilityLabel="Tin nhắn"
       >
         <Image
           source={require('../../assets/image/message_circle.png')}
@@ -238,11 +274,16 @@ const TopBar: React.FC<Props> = ({
         <TouchableWithoutFeedback onPress={() => setDropdownVisible(false)}>
           <View style={[styles.mask, { backgroundColor: C.modalOverlay }]}>
             <TouchableWithoutFeedback>
-              <View testID="topbar-dropdown" style={[styles.dropdownBoard, { backgroundColor: C.surfaceStrong, borderColor: C.borderAccent, shadowColor: C.primary }]}>
+              <View 
+                testID="topbar_dropdown" 
+                style={[styles.dropdownBoard, { backgroundColor: C.surfaceStrong, borderColor: C.borderAccent, shadowColor: C.primary }]}
+                accessibilityRole="menu"
+                accessibilityLabel="Danh sách bạn bè để lọc"
+              >
                 <View style={[styles.separator, { backgroundColor: C.border }]} />
 
                 <FlatList
-                  testID="topbar-friends-dropdown-list"
+                  testID="topbar_friends_dropdown_list"
                   data={friendsList}
                   keyExtractor={(item) => item._id}
                   renderItem={({ item }) => (

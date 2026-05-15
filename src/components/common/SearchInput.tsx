@@ -30,6 +30,8 @@ interface SearchInputProps {
   rightIconSize?: number;
   onRightIconPress?: () => void;
   testID?: string;
+  accessibilityLabel?: string;
+  accessibilityRole?: 'search' | 'text';
 }
 
 export const SearchInput: React.FC<SearchInputProps> = ({
@@ -51,6 +53,8 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   rightIconSize = 20,
   onRightIconPress,
   testID,
+  accessibilityLabel,
+  accessibilityRole = 'search',
 }) => {
   const C = useColors();
   const inputRef = useRef<TextInput>(null);
@@ -135,12 +139,16 @@ export const SearchInput: React.FC<SearchInputProps> = ({
           },
           inputStyle,
         ]}
+        accessibilityLabel={accessibilityLabel || testID || placeholder}
+        accessibilityRole={accessibilityRole}
+        accessible={true}
       />
 
       {/* Clear Button */}
       {showClearButton && value.length > 0 && (
         <Animated.View style={{ opacity: fadeAnim }}>
           <TouchableOpacity
+            testID={testID ? `${testID}_clear_button` : 'search_clear_button'}
             onPress={handleClear}
             style={[
               {
@@ -153,6 +161,8 @@ export const SearchInput: React.FC<SearchInputProps> = ({
               clearButtonStyle,
             ]}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            accessibilityRole="button"
+            accessibilityLabel="Xóa nội dung tìm kiếm"
           >
             <View
               style={{
@@ -173,6 +183,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
       {/* Right Icon */}
       {rightIcon && (
         <TouchableOpacity
+          testID={testID ? `${testID}_right_icon_button` : 'search_right_icon_button'}
           onPress={onRightIconPress}
           style={{
             width: minTouchArea,
@@ -182,6 +193,8 @@ export const SearchInput: React.FC<SearchInputProps> = ({
             marginLeft: scale(4),
           }}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          accessibilityRole="button"
+          accessibilityLabel="Thực hiện tìm kiếm"
         >
           <Icon
             name={rightIcon}

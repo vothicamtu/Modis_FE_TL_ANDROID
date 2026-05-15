@@ -55,14 +55,24 @@ export default function TakeScreen({ goToProfile, goToMessage }: TakeScreenProps
 
   return (
     <LinearGradient colors={C.bgGradient} style={{ flex: 1 }}>
-      <SafeAreaView style={styles.container} testID="take-screen" edges={['top']}>
+      <SafeAreaView 
+        style={styles.container} 
+        testID="take_screen" 
+        edges={['top']}
+        accessibilityLabel="Màn hình chụp ảnh"
+      >
         <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
 
         <View style={{ paddingTop: 4 }}>
           <TopBar variant="home" goToMessage={goToMessage} goToProfile={goToProfile} canTransform />
         </View>
 
-        <View style={styles.camera_area} testID="take-camera-area">
+        <View 
+          style={styles.camera_area} 
+          testID="take_camera_area"
+          accessibilityRole="none"
+          accessibilityLabel="Vùng camera"
+        >
           <View style={styles.camera}>
             {device && hasPermission && (
               <Camera
@@ -77,9 +87,12 @@ export default function TakeScreen({ goToProfile, goToMessage }: TakeScreenProps
 
           <View style={styles.take_area}>
             <Pressable
-              testID="take-flash-button"
+              testID="take_flash_button"
               onPress={() => setFlash((prev) => (prev === "off" ? "on" : "off"))}
               style={[styles.flash_btn, { backgroundColor: C.btnGhostBg, borderWidth: 1.5, borderColor: C.btnGhostBorder }]}
+              accessibilityRole="button"
+              accessibilityLabel={flash === "on" ? "Tắt đèn flash" : "Bật đèn flash"}
+              accessibilityState={{ selected: flash === "on" }}
             >
               <Image
                 source={flash === "on" ? require("../assets/image/flash.png") : require("../assets/image/no_flash.png")}
@@ -88,13 +101,25 @@ export default function TakeScreen({ goToProfile, goToMessage }: TakeScreenProps
               />
             </Pressable>
 
-            <Pressable testID="take-capture-button" onPress={takePicture} style={styles.take_btn}>
+            <Pressable 
+              testID="take_capture_button" 
+              onPress={takePicture} 
+              style={styles.take_btn}
+              accessibilityRole="button"
+              accessibilityLabel="Chụp ảnh"
+            >
               <View style={[styles.outerCircle, { borderColor: C.primary, shadowColor: C.primary }]}>
                 <View style={[styles.innerCircle, { backgroundColor: C.surfaceStrong }]} />
               </View>
             </Pressable>
 
-            <Pressable testID="take-toggle-camera-button" onPress={toggleCamera} style={[styles.flash_btn, { backgroundColor: C.btnGhostBg, borderWidth: 1.5, borderColor: C.btnGhostBorder }]}>
+            <Pressable 
+              testID="take_toggle_camera_button" 
+              onPress={toggleCamera} 
+              style={[styles.flash_btn, { backgroundColor: C.btnGhostBg, borderWidth: 1.5, borderColor: C.btnGhostBorder }]}
+              accessibilityRole="button"
+              accessibilityLabel={cameraPosition === "back" ? "Chuyển sang camera trước" : "Chuyển sang camera sau"}
+            >
               <Image
                 source={require("../assets/image/cached.png")}
                 style={{ width: "70%", height: "70%", tintColor: C.btnGhostIcon }}
@@ -104,9 +129,17 @@ export default function TakeScreen({ goToProfile, goToMessage }: TakeScreenProps
           </View>
         </View>
 
-        <View style={styles.history} testID="take-history">
+        <View 
+          style={styles.history} 
+          testID="take_history"
+          accessibilityRole="button"
+          accessibilityLabel="Xem lịch sử ảnh"
+        >
           <View style={{ width: 70, height: 40, alignItems: "center" }}>
-            <Text style={[styles.general_text, { fontWeight: "bold", fontSize: 19, color: C.textPrimary }]}>
+            <Text 
+              style={[styles.general_text, { fontWeight: "bold", fontSize: 19, color: C.textPrimary }]}
+              accessibilityRole="text"
+            >
               Lịch sử
             </Text>
             <Image source={require("../assets/image/down_toggle.png")} style={{ tintColor: C.textPrimary }} />

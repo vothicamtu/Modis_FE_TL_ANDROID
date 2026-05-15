@@ -35,13 +35,31 @@ export default function LoginScreen() {
   };
 
   return (
-    <LinearGradient colors={C.bgGradient} style={styles.container}>
+    <LinearGradient 
+      colors={C.bgGradient} 
+      style={styles.container}
+      testID="login_screen"
+      accessibilityLabel="Màn hình đăng nhập"
+    >
       <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
       <SafeAreaView style={styles.safeArea}>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
           <View style={styles.topSection}>
-            <Text testID="login-title" style={[styles.title, { color: C.textPrimary }]}>Chào mừng trở lại</Text>
-            <Text style={[styles.subtitle, { color: C.textHint }]}>Đăng nhập để tiếp tục kết nối</Text>
+            <Text 
+              testID="login_title_text" 
+              style={[styles.title, { color: C.textPrimary }]}
+              accessibilityRole="header"
+              accessibilityLabel="Chào mừng trở lại"
+            >
+              Chào mừng trở lại
+            </Text>
+            <Text 
+              style={[styles.subtitle, { color: C.textHint }]}
+              accessibilityRole="text"
+              accessibilityLabel="Đăng nhập để tiếp tục kết nối"
+            >
+              Đăng nhập để tiếp tục kết nối
+            </Text>
           </View>
 
           <View style={[styles.card, {
@@ -52,11 +70,28 @@ export default function LoginScreen() {
             shadowRadius: 16,
             elevation: 2, // Reduced elevation
           }]}>
-            <AuthInput testID="login-username-input" label="Tên đăng nhập" value={username} onChangeText={setUsername} placeholder="Nhập tên đăng nhập" />
-            <AuthInput testID="login-password-input" label="Mật khẩu" value={password} onChangeText={setPassword} placeholder="Nhập mật khẩu" secureTextEntry />
+            <AuthInput 
+              testID="login_username_input" 
+              label="Tên đăng nhập" 
+              value={username} 
+              onChangeText={setUsername} 
+              placeholder="Nhập tên đăng nhập"
+              accessibilityLabel="Nhập tên đăng nhập"
+              accessibilityRole="text"
+            />
+            <AuthInput 
+              testID="login_password_input" 
+              label="Mật khẩu" 
+              value={password} 
+              onChangeText={setPassword} 
+              placeholder="Nhập mật khẩu" 
+              secureTextEntry
+              accessibilityLabel="Nhập mật khẩu"
+              accessibilityRole="text"
+            />
 
             <TouchableOpacity
-              testID="login-submit-button"
+              testID="login_submit_button"
               style={[styles.button, isValid
                 ? { backgroundColor: C.primary, shadowColor: C.primary, shadowOpacity: 0.35, elevation: 5 }
                 : { 
@@ -67,6 +102,9 @@ export default function LoginScreen() {
               ]}
               onPress={onLoginPress}
               disabled={!isValid || loading}
+              accessibilityRole="button"
+              accessibilityLabel={loading ? "Đang đăng nhập" : "Đăng nhập"}
+              accessibilityState={{ disabled: !isValid || loading }}
             >
               {loading ? (
                 <ActivityIndicator color={C.btnPrimaryText} />
@@ -77,8 +115,18 @@ export default function LoginScreen() {
           </View>
 
           <View style={styles.footer}>
-            <Text style={{ color: C.textSecondary }}>Chưa có tài khoản?</Text>
-            <TouchableOpacity testID="login-signup-link" onPress={() => navigation.navigate('SignupScreen')}>
+            <Text 
+              style={{ color: C.textSecondary }}
+              accessibilityRole="text"
+            >
+              Chưa có tài khoản?
+            </Text>
+            <TouchableOpacity 
+              testID="login_signup_link" 
+              onPress={() => navigation.navigate('SignupScreen')}
+              accessibilityRole="link"
+              accessibilityLabel="Đăng ký ngay"
+            >
               <Text style={[styles.linkText, { color: C.primary, fontWeight: '600', textDecorationLine: 'none' }]}>Đăng ký ngay</Text>
             </TouchableOpacity>
           </View>

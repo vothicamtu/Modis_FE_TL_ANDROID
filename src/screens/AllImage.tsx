@@ -42,7 +42,12 @@ const AllImagesScreen = () => {
   };
 
   return (
-    <LinearGradient colors={C.bgGradient} style={styles.container}>
+    <LinearGradient 
+      colors={C.bgGradient} 
+      style={styles.container}
+      testID="all_images_screen"
+      accessibilityLabel="Màn hình xem tất cả ảnh"
+    >
       <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
       <View style={{ height: insets.top, backgroundColor: C.bgGradient[0] }} />
       <View style={{ flex: 1, paddingTop: 28 }}>
@@ -56,11 +61,15 @@ const AllImagesScreen = () => {
           />
         <View style={{ flex: 1 }}>
           <FlatList
-            testID="all-images-flatlist"
+            testID="all_images_flatlist"
             data={images}
             keyExtractor={(item) => item._id}
-            renderItem={({ item }) => (
-              <ImageGridItem item={item} onPress={() => console.log('Pressed', item._id)} />
+            renderItem={({ item, index }) => (
+              <ImageGridItem 
+                item={item} 
+                onPress={() => console.log('Pressed', item._id)}
+                testID={`all_images_grid_item_${index}`}
+              />
             )}
             numColumns={3}
             contentContainerStyle={[
@@ -71,6 +80,8 @@ const AllImagesScreen = () => {
             onEndReached={onLoadMore}
             onEndReachedThreshold={0.5}
             ListFooterComponent={renderFooter}
+            accessibilityRole="list"
+            accessibilityLabel="Lưới ảnh"
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}

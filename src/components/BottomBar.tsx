@@ -9,12 +9,17 @@ const BottomBar = () => {
   const C = useColors();
 
   return (
-    <View testID="bottom-bar" style={[styles.container, {
-      backgroundColor: C.surfaceStrong,
-      borderTopColor: C.border,
-    }]}>
+    <View 
+      testID="bottombar_container" 
+      style={[styles.container, {
+        backgroundColor: C.surfaceStrong,
+        borderTopColor: C.border,
+      }]}
+      accessibilityRole="tabbar"
+      accessibilityLabel="Thanh điều hướng dưới"
+    >
       <TouchableOpacity
-        testID="bottom-bar-home-button"
+        testID="bottombar_home_button"
         style={[styles.outerCircle, {
           borderColor: C.primary,
           backgroundColor: C.surfaceStrong,
@@ -22,6 +27,8 @@ const BottomBar = () => {
         }]}
         onPress={() => navigation.navigate("HomeScreen")}
         activeOpacity={0.7}
+        accessibilityRole="tab"
+        accessibilityLabel="Trang chủ"
       >
         <View style={[styles.innerCircle, { backgroundColor: C.primary }]} />
       </TouchableOpacity>

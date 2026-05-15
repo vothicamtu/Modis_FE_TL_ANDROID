@@ -22,19 +22,36 @@ function MessagesList({ messages, onItemPress, loading }: MessagesListProps) {
 
     return (
         <FlatList
-            testID="messages-list"
+            testID="messages_list"
             data={messages}
             keyExtractor={(item) => item.conversationId || Math.random().toString()}
-            renderItem={({ item }) => (
-                <MessageItem message={item} onPress={() => onItemPress(item)} />
+            renderItem={({ item, index }) => (
+                <MessageItem 
+                    message={item} 
+                    onPress={() => onItemPress(item)}
+                    testID={`message_item_${index}`}
+                />
             )}
             ListEmptyComponent={
                 <View style={styles.centered}>
-                    <Text testID="messages-list-empty" style={[styles.emptyText, { color: C.msgEmptyText }]}>No conversations yet</Text>
-                    <Text style={[styles.emptyHint, { color: C.msgEmptyHint }]}>Send a photo to start chatting!</Text>
+                    <Text 
+                        testID="messages_list_empty" 
+                        style={[styles.emptyText, { color: C.msgEmptyText }]}
+                        accessibilityRole="text"
+                    >
+                        No conversations yet
+                    </Text>
+                    <Text 
+                        style={[styles.emptyHint, { color: C.msgEmptyHint }]}
+                        accessibilityRole="text"
+                    >
+                        Send a photo to start chatting!
+                    </Text>
                 </View>
             }
             contentContainerStyle={messages.length === 0 ? { flex: 1 } : undefined}
+            accessibilityRole="list"
+            accessibilityLabel="Danh sách cuộc trò chuyện"
         />
     );
 }

@@ -80,7 +80,13 @@ export default function ProfileScreen({ goToHome }: Props) {
     onPress?: () => void;
     testID?: string;
   }) => (
-    <TouchableOpacity testID={testID} style={[styles.item, { backgroundColor: C.surface, borderLeftColor: danger ? C.danger : C.primary }]} onPress={onPress}>
+    <TouchableOpacity 
+      testID={testID} 
+      style={[styles.item, { backgroundColor: C.surface, borderLeftColor: danger ? C.danger : C.primary }]} 
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={`${label}${value ? `: ${value}` : ''}`}
+    >
       <Icon name={icon} size={22} color={danger ? C.danger : C.primary} />
       <View style={{ marginLeft: 12 }}>
         <Text style={[styles.label, { color: C.textPrimary }]}>{label}</Text>
@@ -189,16 +195,23 @@ export default function ProfileScreen({ goToHome }: Props) {
   }
 
   return (
-    <LinearGradient colors={C.bgGradient} style={{ flex: 1 }}>
+    <LinearGradient 
+      colors={C.bgGradient} 
+      style={{ flex: 1 }}
+      testID="profile_screen"
+      accessibilityLabel="Màn hình hồ sơ cá nhân"
+    >
       <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
       <View style={{ flex: 1 }}>
         <SafeAreaView style={{ zIndex: 10, width: '100%', backgroundColor: 'transparent' }} edges={['top']}>
           <View style={{ paddingTop: 4 }}>
             <View style={{ paddingBottom: 12, paddingHorizontal: 16 }}>
               <TouchableOpacity
-                testID="profile-back-button"
+                testID="profile_back_button"
                 onPress={handleBack}
                 style={[styles.backButtonModern, { backgroundColor: C.backBtn, shadowColor: C.backBtnShadow }]}
+                accessibilityRole="button"
+                accessibilityLabel="Quay lại"
               >
                 <Icon name="arrow-back" size={24} color={C.textPrimary} />
               </TouchableOpacity>
@@ -212,12 +225,19 @@ export default function ProfileScreen({ goToHome }: Props) {
           style={{ flex: 1 }}
           bounces={false}
           overScrollMode="never"
-          testID="profile-scroll"
+          testID="profile_scroll"
+          accessibilityRole="scrollbar"
+          accessibilityLabel="Cuộn để xem thông tin hồ sơ"
         >
           {/* Avatar Section */}
-          <View style={styles.header} testID="profile-header">
+          <View 
+            style={styles.header} 
+            testID="profile_header"
+            accessibilityRole="header"
+            accessibilityLabel="Thông tin cá nhân"
+          >
             <Image
-              testID="profile-avatar"
+              testID="profile_avatar"
               source={
                 profile?.avatarUrl
                   ? { uri: profile.avatarUrl }
@@ -225,16 +245,29 @@ export default function ProfileScreen({ goToHome }: Props) {
               }
               style={[styles.avatar, { borderColor: C.primary }]}
             />
-            <Text testID="profile-username" style={[styles.name, { color: C.textPrimary }]}>{profile?.username}</Text>
-            <TouchableOpacity testID="profile-edit-avatar-button" onPress={handleEditAvatar}>
+            <Text 
+              testID="profile_username" 
+              style={[styles.name, { color: C.textPrimary }]}
+              accessibilityRole="text"
+            >
+              {profile?.username}
+            </Text>
+            <TouchableOpacity 
+              testID="profile_edit_avatar_button" 
+              onPress={handleEditAvatar}
+              accessibilityRole="button"
+              accessibilityLabel="Chỉnh sửa ảnh đại diện"
+            >
               <Text style={[styles.edit, { color: C.primary }]}>Chỉnh ảnh</Text>
             </TouchableOpacity>
 
             <View style={styles.iinviteWrapper}>
               <TouchableOpacity
-                testID="profile-invite-button"
+                testID="profile_invite_button"
                 style={styles.invite}
                 onPress={() => setShareModal(true)}
+                accessibilityRole="button"
+                accessibilityLabel="Mời bạn bè tham gia Locket"
               >
                 <Text style={[styles.inviteText, { color: C.textPrimary }]}>Mời bạn bè tham gia Locket!</Text>
                 <Icon name="share" size={18} color={C.textSecondary} />
@@ -249,21 +282,21 @@ export default function ProfileScreen({ goToHome }: Props) {
             label="Sửa tên"
             value={profile?.username || 'Chưa thiết lập'}
             onPress={() => openEdit('username', profile?.username || null)}
-            testID="profile-edit-username-item"
+            testID="profile_edit_username_item"
           />
           <Item
             icon="phone"
             label="Thay đổi số điện thoại"
             value={profile?.sdt || 'Chưa thiết lập'}
             onPress={() => openEdit('sdt', profile?.sdt || null)}
-            testID="profile-edit-phone-item"
+            testID="profile_edit_phone_item"
           />
           <Item
             icon="email"
             label="Thay đổi email"
             value={profile?.mail || 'Chưa thiết lập'}
             onPress={() => openEdit('mail', profile?.mail || null)}
-            testID="profile-edit-email-item"
+            testID="profile_edit_email_item"
           />
 
           <Text style={[styles.section, { color: C.textSecondary }]}>Riêng tư & bảo mật</Text>
@@ -272,28 +305,48 @@ export default function ProfileScreen({ goToHome }: Props) {
             label="Đổi mật khẩu"
             value="••••••••"
             onPress={() => setPasswordModal(true)}
-            testID="profile-change-password-item"
+            testID="profile_change_password_item"
           />
 
           {/* Giao diện */}
           <Text style={[styles.section, { color: C.textSecondary }]}>Giao diện</Text>
-          <View style={[styles.item, { backgroundColor: C.surface, borderLeftColor: C.primary }]}>
+          <View 
+            style={[styles.item, { backgroundColor: C.surface, borderLeftColor: C.primary }]}
+            testID="profile_theme_toggle_item"
+            accessibilityRole="adjustable"
+            accessibilityLabel={`Chế độ tối ${isDark ? 'đang bật' : 'đang tắt'}`}
+          >
             <Icon name={isDark ? 'dark-mode' : 'light-mode'} size={22} color={C.primary} />
             <View style={{ marginLeft: 12, flex: 1 }}>
               <Text style={[styles.label, { color: C.textPrimary }]}>Chế độ tối</Text>
               <Text style={[styles.value, { color: C.textSecondary }]}>{isDark ? 'Đang bật' : 'Đang tắt'}</Text>
             </View>
             <Switch
+              testID="profile_theme_switch"
               value={isDark}
               onValueChange={toggleTheme}
               trackColor={{ false: C.textHint, true: C.primary }}
               thumbColor={C.primary}
+              accessibilityRole="switch"
+              accessibilityLabel="Bật/tắt chế độ tối"
+              accessibilityState={{ checked: isDark }}
             />
           </View>
 
           <Text style={[styles.section, { color: C.textSecondary }]}>Vùng nguy hiểm</Text>
-          <Item icon="delete" label="Xóa tài khoản" danger onPress={() => { }} testID="profile-delete-account-item" />
-          <Item icon="logout" label="Đăng xuất" onPress={() => authController.logout(navigation)} testID="profile-logout-item" />
+          <Item 
+            icon="delete" 
+            label="Xóa tài khoản" 
+            danger 
+            onPress={() => { }} 
+            testID="profile_delete_account_item" 
+          />
+          <Item 
+            icon="logout" 
+            label="Đăng xuất" 
+            onPress={() => authController.logout(navigation)} 
+            testID="profile_logout_item" 
+          />
         </ScrollView>
 
         {/* Modals */}
