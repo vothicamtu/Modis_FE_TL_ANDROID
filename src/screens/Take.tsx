@@ -59,7 +59,7 @@ export default function TakeScreen({ goToProfile, goToMessage }: TakeScreenProps
         style={styles.container} 
         testID="take_screen" 
         edges={['top']}
-        accessibilityLabel="Màn hình chụp ảnh"
+        accessibilityLabel="take_screen"
       >
         <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
 
@@ -71,7 +71,7 @@ export default function TakeScreen({ goToProfile, goToMessage }: TakeScreenProps
           style={styles.camera_area} 
           testID="take_camera_area"
           accessibilityRole="none"
-          accessibilityLabel="Vùng camera"
+          accessibilityLabel="take_camera_area"
         >
           <View style={styles.camera}>
             {device && hasPermission && (
@@ -91,8 +91,9 @@ export default function TakeScreen({ goToProfile, goToMessage }: TakeScreenProps
               onPress={() => setFlash((prev) => (prev === "off" ? "on" : "off"))}
               style={[styles.flash_btn, { backgroundColor: C.btnGhostBg, borderWidth: 1.5, borderColor: C.btnGhostBorder }]}
               accessibilityRole="button"
-              accessibilityLabel={flash === "on" ? "Tắt đèn flash" : "Bật đèn flash"}
+              accessibilityLabel="take_flash_button"
               accessibilityState={{ selected: flash === "on" }}
+              accessible={true}
             >
               <Image
                 source={flash === "on" ? require("../assets/image/flash.png") : require("../assets/image/no_flash.png")}
@@ -106,7 +107,8 @@ export default function TakeScreen({ goToProfile, goToMessage }: TakeScreenProps
               onPress={takePicture} 
               style={styles.take_btn}
               accessibilityRole="button"
-              accessibilityLabel="Chụp ảnh"
+              accessibilityLabel="take_capture_button"
+              accessible={true}
             >
               <View style={[styles.outerCircle, { borderColor: C.primary, shadowColor: C.primary }]}>
                 <View style={[styles.innerCircle, { backgroundColor: C.surfaceStrong }]} />
@@ -118,7 +120,8 @@ export default function TakeScreen({ goToProfile, goToMessage }: TakeScreenProps
               onPress={toggleCamera} 
               style={[styles.flash_btn, { backgroundColor: C.btnGhostBg, borderWidth: 1.5, borderColor: C.btnGhostBorder }]}
               accessibilityRole="button"
-              accessibilityLabel={cameraPosition === "back" ? "Chuyển sang camera trước" : "Chuyển sang camera sau"}
+              accessibilityLabel="take_toggle_camera_button"
+              accessible={true}
             >
               <Image
                 source={require("../assets/image/cached.png")}
@@ -133,12 +136,14 @@ export default function TakeScreen({ goToProfile, goToMessage }: TakeScreenProps
           style={styles.history} 
           testID="take_history"
           accessibilityRole="button"
-          accessibilityLabel="Xem lịch sử ảnh"
+          accessibilityLabel="take_history"
+          accessible={true}
         >
           <View style={{ width: 70, height: 40, alignItems: "center" }}>
             <Text 
               style={[styles.general_text, { fontWeight: "bold", fontSize: 19, color: C.textPrimary }]}
               accessibilityRole="text"
+              accessible={false}
             >
               Lịch sử
             </Text>

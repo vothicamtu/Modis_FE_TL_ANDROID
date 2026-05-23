@@ -139,7 +139,8 @@ export const SearchInput: React.FC<SearchInputProps> = ({
           },
           inputStyle,
         ]}
-        accessibilityLabel={accessibilityLabel || testID || placeholder}
+        // Không dùng placeholder/text hiển thị làm accessibilityLabel; dùng ID ổn định cho automation
+        accessibilityLabel={accessibilityLabel ?? testID}
         accessibilityRole={accessibilityRole}
         accessible={true}
       />
@@ -162,7 +163,8 @@ export const SearchInput: React.FC<SearchInputProps> = ({
             ]}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             accessibilityRole="button"
-            accessibilityLabel="Xóa nội dung tìm kiếm"
+            accessibilityLabel={testID ? `${testID}_clear_button` : 'search_clear_button'}
+            accessible={true}
           >
             <View
               style={{
@@ -194,7 +196,8 @@ export const SearchInput: React.FC<SearchInputProps> = ({
           }}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           accessibilityRole="button"
-          accessibilityLabel="Thực hiện tìm kiếm"
+          accessibilityLabel={testID ? `${testID}_right_icon_button` : 'search_right_icon_button'}
+          accessible={true}
         >
           <Icon
             name={rightIcon}

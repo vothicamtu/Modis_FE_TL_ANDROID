@@ -55,7 +55,8 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                 testID={`message_${index}_${isUser ? 'sent' : 'received'}`}
                 style={isUser ? styles.messageContainerRight : styles.messageContainer}
                 accessibilityRole="text"
-                accessibilityLabel={`${isUser ? 'Bạn' : userName}: ${item.text}`}
+                // Không dùng text hiển thị (username/nội dung chat) làm accessibilityLabel vì không ổn định cho automation
+                accessibilityLabel={`message_${index}_${isUser ? 'sent' : 'received'}`}
             >
                 {!isUser && (
                     <Image source={imageSource} style={[styles.smallAvatar, { borderColor: C.smallAvatarBd }]} />
@@ -86,7 +87,7 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                         testID="conversation_header" 
                         style={styles.headerContainer}
                         accessibilityRole="header"
-                        accessibilityLabel={`Cuộc trò chuyện với ${userName}`}
+                        accessibilityLabel="conversation_header"
                     >
                         <Pressable
                             testID="conversation_back_button"
@@ -94,7 +95,7 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                             hitSlop={8}
                             style={[styles.backButtonModern, { backgroundColor: C.msgBackBtn, shadowColor: C.msgBackBtnShadow }]}
                             accessibilityRole="button"
-                            accessibilityLabel="Quay lại danh sách tin nhắn"
+                            accessibilityLabel="conversation_back_button"
                         >
                             <Image
                                 style={{ width: 22, height: 22, tintColor: C.msgIcon }}
@@ -106,11 +107,13 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                                 testID="conversation_avatar" 
                                 source={imageSource} 
                                 style={styles.avatar} 
+                                accessibilityLabel="conversation_avatar"
                             />
                         ) : (
                             <View 
                                 testID="conversation_avatar_fallback" 
                                 style={[styles.avatar, styles.avatarFallback, { backgroundColor: C.msgAvatarFallBg }]}
+                                accessibilityLabel="conversation_avatar_fallback"
                             >
                                 <Text style={[styles.avatarInitial, { color: C.msgAvatarInitial }]}>
                                     {(userName || '?')[0].toUpperCase()}
@@ -122,6 +125,7 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                                 testID="conversation_username" 
                                 style={[styles.userName, { color: C.msgName }]}
                                 accessibilityRole="text"
+                                accessibilityLabel="conversation_username"
                             >
                                 {userName}
                             </Text>
@@ -157,7 +161,7 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                         }}
                         scrollEventThrottle={16}
                         accessibilityRole="list"
-                        accessibilityLabel="Danh sách tin nhắn"
+                        accessibilityLabel="conversation_messages_list"
                         ListEmptyComponent={
                             <View style={{ alignItems: 'center', paddingTop: 60 }}>
                                 <Text 
@@ -202,7 +206,7 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                             blurOnSubmit={false}
                             onSubmitEditing={handleSend}
                             accessibilityRole="text"
-                            accessibilityLabel="Nhập tin nhắn"
+                            accessibilityLabel="chat_input"
                             accessible={true}
                         />
                     </View>
@@ -227,7 +231,7 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                         disabled={!inputText.trim()}
                         activeOpacity={0.7}
                         accessibilityRole="button"
-                        accessibilityLabel={inputText.trim() ? "Gửi tin nhắn" : "Nhập tin nhắn để gửi"}
+                        accessibilityLabel="chat_send_button"
                         accessibilityState={{ disabled: !inputText.trim() }}
                     >
                         <Image

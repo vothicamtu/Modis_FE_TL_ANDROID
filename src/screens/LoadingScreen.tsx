@@ -20,7 +20,7 @@ export default function LoadingScreen() {
       colors={C.bgGradient} 
       style={styles.container} 
       testID="loading_screen"
-      accessibilityLabel="Màn hình chào mừng"
+      accessibilityLabel="loading_screen"
     >
       <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
 
@@ -58,9 +58,15 @@ export default function LoadingScreen() {
             onPress={signup}
             style={[styles.buttonPrimary, { backgroundColor: C.primary, shadowColor: C.primary }]}
             accessibilityRole="button"
-            accessibilityLabel="Tạo tài khoản mới"
+            accessibilityLabel="loading_signup_button"
+            accessible={true}
           >
-            <Text style={[styles.buttonTextPrimary, { color: C.btnPrimaryText }]}>Create new account</Text>
+            <Text
+              style={[styles.buttonTextPrimary, { color: C.btnPrimaryText }]}
+              accessible={false}
+            >
+              Create new account
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -69,9 +75,15 @@ export default function LoadingScreen() {
             onPress={login}
             style={[styles.buttonSecondary, { backgroundColor: 'transparent', borderColor: C.secondary }]}
             accessibilityRole="button"
-            accessibilityLabel="Đăng nhập"
+            accessibilityLabel="loading_login_button"
+            accessible={true}
           >
-            <Text style={[styles.buttonTextSecondary, { color: C.secondary }]}>Login</Text>
+            <Text
+              style={[styles.buttonTextSecondary, { color: C.secondary }]}
+              accessible={false}
+            >
+              Login
+            </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

@@ -111,7 +111,8 @@ export default function FriendsSearch({ onResult, onClear, keyword = "" }: Props
       showClearButton={true}
       leftIcon="search"
       leftIconSize={20}
-      accessibilityLabel="Tìm kiếm bạn bè"
+      // Không dùng placeholder/text hiển thị làm accessibilityLabel; dùng ID ổn định cho automation
+      accessibilityLabel="friends_search_input"
       accessibilityRole="search"
       style={{
         marginHorizontal: 16,

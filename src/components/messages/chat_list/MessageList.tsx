@@ -51,7 +51,7 @@ function MessagesList({ messages, onItemPress, loading }: MessagesListProps) {
             }
             contentContainerStyle={messages.length === 0 ? { flex: 1 } : undefined}
             accessibilityRole="list"
-            accessibilityLabel="Danh sách cuộc trò chuyện"
+            accessibilityLabel="messages_list"
         />
     );
 }

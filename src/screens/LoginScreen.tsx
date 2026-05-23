@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StatusBar, Alert, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StatusBar, ActivityIndicator, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthInput } from '../components/auth/AuthInput';
 import { styles } from '../styles/loginScreen.styles';
@@ -9,6 +9,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
 import LinearGradient from 'react-native-linear-gradient';
 import { useColors } from '../hook/useColors';
+import { useAuthDialog } from '../context/AuthDialogContext';
 
 export default function LoginScreen() {
   const [username, setUsername] = useState('');
@@ -16,6 +17,7 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const C = useColors();
+  const { showAuthDialog } = useAuthDialog();
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -30,7 +32,7 @@ export default function LoginScreen() {
     if (result.success) {
       navigation.reset({ index: 0, routes: [{ name: 'HomeScreen' }] });
     } else {
-      Alert.alert('Thông báo', result.message);
+      showAuthDialog({ title: 'Thông báo', message: result.message });
     }
   };
 
@@ -39,7 +41,7 @@ export default function LoginScreen() {
       colors={C.bgGradient} 
       style={styles.container}
       testID="login_screen"
-      accessibilityLabel="Màn hình đăng nhập"
+      accessibilityLabel="login_screen"
     >
       <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
       <SafeAreaView style={styles.safeArea}>
@@ -49,14 +51,15 @@ export default function LoginScreen() {
               testID="login_title_text" 
               style={[styles.title, { color: C.textPrimary }]}
               accessibilityRole="header"
-              accessibilityLabel="Chào mừng trở lại"
+              accessibilityLabel="login_title_text"
             >
               Chào mừng trở lại
             </Text>
             <Text 
               style={[styles.subtitle, { color: C.textHint }]}
               accessibilityRole="text"
-              accessibilityLabel="Đăng nhập để tiếp tục kết nối"
+              testID="login_subtitle_text"
+              accessibilityLabel="login_subtitle_text"
             >
               Đăng nhập để tiếp tục kết nối
             </Text>
@@ -76,7 +79,7 @@ export default function LoginScreen() {
               value={username} 
               onChangeText={setUsername} 
               placeholder="Nhập tên đăng nhập"
-              accessibilityLabel="Nhập tên đăng nhập"
+              accessibilityLabel="login_username_input"
               accessibilityRole="text"
             />
             <AuthInput 
@@ -86,7 +89,7 @@ export default function LoginScreen() {
               onChangeText={setPassword} 
               placeholder="Nhập mật khẩu" 
               secureTextEntry
-              accessibilityLabel="Nhập mật khẩu"
+              accessibilityLabel="login_password_input"
               accessibilityRole="text"
             />
 
@@ -103,13 +106,19 @@ export default function LoginScreen() {
               onPress={onLoginPress}
               disabled={!isValid || loading}
               accessibilityRole="button"
-              accessibilityLabel={loading ? "Đang đăng nhập" : "Đăng nhập"}
+              accessibilityLabel="login_submit_button"
               accessibilityState={{ disabled: !isValid || loading }}
+              accessible={true}
             >
               {loading ? (
                 <ActivityIndicator color={C.btnPrimaryText} />
               ) : (
-                <Text style={[styles.buttonText, { color: isValid ? C.btnPrimaryText : C.btnCancelText }]}>Đăng nhập</Text>
+                <Text
+                  style={[styles.buttonText, { color: isValid ? C.btnPrimaryText : C.btnCancelText }]}
+                  accessible={false}
+                >
+                  Đăng nhập
+                </Text>
               )}
             </TouchableOpacity>
           </View>
@@ -124,10 +133,16 @@ export default function LoginScreen() {
             <TouchableOpacity 
               testID="login_signup_link" 
               onPress={() => navigation.navigate('SignupScreen')}
-              accessibilityRole="link"
-              accessibilityLabel="Đăng ký ngay"
+              accessibilityRole="button"
+              accessibilityLabel="login_signup_link"
+              accessible={true}
             >
-              <Text style={[styles.linkText, { color: C.primary, fontWeight: '600', textDecorationLine: 'none' }]}>Đăng ký ngay</Text>
+              <Text
+                style={[styles.linkText, { color: C.primary, fontWeight: '600', textDecorationLine: 'none' }]}
+                accessible={false}
+              >
+                Đăng ký ngay
+              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

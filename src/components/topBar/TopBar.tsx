@@ -154,7 +154,8 @@ const TopBar: React.FC<Props> = ({
           style={[styles.homeFriendsButton, { backgroundColor: C.surfaceStrong, borderColor: C.primary, shadowColor: C.primary }]}
           onPress={() => navigation.navigate('FriendsScreen')}
           accessibilityRole="button"
-          accessibilityLabel={`Bạn bè, ${friendCount} người bạn`}
+          accessibilityLabel="topbar_friends_button"
+          accessible={true}
         >
           <View style={styles.box_friends}>
             <Image
@@ -166,12 +167,15 @@ const TopBar: React.FC<Props> = ({
               testID="topbar_friend_count" 
               style={[styles.homeTextCount, { color: C.textPrimary }]}
               accessibilityRole="text"
+              accessibilityLabel="topbar_friend_count"
             >
               {friendCount}
             </Text>
             <Text 
+              testID="topbar_title"
               style={[styles.homeTextLabel, { color: C.textSecondary }]}
               accessibilityRole="text"
+              accessibilityLabel="topbar_title"
             >
               Bạn bè
             </Text>
@@ -186,14 +190,16 @@ const TopBar: React.FC<Props> = ({
         style={[styles.filterButton, { backgroundColor: C.surfaceStrong, borderColor: C.primary, shadowColor: C.primary }]} 
         onPress={toggleDropdown}
         accessibilityRole="button"
-        accessibilityLabel={`Lọc theo ${selectedLabel}`}
+        accessibilityLabel="topbar_filter_button"
         accessibilityState={{ expanded: dropdownVisible }}
+        accessible={true}
       >
         <Text 
-          testID="topbar_filter_label" 
+          testID="topbar_title" 
           style={[styles.title, { color: C.textPrimary }]} 
           numberOfLines={1}
           accessibilityRole="text"
+          accessibilityLabel="topbar_title"
         >
           {selectedLabel}
         </Text>
@@ -207,7 +213,7 @@ const TopBar: React.FC<Props> = ({
       style={styles.container} 
       testID="topbar_container"
       accessibilityRole="header"
-      accessibilityLabel="Thanh điều hướng"
+      accessibilityLabel="topbar_container"
     >
       {/* Nút Back hoặc Avatar */}
       {showBackButton ? (
@@ -216,7 +222,8 @@ const TopBar: React.FC<Props> = ({
           style={[styles.iconButton, { backgroundColor: C.backBtn, shadowColor: C.backBtnShadow }]}
           onPress={handleBack}
           accessibilityRole="button"
-          accessibilityLabel="Quay lại"
+          accessibilityLabel="topbar_back_button"
+          accessible={true}
         >
           <Icon name="arrow-back" size={24} color={C.textPrimary} />
         </TouchableOpacity>
@@ -232,7 +239,8 @@ const TopBar: React.FC<Props> = ({
             }
           }}
           accessibilityRole="imagebutton"
-          accessibilityLabel="Xem hồ sơ cá nhân"
+          accessibilityLabel="topbar_avatar_button"
+          accessible={true}
         >
           <Image
             testID="topbar_avatar_image"
@@ -242,6 +250,7 @@ const TopBar: React.FC<Props> = ({
                 : require('../../assets/image/avt.png')
             }
             style={styles.avatarImage}
+            accessibilityLabel="topbar_avatar_image"
           />
         </TouchableOpacity>
       )}
@@ -260,7 +269,8 @@ const TopBar: React.FC<Props> = ({
         }}
         style={[styles.iconButton, { backgroundColor: C.backBtn, shadowColor: C.backBtnShadow }]}
         accessibilityRole="button"
-        accessibilityLabel="Tin nhắn"
+        accessibilityLabel="topbar_message_button"
+        accessible={true}
       >
         <Image
           source={require('../../assets/image/message_circle.png')}
@@ -278,7 +288,7 @@ const TopBar: React.FC<Props> = ({
                 testID="topbar_dropdown" 
                 style={[styles.dropdownBoard, { backgroundColor: C.surfaceStrong, borderColor: C.borderAccent, shadowColor: C.primary }]}
                 accessibilityRole="menu"
-                accessibilityLabel="Danh sách bạn bè để lọc"
+                accessibilityLabel="topbar_dropdown"
               >
                 <View style={[styles.separator, { backgroundColor: C.border }]} />
 
@@ -286,6 +296,7 @@ const TopBar: React.FC<Props> = ({
                   testID="topbar_friends_dropdown_list"
                   data={friendsList}
                   keyExtractor={(item) => item._id}
+                  accessibilityLabel="topbar_friends_dropdown_list"
                   renderItem={({ item }) => (
                     <FriendRow
                       item={item}

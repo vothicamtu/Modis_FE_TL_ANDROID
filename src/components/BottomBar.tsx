@@ -16,7 +16,7 @@ const BottomBar = () => {
         borderTopColor: C.border,
       }]}
       accessibilityRole="tabbar"
-      accessibilityLabel="Thanh điều hướng dưới"
+      accessibilityLabel="bottombar_container"
     >
       <TouchableOpacity
         testID="bottombar_home_button"
@@ -28,7 +28,8 @@ const BottomBar = () => {
         onPress={() => navigation.navigate("HomeScreen")}
         activeOpacity={0.7}
         accessibilityRole="tab"
-        accessibilityLabel="Trang chủ"
+        accessibilityLabel="bottombar_home_button"
+        accessible={true}
       >
         <View style={[styles.innerCircle, { backgroundColor: C.primary }]} />
       </TouchableOpacity>

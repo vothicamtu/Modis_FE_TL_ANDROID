@@ -85,12 +85,15 @@ export default function ProfileScreen({ goToHome }: Props) {
       style={[styles.item, { backgroundColor: C.surface, borderLeftColor: danger ? C.danger : C.primary }]} 
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel={`${label}${value ? `: ${value}` : ''}`}
+      // Quan trọng cho Appium Android: accessibility id map với content-desc (accessibilityLabel).
+      // Không dùng label/value hiển thị làm accessibilityLabel vì không ổn định cho automation.
+      accessibilityLabel={testID}
+      accessible={true}
     >
       <Icon name={icon} size={22} color={danger ? C.danger : C.primary} />
       <View style={{ marginLeft: 12 }}>
-        <Text style={[styles.label, { color: C.textPrimary }]}>{label}</Text>
-        {value && <Text style={[styles.value, { color: C.textSecondary }]}>{value}</Text>}
+        <Text style={[styles.label, { color: C.textPrimary }]} accessible={false}>{label}</Text>
+        {value && <Text style={[styles.value, { color: C.textSecondary }]} accessible={false}>{value}</Text>}
       </View>
     </TouchableOpacity>
   );
@@ -199,7 +202,7 @@ export default function ProfileScreen({ goToHome }: Props) {
       colors={C.bgGradient} 
       style={{ flex: 1 }}
       testID="profile_screen"
-      accessibilityLabel="Màn hình hồ sơ cá nhân"
+      accessibilityLabel="profile_screen"
     >
       <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
       <View style={{ flex: 1 }}>
@@ -211,7 +214,8 @@ export default function ProfileScreen({ goToHome }: Props) {
                 onPress={handleBack}
                 style={[styles.backButtonModern, { backgroundColor: C.backBtn, shadowColor: C.backBtnShadow }]}
                 accessibilityRole="button"
-                accessibilityLabel="Quay lại"
+                accessibilityLabel="profile_back_button"
+                accessible={true}
               >
                 <Icon name="arrow-back" size={24} color={C.textPrimary} />
               </TouchableOpacity>
@@ -227,14 +231,14 @@ export default function ProfileScreen({ goToHome }: Props) {
           overScrollMode="never"
           testID="profile_scroll"
           accessibilityRole="scrollbar"
-          accessibilityLabel="Cuộn để xem thông tin hồ sơ"
+          accessibilityLabel="profile_scroll"
         >
           {/* Avatar Section */}
           <View 
             style={styles.header} 
             testID="profile_header"
             accessibilityRole="header"
-            accessibilityLabel="Thông tin cá nhân"
+            accessibilityLabel="profile_header"
           >
             <Image
               testID="profile_avatar"
@@ -244,11 +248,13 @@ export default function ProfileScreen({ goToHome }: Props) {
                   : require('../assets/image/avt.png')
               }
               style={[styles.avatar, { borderColor: C.primary }]}
+              accessibilityLabel="profile_avatar"
             />
             <Text 
               testID="profile_username" 
               style={[styles.name, { color: C.textPrimary }]}
               accessibilityRole="text"
+              accessibilityLabel="profile_username"
             >
               {profile?.username}
             </Text>
@@ -256,9 +262,10 @@ export default function ProfileScreen({ goToHome }: Props) {
               testID="profile_edit_avatar_button" 
               onPress={handleEditAvatar}
               accessibilityRole="button"
-              accessibilityLabel="Chỉnh sửa ảnh đại diện"
+              accessibilityLabel="profile_edit_avatar_button"
+              accessible={true}
             >
-              <Text style={[styles.edit, { color: C.primary }]}>Chỉnh ảnh</Text>
+              <Text style={[styles.edit, { color: C.primary }]} accessible={false}>Chỉnh ảnh</Text>
             </TouchableOpacity>
 
             <View style={styles.iinviteWrapper}>
@@ -267,9 +274,10 @@ export default function ProfileScreen({ goToHome }: Props) {
                 style={styles.invite}
                 onPress={() => setShareModal(true)}
                 accessibilityRole="button"
-                accessibilityLabel="Mời bạn bè tham gia Locket"
+                accessibilityLabel="profile_invite_button"
+                accessible={true}
               >
-                <Text style={[styles.inviteText, { color: C.textPrimary }]}>Mời bạn bè tham gia Locket!</Text>
+                <Text style={[styles.inviteText, { color: C.textPrimary }]} accessible={false}>Mời bạn bè tham gia Locket!</Text>
                 <Icon name="share" size={18} color={C.textSecondary} />
               </TouchableOpacity>
             </View>
@@ -314,7 +322,7 @@ export default function ProfileScreen({ goToHome }: Props) {
             style={[styles.item, { backgroundColor: C.surface, borderLeftColor: C.primary }]}
             testID="profile_theme_toggle_item"
             accessibilityRole="adjustable"
-            accessibilityLabel={`Chế độ tối ${isDark ? 'đang bật' : 'đang tắt'}`}
+            accessibilityLabel="profile_theme_toggle_item"
           >
             <Icon name={isDark ? 'dark-mode' : 'light-mode'} size={22} color={C.primary} />
             <View style={{ marginLeft: 12, flex: 1 }}>
@@ -328,8 +336,9 @@ export default function ProfileScreen({ goToHome }: Props) {
               trackColor={{ false: C.textHint, true: C.primary }}
               thumbColor={C.primary}
               accessibilityRole="switch"
-              accessibilityLabel="Bật/tắt chế độ tối"
+              accessibilityLabel="profile_theme_switch"
               accessibilityState={{ checked: isDark }}
+              accessible={true}
             />
           </View>
 
@@ -356,7 +365,11 @@ export default function ProfileScreen({ goToHome }: Props) {
           animationType="fade"
           onRequestClose={() => setIsModalVisible(false)}
         >
-          <View style={[styles.overlay, { backgroundColor: C.modalOverlay }]} testID="profile-edit-modal">
+          <View
+            style={[styles.overlay, { backgroundColor: C.modalOverlay }]}
+            testID="profile-edit-modal"
+            accessibilityLabel="profile-edit-modal"
+          >
             <View style={[styles.modalContent, { backgroundColor: C.surfaceStrong, borderColor: C.borderAccent }]}>
               <Text style={[styles.modalTitle, { color: C.textPrimary }]}>
                 Cập nhật{' '}
@@ -371,21 +384,28 @@ export default function ProfileScreen({ goToHome }: Props) {
                 placeholder="Nhập thông tin mới..."
                 placeholderTextColor={C.textHint}
                 keyboardAppearance={C.statusBar === 'dark-content' ? 'light' : 'dark'}
+                accessibilityLabel="profile-edit-modal-input"
               />
               <View style={styles.modalButtons}>
                 <TouchableOpacity
                   testID="profile-edit-modal-cancel"
                   style={[styles.btn, { backgroundColor: C.btnCancel }]}
                   onPress={() => setIsModalVisible(false)}
+                  accessibilityRole="button"
+                  accessibilityLabel="profile-edit-modal-cancel"
+                  accessible={true}
                 >
-                  <Text style={[styles.btnTextCancel, { color: C.btnCancelText }]}>Hủy</Text>
+                  <Text style={[styles.btnTextCancel, { color: C.btnCancelText }]} accessible={false}>Hủy</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   testID="profile-edit-modal-save"
                   style={[styles.btn, styles.btnSave, { backgroundColor: C.primary }]}
                   onPress={handleSave}
+                  accessibilityRole="button"
+                  accessibilityLabel="profile-edit-modal-save"
+                  accessible={true}
                 >
-                  <Text style={[styles.btnTextSave, { color: C.btnPrimaryText }]}>Lưu</Text>
+                  <Text style={[styles.btnTextSave, { color: C.btnPrimaryText }]} accessible={false}>Lưu</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -393,7 +413,11 @@ export default function ProfileScreen({ goToHome }: Props) {
         </Modal>
 
         <Modal visible={passwordModal} transparent animationType="slide">
-          <View style={[styles.overlay, { backgroundColor: C.modalOverlay }]} testID="profile-password-modal">
+          <View
+            style={[styles.overlay, { backgroundColor: C.modalOverlay }]}
+            testID="profile-password-modal"
+            accessibilityLabel="profile-password-modal"
+          >
             <View style={[styles.modalContent, { backgroundColor: C.surfaceStrong, borderColor: C.borderAccent }]}>
               <Text style={[styles.modalTitle, { color: C.textPrimary }]}>Đổi mật khẩu</Text>
               <TextInput
@@ -405,6 +429,7 @@ export default function ProfileScreen({ goToHome }: Props) {
                 secureTextEntry
                 value={passwordData.oldPass}
                 onChangeText={(text) => setPasswordData({ ...passwordData, oldPass: text })}
+                accessibilityLabel="profile-old-password-input"
               />
               <TextInput
                 testID="profile-new-password-input"
@@ -415,6 +440,7 @@ export default function ProfileScreen({ goToHome }: Props) {
                 secureTextEntry
                 value={passwordData.newPass}
                 onChangeText={(text) => setPasswordData({ ...passwordData, newPass: text })}
+                accessibilityLabel="profile-new-password-input"
               />
               <TextInput
                 testID="profile-confirm-password-input"
@@ -425,21 +451,28 @@ export default function ProfileScreen({ goToHome }: Props) {
                 secureTextEntry
                 value={passwordData.confirmPass}
                 onChangeText={(text) => setPasswordData({ ...passwordData, confirmPass: text })}
+                accessibilityLabel="profile-confirm-password-input"
               />
               <View style={styles.modalButtons}>
                 <TouchableOpacity
                   testID="profile-password-modal-cancel"
                   style={[styles.btn, { backgroundColor: C.btnCancel }]}
                   onPress={() => setPasswordModal(false)}
+                  accessibilityRole="button"
+                  accessibilityLabel="profile-password-modal-cancel"
+                  accessible={true}
                 >
-                  <Text style={[styles.btnTextCancel, { color: C.btnCancelText }]}>Hủy</Text>
+                  <Text style={[styles.btnTextCancel, { color: C.btnCancelText }]} accessible={false}>Hủy</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   testID="profile-password-modal-save"
                   style={[styles.btn, styles.btnSave, { backgroundColor: C.primary }]}
                   onPress={handleChangePassword}
+                  accessibilityRole="button"
+                  accessibilityLabel="profile-password-modal-save"
+                  accessible={true}
                 >
-                  <Text style={[styles.btnTextSave, { color: C.btnPrimaryText }]}>Cập nhật</Text>
+                  <Text style={[styles.btnTextSave, { color: C.btnPrimaryText }]} accessible={false}>Cập nhật</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -452,6 +485,8 @@ export default function ProfileScreen({ goToHome }: Props) {
             testID="profile-share-modal"
             activeOpacity={1}
             onPress={() => setShareModal(false)}
+            accessibilityRole="button"
+            accessibilityLabel="profile-share-modal"
           >
             <TouchableOpacity 
               style={[styles.modalContent, { backgroundColor: C.surfaceStrong, borderColor: C.borderAccent, paddingBottom: 30 }]}
@@ -463,8 +498,11 @@ export default function ProfileScreen({ goToHome }: Props) {
                 testID="profile-share-modal-close"
                 style={[styles.btn, { backgroundColor: C.btnCancel, marginTop: 20 }]}
                 onPress={() => setShareModal(false)}
+                accessibilityRole="button"
+                accessibilityLabel="profile-share-modal-close"
+                accessible={true}
               >
-                <Text style={[styles.btnTextCancel, { color: C.btnCancelText }]}>Đóng</Text>
+                <Text style={[styles.btnTextCancel, { color: C.btnCancelText }]} accessible={false}>Đóng</Text>
               </TouchableOpacity>
             </TouchableOpacity>
           </TouchableOpacity>

@@ -64,7 +64,7 @@ function MessageScreen({ goToHome }: MessageScreenProps) {
             colors={C.msgBgGradient} 
             style={styles.container}
             testID="message_screen"
-            accessibilityLabel="Màn hình tin nhắn"
+            accessibilityLabel="message_screen"
         >
             <SafeAreaView style={{ flex: 1 }} edges={['top']}>
                 <View style={{ paddingTop: 4 }}>

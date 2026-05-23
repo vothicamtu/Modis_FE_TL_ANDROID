@@ -46,7 +46,7 @@ const AllImagesScreen = () => {
       colors={C.bgGradient} 
       style={styles.container}
       testID="all_images_screen"
-      accessibilityLabel="Màn hình xem tất cả ảnh"
+      accessibilityLabel="all_images_screen"
     >
       <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
       <View style={{ height: insets.top, backgroundColor: C.bgGradient[0] }} />
@@ -81,7 +81,7 @@ const AllImagesScreen = () => {
             onEndReachedThreshold={0.5}
             ListFooterComponent={renderFooter}
             accessibilityRole="list"
-            accessibilityLabel="Lưới ảnh"
+            accessibilityLabel="all_images_flatlist"
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}

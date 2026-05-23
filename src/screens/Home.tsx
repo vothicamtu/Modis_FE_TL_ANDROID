@@ -104,7 +104,7 @@ function HomeScreen() {
         <SafeAreaView 
             style={{ flex: 1, overflow: 'hidden', backgroundColor: C.bg }}
             testID="home_screen"
-            accessibilityLabel="Màn hình chính với điều hướng vuốt"
+            accessibilityLabel="home_screen"
         >
             <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
 
@@ -122,7 +122,7 @@ function HomeScreen() {
                         ]}
                         testID="home_gesture_container"
                         accessibilityRole="none"
-                        accessibilityLabel="Vùng vuốt để điều hướng giữa các màn hình"
+                        accessibilityLabel="home_gesture_container"
                     >
                         {/* Hàng 0 */}
                         <View style={{ width, height }}>

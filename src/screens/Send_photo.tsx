@@ -201,13 +201,14 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
     <SafeAreaView 
       style={[styles.container, { backgroundColor: C.containerBg }]} 
       testID="send_photo_screen"
-      accessibilityLabel="Màn hình gửi ảnh"
+      accessibilityLabel="send_photo_screen"
     >
       <View style={styles.send_to}>
         <Text 
+          testID="send_photo_header_text"
           style={{ fontSize: 20, fontWeight: "bold", color: C.textPrimary }}
           accessibilityRole="header"
-          accessibilityLabel="Gửi đến"
+          accessibilityLabel="send_photo_header_text"
         >
           Gửi đến ...
         </Text>
@@ -217,7 +218,8 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
           onPress={saveImage} 
           style={[styles.download_btn, { backgroundColor: C.primary, shadowColor: C.primary }]}
           accessibilityRole="button"
-          accessibilityLabel="Lưu ảnh vào thư viện"
+          accessibilityLabel="send_photo_download_button"
+          accessible={true}
         >
           <Image source={require("../assets/image/download.png")} style={{ width: 22, height: 22, tintColor: '#ffffff' }} />
         </Pressable>
@@ -227,7 +229,7 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
         style={styles.image_area} 
         testID="send_photo_preview_area"
         accessibilityRole="none"
-        accessibilityLabel="Vùng xem trước ảnh"
+        accessibilityLabel="send_photo_preview_area"
       >
         <Image 
           testID="send_photo_preview_image" 
@@ -261,7 +263,7 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
             placeholderTextColor="rgba(255,255,255,0.8)" // White placeholder with opacity
             keyboardAppearance={C.statusBar === 'dark-content' ? 'light' : 'dark'}
             accessibilityRole="text"
-            accessibilityLabel="Nhập chú thích cho ảnh"
+            accessibilityLabel="send_photo_caption_input"
             accessible={true}
           />
         </View>
@@ -274,8 +276,9 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
           style={[styles.close_btn, { backgroundColor: C.btnGhostBg, borderWidth: 1.5, borderColor: C.btnGhostBorder }, loading && { opacity: 0.4 }]}
           disabled={loading}
           accessibilityRole="button"
-          accessibilityLabel="Hủy và quay lại"
+          accessibilityLabel="send_photo_close_button"
           accessibilityState={{ disabled: loading }}
+          accessible={true}
         >
           <Image source={require("../assets/image/close.png")} style={{ width: "55%", height: "55%", tintColor: C.btnGhostIcon }} resizeMode="contain" />
         </Pressable>
@@ -286,8 +289,9 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
           style={[styles.send_btn, { backgroundColor: C.primary, shadowColor: C.primary }]} 
           disabled={loading}
           accessibilityRole="button"
-          accessibilityLabel={loading ? "Đang gửi ảnh" : "Gửi ảnh"}
+          accessibilityLabel="send_photo_send_button"
           accessibilityState={{ disabled: loading }}
+          accessible={true}
         >
           {loading ? (
             <ActivityIndicator size="large" color={C.secondary} />
@@ -302,8 +306,9 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
           style={[styles.close_btn, { backgroundColor: C.btnGhostBg, borderWidth: 1.5, borderColor: C.btnGhostBorder }, loading && { opacity: 0.4 }]}
           disabled={loading}
           accessibilityRole="button"
-          accessibilityLabel="Chọn mẫu chú thích"
+          accessibilityLabel="send_photo_caption_pattern_button"
           accessibilityState={{ disabled: loading }}
+          accessible={true}
         >
           <Image source={require("../assets/image/sparkle.png")} style={{ width: "55%", height: "55%", tintColor: C.btnGhostIcon }} resizeMode="contain" />
         </Pressable>
@@ -313,7 +318,7 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
         style={styles.friend_list} 
         testID="send_photo_friend_list"
         accessibilityRole="none"
-        accessibilityLabel="Danh sách bạn bè để gửi ảnh"
+        accessibilityLabel="send_photo_friend_list"
       >
         <View style={styles.friend}>
           <Pressable
@@ -324,8 +329,9 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
               { borderColor: allFriend ? C.primary : C.border },
             ]}
             accessibilityRole="button"
-            accessibilityLabel="Chọn tất cả bạn bè"
+            accessibilityLabel="send_photo_all_friends_button"
             accessibilityState={{ selected: allFriend }}
+            accessible={true}
           >
             <Image
               source={require("../assets/image/image.png")}
@@ -348,7 +354,7 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
           data={friends}
           keyExtractor={(item) => item.friendReqId}
           accessibilityRole="list"
-          accessibilityLabel="Danh sách bạn bè"
+          accessibilityLabel="send_photo_friends_flatlist"
           renderItem={({ item, index }) => (
             <View style={styles.friend}>
               <Pressable
@@ -363,8 +369,9 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
                   },
                 ]}
                 accessibilityRole="button"
-                accessibilityLabel={`${!allFriend && checkReceiver(item.userId) ? 'Bỏ chọn' : 'Chọn'} ${item.username}`}
+                accessibilityLabel={`send_photo_friend_${item.userId}`}
                 accessibilityState={{ selected: !allFriend && checkReceiver(item.userId) }}
+                accessible={true}
               >
                 <Image
                   source={
@@ -401,7 +408,7 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
           style={[styles.caption_pattern, { backgroundColor: C.panelBg, borderColor: C.panelBorder }]} 
           testID="send_photo_caption_panel"
           accessibilityRole="menu"
-          accessibilityLabel="Bảng chọn mẫu chú thích"
+          accessibilityLabel="send_photo_caption_panel"
         >
           <View style={{ width: 45, height: 7, borderRadius: 5, backgroundColor: C.dragHandle, marginTop: 10 }} />
           <Text 
@@ -423,18 +430,20 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
                 onPress={() => { setOnCaptionPattern(false); setTimeout(() => inputRef.current?.focus(), 300); }}
                 style={[styles.box_radius, { backgroundColor: C.captionBoxBg, borderColor: C.captionBoxBorder }]}
                 accessibilityRole="button"
-                accessibilityLabel="Nhập văn bản tùy chỉnh"
+                accessibilityLabel="caption_text_button"
+                accessible={true}
               >
-                <Text style={[styles.text_caption, { color: C.captionBoxText }]}>Aa Văn bản</Text>
+                <Text style={[styles.text_caption, { color: C.captionBoxText }]} accessible={false}>Aa Văn bản</Text>
               </Pressable>
               <Pressable 
                 testID="caption_time_button" 
                 onPress={() => { const now = new Date(); applyCaption(`⏰ ${now.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit", hour12: false })}`); }}
                 style={[styles.box_radius, { backgroundColor: C.captionBoxBg, borderColor: C.captionBoxBorder }]}
                 accessibilityRole="button"
-                accessibilityLabel="Thêm thời gian hiện tại"
+                accessibilityLabel="caption_time_button"
+                accessible={true}
               >
-                <Text style={[styles.text_caption, { color: C.captionBoxText }]}>⏰ 10:27</Text>
+                <Text style={[styles.text_caption, { color: C.captionBoxText }]} accessible={false}>⏰ 10:27</Text>
               </Pressable>
             </View>
           </View>
@@ -451,36 +460,40 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
                 onPress={() => applyCaption("Party Time!")} 
                 style={[styles.box_radius, { backgroundColor: Colors.cyan }]}
                 accessibilityRole="button"
-                accessibilityLabel="Thêm chú thích Party Time"
+                accessibilityLabel="caption_party_button"
+                accessible={true}
               >
-                <Text style={[styles.text_caption, { color: Colors.black }]}>Party Time!</Text>
+                <Text style={[styles.text_caption, { color: Colors.black }]} accessible={false}>Party Time!</Text>
               </Pressable>
               <Pressable 
                 testID="caption_ootd_button" 
                 onPress={() => applyCaption("🕶️ OOTD")} 
                 style={[styles.box_radius, { backgroundColor: Colors.white }]}
                 accessibilityRole="button"
-                accessibilityLabel="Thêm chú thích OOTD"
+                accessibilityLabel="caption_ootd_button"
+                accessible={true}
               >
-                <Text style={[styles.text_caption, { color: Colors.black }]}>🕶️ OOTD</Text>
+                <Text style={[styles.text_caption, { color: Colors.black }]} accessible={false}>🕶️ OOTD</Text>
               </Pressable>
               <Pressable 
                 testID="caption_missyou_button" 
                 onPress={() => applyCaption("🥰 Miss you")} 
                 style={[styles.box_radius, { backgroundColor: Colors.organce }]}
                 accessibilityRole="button"
-                accessibilityLabel="Thêm chú thích Miss you"
+                accessibilityLabel="caption_missyou_button"
+                accessible={true}
               >
-                <Text style={[styles.text_caption, { color: C.textPrimary }]}>🥰 Miss you</Text>
+                <Text style={[styles.text_caption, { color: C.textPrimary }]} accessible={false}>🥰 Miss you</Text>
               </Pressable>
               <Pressable 
                 testID="caption_iloveyou_button" 
                 onPress={() => applyCaption("😍 I love you")} 
                 style={[styles.box_radius, { backgroundColor: Colors.red }]}
                 accessibilityRole="button"
-                accessibilityLabel="Thêm chú thích I love you"
+                accessibilityLabel="caption_iloveyou_button"
+                accessible={true}
               >
-                <Text style={[styles.text_caption, { color: C.btnPrimaryText }]}>😍 I love you</Text>
+                <Text style={[styles.text_caption, { color: C.btnPrimaryText }]} accessible={false}>😍 I love you</Text>
               </Pressable>
             </View>
           </View>

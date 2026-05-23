@@ -74,7 +74,7 @@ export default function FriendsScreen() {
     <SafeContainer 
       useGradient={true}
       testID="friends_screen"
-      accessibilityLabel="Màn hình bạn bè"
+      accessibilityLabel="friends_screen"
     >
       <View style={{ flex: 1, paddingTop: scale(28) }}>
         {/* Header with back button */}
@@ -97,7 +97,7 @@ export default function FriendsScreen() {
             ]}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             accessibilityRole="button"
-            accessibilityLabel="Quay lại"
+            accessibilityLabel="friends_back_button"
           >
             <Icon name="arrow-back" size={iconSize} color={C.textPrimary} />
           </TouchableOpacity>
@@ -117,7 +117,7 @@ export default function FriendsScreen() {
             { paddingBottom: scale(20) }
           ]}
           accessibilityRole="scrollbar"
-          accessibilityLabel="Cuộn để xem danh sách bạn bè"
+          accessibilityLabel="friends_scroll"
         >
           <FriendsHeader />
           

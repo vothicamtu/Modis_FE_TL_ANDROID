@@ -24,7 +24,8 @@ const ImageGridItem: React.FC<Props> = ({ item, onPress, testID }) => {
       onPress={onPress} 
       style={styles.container}
       accessibilityRole="imagebutton"
-      accessibilityLabel="Ảnh trong thư viện"
+      // Không dùng text hiển thị làm accessibilityLabel; dùng ID ổn định cho automation
+      accessibilityLabel={testID || `image_grid_item_${item._id}`}
     >
       <View style={[styles.card, { backgroundColor: C.surfaceStrong }]}>
         <Image

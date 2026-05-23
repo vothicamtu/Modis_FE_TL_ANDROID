@@ -17,6 +17,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import { RootStackParamList } from './types';
 import { ThemeProvider } from '../context/ThemeContext';
 import { useColors } from '../hook/useColors';
+import { AuthDialogProvider } from '../context/AuthDialogContext';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -58,7 +59,9 @@ export default function AppNavigation() {
     return (
         <ThemeProvider>
             <GestureHandlerRootView style={{ flex: 1 }}>
-                <NavigationContent />
+                <AuthDialogProvider>
+                    <NavigationContent />
+                </AuthDialogProvider>
             </GestureHandlerRootView>
         </ThemeProvider>
     );
