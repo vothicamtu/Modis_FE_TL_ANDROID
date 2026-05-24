@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StatusBar, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AuthInput } from '../components/auth/AuthInput';
 import { styles } from '../styles/loginScreen.styles';
 import { authController } from '../controller/auth.controller';
@@ -45,7 +46,18 @@ export default function LoginScreen() {
     >
       <StatusBar barStyle={C.statusBar} translucent backgroundColor="transparent" />
       <SafeAreaView style={styles.safeArea}>
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+        <KeyboardAwareScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingBottom: 20 }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          bounces={false}
+          overScrollMode="never"
+          enableOnAndroid
+          extraScrollHeight={16}
+          enableAutomaticScroll={false}
+        >
           <View style={styles.topSection}>
             <Text 
               testID="login_title_text" 
@@ -66,12 +78,12 @@ export default function LoginScreen() {
           </View>
 
           <View style={[styles.card, {
-            backgroundColor: C.surfaceStrong, // Use surfaceStrong for unified appearance
+            backgroundColor: C.surfaceStrong,
             borderColor: C.border,
             shadowColor: C.primary,
-            shadowOpacity: 0.08, // Reduced shadow for cleaner look
+            shadowOpacity: 0.08,
             shadowRadius: 16,
-            elevation: 2, // Reduced elevation
+            elevation: 2,
           }]}>
             <AuthInput 
               testID="login_username_input" 
@@ -145,7 +157,7 @@ export default function LoginScreen() {
               </Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </LinearGradient>
   );

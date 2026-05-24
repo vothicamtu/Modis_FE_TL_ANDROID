@@ -19,6 +19,18 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 28,
   },
 
+  topSection: {
+    alignItems: 'center',
+    marginBottom: 32,
+    marginTop: 20,
+  },
+
+  logoImage: {
+    width: 120,
+    height: 120,
+    marginBottom: 16,
+  },
+
   title: {
     fontSize: 28,
     fontWeight: '800',
@@ -30,6 +42,18 @@ export const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 32,
     textAlign: 'center',
+  },
+
+  card: {
+    borderRadius: 24,
+    padding: 24,
+    borderWidth: 1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    elevation: 2,
+    marginHorizontal: 4,
+    marginBottom: 16,
   },
 
   inputContainer: { marginBottom: 16 },
@@ -76,26 +100,5 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
     marginTop: 12,
     fontSize: 14,
-  },
-
-  topSection: {
-    alignItems: 'center',
-    marginBottom: 32,
-  },
-  logoImage: {
-    width: 120,
-    height: 120,
-    marginBottom: 16,
-  },
-
-  card: {
-    borderRadius: 24,
-    padding: 24,
-    borderWidth: 1, // Subtle border for definition
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08, // Reduced shadow
-    shadowRadius: 16,
-    elevation: 2, // Reduced elevation for cleaner look
-    marginHorizontal: 4, // Small margin to prevent shadow clipping
   },
 });
