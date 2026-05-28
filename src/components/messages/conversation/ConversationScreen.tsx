@@ -8,7 +8,6 @@ import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../../navigation/types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useColors } from '../../../hook/useColors';
-
 function ConversationScreen() {
     const route = useRoute<RouteProp<RootStackParamList, 'ConversationScreen'>>();
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
