@@ -52,11 +52,10 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
         const isUser = item.sender === 'user';
         return (
             <View
-                testID={`message_${index}_${isUser ? 'sent' : 'received'}`}
+                testID={`conversation_message_${index}_${isUser ? 'sent' : 'received'}`}
                 style={isUser ? styles.messageContainerRight : styles.messageContainer}
                 accessibilityRole="text"
-                // Không dùng text hiển thị (username/nội dung chat) làm accessibilityLabel vì không ổn định cho automation
-                accessibilityLabel={`message_${index}_${isUser ? 'sent' : 'received'}`}
+                accessibilityLabel={`conversation_message_${index}_${isUser ? 'sent' : 'received'}`}
             >
                 {!isUser && (
                     <Image source={imageSource} style={[styles.smallAvatar, { borderColor: C.smallAvatarBd }]} />
@@ -145,6 +144,7 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                     <FlatList
                         ref={flatListRef}
                         testID="conversation_messages_list"
+                        accessibilityLabel="conversation_messages_list"
                         data={messages}
                         renderItem={renderMessageItem}
                         keyExtractor={(item) => item.id}
