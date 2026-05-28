@@ -24,7 +24,9 @@ function MessagesList({ messages, onItemPress, loading }: MessagesListProps) {
         <FlatList
             testID="messages_list"
             data={messages}
-            keyExtractor={(item) => item.conversationId || Math.random().toString()}
+            keyExtractor={(item, index) =>
+  item.conversationId?.toString() || `conversation_${index}`
+}
             renderItem={({ item, index }) => (
                 <MessageItem 
                     message={item} 
