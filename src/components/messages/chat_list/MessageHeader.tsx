@@ -12,6 +12,8 @@ function MessagesHeader({ goToHome }: Props) {
         <View testID="messages-header" style={styles.headerContainer}>
             <TouchableOpacity
                 testID="messages-header-back-button"
+                accessibilityLabel="messages-header-back-button"
+                accessibilityRole="button"
                 onPress={goToHome}
                 style={[styles.backButtonModern, { backgroundColor: C.msgBackBtn, shadowColor: C.msgBackBtnShadow }]}
             >

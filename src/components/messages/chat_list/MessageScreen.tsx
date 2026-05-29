@@ -43,19 +43,36 @@ function MessageScreen({ goToHome }: MessageScreenProps) {
 
     useFocusEffect(
         React.useCallback(() => {
+            let isMounted = true;
+
             const fetchConversations = async () => {
                 try {
                     setLoading(true);
+
                     const data = await MessageService.loadConversations();
-                    setConversation(data);
-                    await StompService.connect();
+
+                    if (isMounted) {
+                        setConversation(data);
+                    }
+
+                    StompService.connect().catch(error => {
+                        console.error('Socket connection error:', error);
+                    });
+
                 } catch (error) {
                     console.error('Error loading conversations:', error);
                 } finally {
-                    setLoading(false);
+                    if (isMounted) {
+                        setLoading(false);
+                    }
                 }
             };
+
             fetchConversations();
+
+            return () => {
+                isMounted = false;
+            };
         }, [])
     );
 

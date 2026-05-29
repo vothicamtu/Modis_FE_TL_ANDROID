@@ -9,6 +9,7 @@ export interface ConversationItem {
     partnerAvatar: string | null;
     partnerId: string | null;
     partnerName: string;
+    partnerUsername: string;
     timestamp: string;
 }
 

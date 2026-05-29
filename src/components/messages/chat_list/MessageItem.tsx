@@ -18,8 +18,8 @@ function MessageItem({ message, onPress, testID }: MessageItemProps) {
   return (
     <TouchableOpacity
       accessible={true}
-      testID={`message_conversation_item_${message.partnerUsername}`}
-      accessibilityLabel={`message_conversation_item_${message.partnerUsername}`}
+      testID={`message_conversation_item_${message.partnerName}`}
+      accessibilityLabel={`message_conversation_item_${message.partnerName}`}
       style={[styles.itemContainer, { borderBottomColor: C.msgDivider }]}
       onPress={onPress}
       activeOpacity={0.7}
@@ -27,15 +27,15 @@ function MessageItem({ message, onPress, testID }: MessageItemProps) {
     >
       <View style={styles.avatarWrapper}>
         {avatarUri ? (
-          <Image 
-            testID={`message_conversation_item_${message.partnerUsername}_avatar`}
-            accessibilityLabel={`message_conversation_item_${message.partnerUsername}_avatar`}
-            source={{ uri: avatarUri }} 
-            style={[styles.avatarImage, { borderColor: C.primary }]} 
+          <Image
+            testID={`message_conversation_item_${message.partnerName}_avatar`}
+            accessibilityLabel={`message_conversation_item_${message.partnerName}_avatar`}
+            source={{ uri: avatarUri }}
+            style={[styles.avatarImage, { borderColor: C.primary }]}
           />
         ) : (
-          <View 
-            testID={`${testID || 'message_item'}_avatar_fallback`} 
+          <View
+            testID={`${testID || 'message_item'}_avatar_fallback`}
             style={[styles.avatarFallback, { backgroundColor: C.msgAvatarFallBg, borderColor: C.msgAvatarFallBd }]}
           >
             <Text style={[styles.avatarInitial, { color: C.msgAvatarInitial }]}>{initial}</Text>
@@ -44,19 +44,19 @@ function MessageItem({ message, onPress, testID }: MessageItemProps) {
       </View>
 
       <View style={styles.contentContainer}>
-        <Text 
-          testID={`message_conversation_item_${message.partnerUsername}_name`}
-          accessibilityLabel={`message_conversation_item_${message.partnerUsername}_name`}
-          style={[styles.userName, { color: C.msgName }]} 
+        <Text
+          testID={`message_conversation_item_${message.partnerName}_name`}
+          accessibilityLabel={`message_conversation_item_${message.partnerName}_name`}
+          style={[styles.userName, { color: C.msgName }]}
           numberOfLines={1}
           accessibilityRole="text"
         >
           {message.partnerName}
         </Text>
-        <Text 
-          testID={`message_conversation_item_${message.partnerUsername}_last_message`}
-          accessibilityLabel={`message_conversation_item_${message.partnerUsername}_last_message`}
-          style={[styles.lastMessage, { color: C.msgLastMsg }]} 
+        <Text
+          testID={`message_conversation_item_${message.partnerName}_last_message`}
+          accessibilityLabel={`message_conversation_item_${message.partnerName}_last_message`}
+          style={[styles.lastMessage, { color: C.msgLastMsg }]}
           numberOfLines={1}
           accessibilityRole="text"
         >
@@ -64,9 +64,9 @@ function MessageItem({ message, onPress, testID }: MessageItemProps) {
         </Text>
       </View>
 
-      <Text 
-        testID={`message_conversation_item_${message.partnerUsername}_time`}
-        accessibilityLabel={`message_conversation_item_${message.partnerUsername}_time`}
+      <Text
+        testID={`message_conversation_item_${message.partnerName}_time`}
+        accessibilityLabel={`message_conversation_item_${message.partnerName}_time`}
         style={[styles.timeText, { color: C.msgTime }]}
         accessibilityRole="text"
       >
