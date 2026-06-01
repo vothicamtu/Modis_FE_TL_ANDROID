@@ -31,15 +31,19 @@ const SearchUserItem = memo(({ item, onAddFriend, isFriend, isSent, C }: {
   const minTouchArea = getMinTouchArea();
 
   return (
-    <View style={[styles.friendItem, {
-      paddingHorizontal: scale(12),
-      paddingVertical: scale(12),
-      marginBottom: scale(8),
-      backgroundColor: C.surface,
-      borderRadius: scale(12),
-      borderWidth: 1,
-      borderColor: C.border,
-    }]}>
+    <View
+      testID={`search_result_item_${item.id}`}
+      accessibilityLabel={`search_result_item_${item.id}`}
+      style={[styles.friendItem, {
+        paddingHorizontal: scale(12),
+        paddingVertical: scale(12),
+        marginBottom: scale(8),
+        backgroundColor: C.surface,
+        borderRadius: scale(12),
+        borderWidth: 1,
+        borderColor: C.border,
+      }]}
+    >
       <Image
         source={
           item.avatarUrl
@@ -72,6 +76,8 @@ const SearchUserItem = memo(({ item, onAddFriend, isFriend, isSent, C }: {
       </View>
 
       <TouchableOpacity
+        testID={`search_result_add_button_${item.id}`}
+        accessibilityLabel={`search_result_add_button_${item.id}`}
         disabled={disabled}
         onPress={() => onAddFriend(item.id)}
         style={[
@@ -161,10 +167,14 @@ export default function SearchResultList({ users, keyword, onClearSearch }: Prop
   const iconSize = getIconSize(20);
 
   const EmptyComponent = useCallback(() => (
-    <View style={{
-      alignItems: 'center',
-      paddingVertical: scale(32),
-    }}>
+    <View
+      testID="search_empty_state"
+      accessibilityLabel="search_empty_state"
+      style={{
+        alignItems: 'center',
+        paddingVertical: scale(32),
+      }}
+    >
       <Icon name="search-off" size={48} color={C.textHint} />
       <Text style={{
         fontSize: getFontSize(16),
@@ -235,6 +245,8 @@ export default function SearchResultList({ users, keyword, onClearSearch }: Prop
       </View>
 
       <FlatList
+        testID="search_results_list"
+        accessibilityLabel="search_results_list"
         data={users}
         keyExtractor={keyExtractor}
         renderItem={renderUserItem}

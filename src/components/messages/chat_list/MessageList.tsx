@@ -44,6 +44,7 @@ function MessagesList({ messages, onItemPress, loading }: MessagesListProps) {
                         <View style={styles.centered}>
                             <Text
                                 testID="messages_list_empty"
+                                accessibilityLabel="messages_list_empty"
                                 style={[
                                     styles.emptyText,
                                     { color: C.msgEmptyText }

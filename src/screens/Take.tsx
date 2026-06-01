@@ -132,9 +132,10 @@ export default function TakeScreen({ goToProfile, goToMessage }: TakeScreenProps
           </View>
         </View>
 
-        <View 
+        <Pressable 
           style={styles.history} 
           testID="take_history"
+          onPress={() => navigation.navigate("AllImage")}
           accessibilityRole="button"
           accessibilityLabel="take_history"
           accessible={true}
@@ -149,7 +150,7 @@ export default function TakeScreen({ goToProfile, goToMessage }: TakeScreenProps
             </Text>
             <Image source={require("../assets/image/down_toggle.png")} style={{ tintColor: C.textPrimary }} />
           </View>
-        </View>
+        </Pressable>
       </SafeAreaView>
     </LinearGradient>
   );
