@@ -7,11 +7,13 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useColors } from '../../../hook/useColors';
+import { optimizeCloudinaryUrl } from '../../../utils/cloudinary';
 
 interface Message {
     id: string;
     text: string;
     sender: 'user' | 'other';
+    imageUrl?: string;
 }
 
 interface ConversationProps {
@@ -20,7 +22,7 @@ interface ConversationProps {
     avatarUrl?: string;
     avatarSource?: any;
     messages: Message[];
-    onSendMessage?: (text: string) => void;
+    onSendMessage?: (text: string, imageUrl?: string) => void;
     isConnected?: boolean;
     isLoading?: boolean;
 }
@@ -29,6 +31,9 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
     const [inputText, setInputText] = useState('');
     const flatListRef = useRef<FlatList>(null);
     const inputRef = useRef<TextInput>(null);
+    const previousMessageCountRef = useRef(0);
+    const pendingAutoScrollRef = useRef(false);
+    const initialAutoScrollDoneRef = useRef(false);
     const imageSource = avatarSource ? avatarSource : { uri: avatarUrl };
     const [isNearBottom, setIsNearBottom] = useState(true);
     const navigation = useNavigation();
@@ -36,8 +41,33 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
     const insets = useSafeAreaInsets();
 
     useEffect(() => {
-        if (isNearBottom) {
-            setTimeout(() => { flatListRef.current?.scrollToEnd({ animated: true }); }, 100);
+        previousMessageCountRef.current = 0;
+        pendingAutoScrollRef.current = false;
+        initialAutoScrollDoneRef.current = false;
+    }, [userName]);
+
+    const scrollToLatestMessage = () => {
+        [80, 240, 600, 1000].forEach((delay) => {
+            setTimeout(() => {
+                flatListRef.current?.scrollToEnd({ animated: delay > 80 });
+            }, delay);
+        });
+    };
+
+    useEffect(() => {
+        const hasNewMessage = messages.length > previousMessageCountRef.current;
+        const isInitialLoad = messages.length > 0 && !initialAutoScrollDoneRef.current;
+        const shouldScrollToEnd = isInitialLoad || (hasNewMessage && (isNearBottom || messages[messages.length - 1]?.sender === 'user'));
+
+        previousMessageCountRef.current = messages.length;
+
+        if (shouldScrollToEnd) {
+            pendingAutoScrollRef.current = true;
+            initialAutoScrollDoneRef.current = true;
+            scrollToLatestMessage();
+            setTimeout(() => {
+                pendingAutoScrollRef.current = false;
+            }, 1200);
         }
     }, [messages]);
 
@@ -63,10 +93,28 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                 {isUser ? (
                     <View style={[styles.messageBubbleRight, { backgroundColor: C.bubbleSentBg, shadowColor: C.bubbleSentShadow }]}>
                         <Text style={[styles.messageTextRight, { color: C.bubbleSentText }]}>{item.text}</Text>
+                        {item.imageUrl && (
+                            <Image
+                                testID={`conversation_message_${index}_sent_image`}
+                                accessibilityLabel={`conversation_message_${index}_sent_image`}
+                                source={{ uri: optimizeCloudinaryUrl(item.imageUrl) }}
+                                style={styles.messageImage}
+                                resizeMode="cover"
+                            />
+                        )}
                     </View>
                 ) : (
                     <View style={[styles.messageBubble, { backgroundColor: C.bubbleRecvBg, borderColor: C.bubbleRecvBorder, shadowColor: C.bubbleRecvShadow }]}>
                         <Text style={[styles.messageText, { color: C.bubbleRecvText }]}>{item.text}</Text>
+                        {item.imageUrl && (
+                            <Image
+                                testID={`conversation_message_${index}_received_image`}
+                                accessibilityLabel={`conversation_message_${index}_received_image`}
+                                source={{ uri: optimizeCloudinaryUrl(item.imageUrl) }}
+                                style={styles.messageImage}
+                                resizeMode="cover"
+                            />
+                        )}
                     </View>
                 )}
             </View>
@@ -161,7 +209,11 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                         }}
                         scrollEventThrottle={16}
                         accessibilityRole="list"
-                        accessibilityLabel="conversation_messages_list"
+                        onContentSizeChange={() => {
+                            if (pendingAutoScrollRef.current) {
+                                flatListRef.current?.scrollToEnd({ animated: true });
+                            }
+                        }}
                         ListEmptyComponent={
                             <View style={{ alignItems: 'center', paddingTop: 60 }}>
                                 <Text 

@@ -19,7 +19,10 @@ const FriendItem = memo(({ item, onUnfriend, C }: { item: Friend, onUnfriend: (i
       style={[styles.avatar, { borderColor: C.primary }]}
     />
 
-    <Text testID={`friend-name-${item.friendReqId}`} style={[styles.name, { color: C.textPrimary }]}>
+    <Text
+      testID={`friend-name-${item.friendReqId}`}
+      style={[styles.name, { color: C.textPrimary }]}
+    >
       {item.fullname || item.username}
     </Text>
 

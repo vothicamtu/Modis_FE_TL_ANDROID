@@ -13,7 +13,7 @@ function ConversationScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const C = useColors();
 
-    const { conversationId, receiverId, receiverName, receiverAvatar, initialMessage } = route.params;
+    const { conversationId, receiverId, receiverName, receiverAvatar, initialMessage, initialImageUrl } = route.params;
 
     const { messages, sendMessage, isConnected, isLoading } = useChat({
         conversationId,
@@ -24,9 +24,9 @@ function ConversationScreen() {
     useEffect(() => {
         if (initialMessage && isConnected && !hasSentInitial.current) {
             hasSentInitial.current = true;
-            sendMessage(initialMessage);
+            sendMessage(initialMessage, initialImageUrl);
         }
-    }, [isConnected, initialMessage]);
+    }, [isConnected, initialMessage, initialImageUrl]);
 
     const goBack = () => navigation.goBack();
     const swipeGesture = Gesture.Pan()

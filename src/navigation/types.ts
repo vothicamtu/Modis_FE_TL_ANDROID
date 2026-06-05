@@ -13,6 +13,7 @@ export type RootStackParamList = {
         receiverName: string;
         receiverAvatar?: string | null;
         initialMessage?: string;
+        initialImageUrl?: string;
     };
     ProfileScreen: undefined;
 };

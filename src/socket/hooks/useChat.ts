@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import ChatService, { ChatMessage } from '../service/ChatService';
+import ChatService, { ChatMessage, decodeMessageContent } from '../service/ChatService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messageService, { ServerMessage } from '../../services/messageService';
 
@@ -17,13 +17,17 @@ export const useChat = ({ conversationId, receiverId, initialMessages = [] }: Us
     //  Dùng ref để giữ userId — tránh re-render không cần thiết
     const currentUserIdRef = useRef<string>('');
 
-    const mapServerMessageToUI = useCallback((msg: ServerMessage, userId: string): ChatMessage => ({
-        id: msg.messageId,
-        text: msg.content,
-        sender: msg.senderId === userId ? 'user' : 'other',
-        timestamp: new Date(msg.timestamp),
-        type: 'text',
-    }), []);
+    const mapServerMessageToUI = useCallback((msg: ServerMessage, userId: string): ChatMessage => {
+        const decoded = decodeMessageContent(msg.content);
+        return {
+            id: msg.messageId,
+            text: decoded.text,
+            sender: msg.senderId === userId ? 'user' : 'other',
+            timestamp: new Date(msg.timestamp),
+            type: 'text',
+            imageUrl: decoded.imageUrl,
+        };
+    }, []);
 
     useEffect(() => {
         let subscriptionId: string;
@@ -108,7 +112,7 @@ export const useChat = ({ conversationId, receiverId, initialMessages = [] }: Us
         };
     }, [conversationId, receiverId]);
 
-    const sendMessage = useCallback((text: string) => {
+    const sendMessage = useCallback((text: string, imageUrl?: string) => {
         const userId = currentUserIdRef.current;
         if (!userId) {
             console.error('Cannot send message: User ID not found');
@@ -121,6 +125,7 @@ export const useChat = ({ conversationId, receiverId, initialMessages = [] }: Us
             sender: 'user',
             timestamp: new Date(),
             type: 'text',
+            imageUrl,
         };
 
         setMessages((prev) => [...prev, newMessage]);

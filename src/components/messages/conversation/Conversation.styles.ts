@@ -92,6 +92,12 @@ export const styles = StyleSheet.create({
         fontSize: 15,
         lineHeight: 21,
     },
+    messageImage: {
+        width: 180,
+        height: 180,
+        borderRadius: 14,
+        marginBottom: 8,
+    },
 
     inputContainer: {
         flexDirection: 'row',

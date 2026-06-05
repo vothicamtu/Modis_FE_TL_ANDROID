@@ -193,6 +193,7 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
       receiverName: currentPost.senderName,
       receiverAvatar: currentPost.senderAvatar,
       initialMessage: text,
+      initialImageUrl: currentPost.urlImage,
     });
   }, [navigation]);
 

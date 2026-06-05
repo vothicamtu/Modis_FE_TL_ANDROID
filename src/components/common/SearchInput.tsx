@@ -109,6 +109,8 @@ export const SearchInput: React.FC<SearchInputProps> = ({
       {/* Left Icon */}
       {leftIcon && (
         <Icon
+          testID={testID ? `${testID}_left_icon` : 'search_left_icon'}
+          accessibilityLabel={testID ? `${testID}_left_icon` : 'search_left_icon'}
           name={leftIcon}
           size={leftIconSize}
           color={isFocused ? C.primary : C.textHint}

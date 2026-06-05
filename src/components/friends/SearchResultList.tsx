@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useCallback, memo } from "react";
-import { View, Text, FlatList, TouchableOpacity, Image } from "react-native";
+import React, { useEffect, useState, useCallback, memo, useMemo } from "react";
+import { View, Text, FlatList, TouchableOpacity, Image, Alert, ActivityIndicator } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import styles from "../../styles/FriendsScreen.styles";
 import friendsController from "../../controller/friends.controller";
 import { emit, on } from "../../utils/eventBus";
 import { SearchUser } from "../../types/user/SearchUser";
+import { FriendReq } from "../../types/friend/FriendReq";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useColors } from "../../hook/useColors";
-import { scale, getMinTouchArea, getFontSize, getIconSize } from "../../utils/responsive";
+import { scale, getMinTouchArea, getFontSize } from "../../utils/responsive";
 
 type Props = {
   users: SearchUser[];
@@ -16,24 +17,29 @@ type Props = {
 };
 
 // Memoize SearchUserItem để tránh re-render
-const SearchUserItem = memo(({ item, onAddFriend, isFriend, isSent, C }: {
+const SearchUserItem = memo(({ item, onAddFriend, onAcceptIncoming, onRejectIncoming, isFriend, isSent, incomingRequestId, isProcessing, C }: {
   item: SearchUser;
   onAddFriend: (id: string) => void;
+  onAcceptIncoming: (requestId: string) => void;
+  onRejectIncoming: (requestId: string) => void;
   isFriend: boolean;
   isSent: boolean;
+  incomingRequestId?: string;
+  isProcessing: boolean;
   C: any;
 }) => {
   let buttonText = "Kết bạn";
   if (isFriend) buttonText = "Bạn bè";
+  else if (incomingRequestId) buttonText = "Chấp nhận";
   else if (isSent) buttonText = "Đã gửi";
 
-  const disabled = isFriend || isSent;
+  const disabled = incomingRequestId ? isProcessing : isFriend || isSent || isProcessing;
   const minTouchArea = getMinTouchArea();
+  const displayName = item.fullname || item.username;
 
   return (
     <View
       testID={`search_result_item_${item.id}`}
-      accessibilityLabel={`search_result_item_${item.id}`}
       style={[styles.friendItem, {
         paddingHorizontal: scale(12),
         paddingVertical: scale(12),
@@ -45,6 +51,8 @@ const SearchUserItem = memo(({ item, onAddFriend, isFriend, isSent, C }: {
       }]}
     >
       <Image
+        testID={`search_result_avatar_${item.id}`}
+        accessibilityLabel={`search_result_avatar_${item.id}`}
         source={
           item.avatarUrl
             ? { uri: item.avatarUrl }
@@ -59,57 +67,111 @@ const SearchUserItem = memo(({ item, onAddFriend, isFriend, isSent, C }: {
       />
 
       <View style={{ flex: 1, marginLeft: scale(12) }}>
-        <Text style={[styles.name, { 
+        <Text
+          testID={`search_result_name_${item.id}`}
+          accessibilityLabel={`search_result_name_${item.id}`}
+          style={[styles.name, {
           color: C.textPrimary,
           fontSize: getFontSize(16),
           fontWeight: '600',
-        }]}>
-          {item.fullname || item.username}
+        }]}
+        >
+          {displayName}
         </Text>
-        <Text style={[styles.username, { 
+        <Text
+          testID={`search_result_username_${item.id}`}
+          accessibilityLabel={`search_result_username_${item.id}`}
+          style={[styles.username, {
           color: C.textHint,
           fontSize: getFontSize(14),
           marginTop: scale(2),
-        }]}>
+        }]}
+        >
           @{item.username}
         </Text>
       </View>
 
-      <TouchableOpacity
-        testID={`search_result_add_button_${item.id}`}
-        accessibilityLabel={`search_result_add_button_${item.id}`}
-        disabled={disabled}
-        onPress={() => onAddFriend(item.id)}
-        style={[
-          styles.addBtn,
-          {
-            backgroundColor: disabled ? C.btnDisabled : C.primary,
-            paddingHorizontal: scale(16),
-            paddingVertical: scale(8),
-            borderRadius: scale(20),
-            minWidth: scale(80),
-            minHeight: minTouchArea,
-            alignItems: 'center',
-            justifyContent: 'center',
-          },
-        ]}
-        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-      >
-        <Text style={[styles.addText, { 
-          color: C.btnPrimaryText,
-          fontSize: getFontSize(14),
-          fontWeight: '600',
-        }]}>
-          {buttonText}
-        </Text>
-      </TouchableOpacity>
+      {isProcessing ? (
+        <ActivityIndicator size="small" color={C.textHint} style={{ minWidth: scale(80) }} />
+      ) : incomingRequestId ? (
+        <View style={styles.requestActions}>
+          <TouchableOpacity
+            testID={`search_result_accept_button_${item.id}`}
+            accessibilityLabel={`search_result_accept_button_${item.id}`}
+            accessibilityRole="button"
+            accessibilityState={{ disabled }}
+            disabled={disabled}
+            onPress={() => onAcceptIncoming(incomingRequestId)}
+            style={{
+              width: 36, height: 36, borderRadius: 18,
+              backgroundColor: C.primary,
+              justifyContent: 'center', alignItems: 'center', elevation: 3,
+            }}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Icon name="check" size={20} color={C.btnPrimaryText} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            testID={`search_result_reject_button_${item.id}`}
+            accessibilityLabel={`search_result_reject_button_${item.id}`}
+            accessibilityRole="button"
+            accessibilityState={{ disabled }}
+            disabled={disabled}
+            onPress={() => onRejectIncoming(incomingRequestId)}
+            style={{
+              width: 36, height: 36, borderRadius: 18,
+              backgroundColor: C.btnGhostBg,
+              borderWidth: 1.5, borderColor: C.btnGhostBorder,
+              justifyContent: 'center', alignItems: 'center', elevation: 3,
+            }}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Image source={require("../../assets/image/close.png")} style={{ width: 16, height: 16, tintColor: C.btnGhostIcon }} />
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <TouchableOpacity
+          testID={`search_result_add_button_${item.id}`}
+          accessibilityLabel={`search_result_add_button_${item.id}`}
+          disabled={disabled}
+          onPress={() => onAddFriend(item.id)}
+          style={[
+            styles.addBtn,
+            {
+              backgroundColor: disabled ? C.btnDisabled : C.primary,
+              paddingHorizontal: scale(16),
+              paddingVertical: scale(8),
+              borderRadius: scale(20),
+              minWidth: scale(80),
+              minHeight: minTouchArea,
+              alignItems: 'center',
+              justifyContent: 'center',
+            },
+          ]}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        >
+          <Text
+            testID={`search_result_status_${item.id}`}
+            accessibilityLabel={`search_result_status_${item.id}`}
+            style={[styles.addText, {
+            color: C.btnPrimaryText,
+            fontSize: getFontSize(14),
+            fontWeight: '600',
+          }]}
+          >
+            {buttonText}
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 });
 
-export default function SearchResultList({ users, keyword, onClearSearch }: Props) {
+export default function SearchResultList({ users, keyword }: Props) {
   const [sentIds, setSentIds] = useState<string[]>([]);
   const [friendIds, setFriendIds] = useState<string[]>([]);
+  const [incomingRequestByUserId, setIncomingRequestByUserId] = useState<Record<string, string>>({});
+  const [processingRequestId, setProcessingRequestId] = useState<string | null>(null);
   const C = useColors();
 
   useEffect(() => {
@@ -120,19 +182,26 @@ export default function SearchResultList({ users, keyword, onClearSearch }: Prop
 
   const loadAll = useCallback(async () => {
     try {
-      const [sent, friends] = await Promise.all([
+      const [sent, friends, received] = await Promise.all([
         friendsController.getSentRequests(),
         friendsController.getFriends(),
+        friendsController.getReceivedRequests(),
       ]);
       setSentIds(sent.map((r) => r.receiverId));
       setFriendIds(friends.map((f) => f.userId));
+      setIncomingRequestByUserId(
+        received.reduce((acc: Record<string, string>, request: FriendReq) => {
+          acc[request.senderId] = request.id;
+          return acc;
+        }, {})
+      );
     } catch (e) {
       console.log("Load friend state failed:", e);
     }
   }, []);
 
   const handleAddFriend = useCallback(async (receiverId: string) => {
-    if (sentIds.includes(receiverId) || friendIds.includes(receiverId)) return;
+    if (sentIds.includes(receiverId) || friendIds.includes(receiverId) || incomingRequestByUserId[receiverId]) return;
 
     const senderId = await AsyncStorage.getItem("userId");
     if (!senderId) return;
@@ -144,27 +213,91 @@ export default function SearchResultList({ users, keyword, onClearSearch }: Prop
     } catch (err) {
       console.log("Add friend error:", err);
     }
-  }, [sentIds, friendIds]);
+  }, [sentIds, friendIds, incomingRequestByUserId]);
+
+  const handleAcceptIncoming = useCallback(async (requestId: string) => {
+    if (processingRequestId) return;
+
+    try {
+      setProcessingRequestId(requestId);
+      await friendsController.acceptRequest(requestId);
+      setIncomingRequestByUserId((prev) => {
+        const next = { ...prev };
+        Object.keys(next).forEach((userId) => {
+          if (next[userId] === requestId) delete next[userId];
+        });
+        return next;
+      });
+      await loadAll();
+      emit("friendsUpdated");
+    } catch (e) {
+      console.log("Accept incoming search request failed:", e);
+      Alert.alert("Lỗi", "Không thể chấp nhận lời mời. Vui lòng thử lại.");
+    } finally {
+      setProcessingRequestId(null);
+    }
+  }, [processingRequestId, loadAll]);
+
+  const handleRejectIncoming = useCallback((requestId: string) => {
+    if (processingRequestId) return;
+
+    Alert.alert("Từ chối lời mời", "Bạn có chắc muốn từ chối?", [
+      { text: "Không", style: "cancel" },
+      {
+        text: "Có",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            setProcessingRequestId(requestId);
+            await friendsController.rejectRequest(requestId);
+            setIncomingRequestByUserId((prev) => {
+              const next = { ...prev };
+              Object.keys(next).forEach((userId) => {
+                if (next[userId] === requestId) delete next[userId];
+              });
+              return next;
+            });
+            emit("friendsUpdated");
+          } catch (e) {
+            console.log("Reject incoming search request failed:", e);
+            Alert.alert("Lỗi", "Không thể từ chối lời mời. Vui lòng thử lại.");
+          } finally {
+            setProcessingRequestId(null);
+          }
+        },
+      },
+    ]);
+  }, [processingRequestId]);
 
   const renderUserItem = useCallback(({ item }: { item: SearchUser }) => {
     const isFriend = friendIds.includes(item.id);
     const isSent = sentIds.includes(item.id);
+    const incomingRequestId = incomingRequestByUserId[item.id];
 
     return (
       <SearchUserItem
         item={item}
         onAddFriend={handleAddFriend}
+        onAcceptIncoming={handleAcceptIncoming}
+        onRejectIncoming={handleRejectIncoming}
         isFriend={isFriend}
         isSent={isSent}
+        incomingRequestId={incomingRequestId}
+        isProcessing={processingRequestId === incomingRequestId}
         C={C}
       />
     );
-  }, [friendIds, sentIds, handleAddFriend, C]);
+  }, [friendIds, sentIds, incomingRequestByUserId, processingRequestId, handleAddFriend, handleAcceptIncoming, handleRejectIncoming, C]);
+
+  const sortedUsers = useMemo(() => {
+    return [...users].sort((a, b) => {
+      const aRank = incomingRequestByUserId[a.id] ? 0 : 1;
+      const bRank = incomingRequestByUserId[b.id] ? 0 : 1;
+      return aRank - bRank;
+    });
+  }, [users, incomingRequestByUserId]);
 
   const keyExtractor = useCallback((item: SearchUser) => item.id, []);
-
-  const minTouchArea = getMinTouchArea();
-  const iconSize = getIconSize(20);
 
   const EmptyComponent = useCallback(() => (
     <View
@@ -197,19 +330,21 @@ export default function SearchResultList({ users, keyword, onClearSearch }: Prop
 
   return (
     <View style={{ paddingHorizontal: scale(16) }}>
-      {/* Search header with clear button */}
       <View style={{
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
         marginBottom: scale(12),
         paddingVertical: scale(8),
       }}>
-        <Text style={[styles.sectionTitle, { 
+        <Text
+          testID="search_results_title"
+          accessibilityLabel="search_results_title"
+          style={[styles.sectionTitle, {
           color: C.primary,
           fontSize: getFontSize(16),
           flex: 1,
-        }]}>
+        }]}
+        >
           {users.length > 0 
             ? `Kết quả cho "${keyword}" (${users.length})`
             : keyword 
@@ -217,40 +352,16 @@ export default function SearchResultList({ users, keyword, onClearSearch }: Prop
               : "Kết quả tìm kiếm"
           }
         </Text>
-        
-        {onClearSearch && (
-          <TouchableOpacity
-            onPress={onClearSearch}
-            style={{
-              width: minTouchArea,
-              height: minTouchArea,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: '#FFFFFF',
-              borderRadius: minTouchArea / 2,
-              borderWidth: 1,
-              borderColor: C.border,
-              shadowColor: C.primary,
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.2,
-              shadowRadius: 4,
-              elevation: 3,
-            }}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            activeOpacity={0.7}
-          >
-            <Icon name="close" size={iconSize} color="#000000" />
-          </TouchableOpacity>
-        )}
       </View>
 
       <FlatList
         testID="search_results_list"
         accessibilityLabel="search_results_list"
-        data={users}
+        data={sortedUsers}
         keyExtractor={keyExtractor}
         renderItem={renderUserItem}
         ListEmptyComponent={users.length === 0 && keyword ? EmptyComponent : null}
+        keyboardShouldPersistTaps="always"
         scrollEnabled={false}
         removeClippedSubviews={false} // Tắt để tránh conflict
         maxToRenderPerBatch={10}

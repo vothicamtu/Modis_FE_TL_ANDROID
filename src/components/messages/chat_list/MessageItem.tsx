@@ -3,6 +3,7 @@ import { ConversationItem } from '../../../services/messageService';
 import { formatTime } from '../../../utils/dateUtils';
 import { optimizeCloudinaryUrl } from '../../../utils/cloudinary';
 import { useColors } from '../../../hook/useColors';
+import { decodeMessageContent } from '../../../socket/service/ChatService';
 
 interface MessageItemProps {
   message: ConversationItem;
@@ -14,6 +15,8 @@ function MessageItem({ message, onPress, testID }: MessageItemProps) {
   const C = useColors();
   const avatarUri = message.partnerAvatar ? optimizeCloudinaryUrl(message.partnerAvatar) : null;
   const initial = (message.partnerName || '?')[0].toUpperCase();
+  const decodedLastMessage = decodeMessageContent(message.lastMessage || '');
+  const lastMessageText = decodedLastMessage.imageUrl ? 'Đã gửi ảnh' : decodedLastMessage.text;
 
   return (
     <TouchableOpacity
@@ -60,7 +63,7 @@ function MessageItem({ message, onPress, testID }: MessageItemProps) {
           numberOfLines={1}
           accessibilityRole="text"
         >
-          {message.lastMessage}
+          {lastMessageText}
         </Text>
       </View>
 

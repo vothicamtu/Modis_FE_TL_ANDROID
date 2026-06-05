@@ -22,6 +22,7 @@ const MemoizedFriendRequestItem = memo(({ item, onAccept, onReject, disabled }: 
     disabled={disabled}
     onAccept={onAccept}
     onReject={onReject}
+    testID={`friend_request_item_${item.id}`}
   />
 ));
 
@@ -106,15 +107,28 @@ export default function FriendRequests() {
 
   const ListEmptyComponent = useCallback(() => (
     !loading ? (
-      <Text style={{ color: C.textHint, marginLeft: 16 }}>
+      <Text
+        testID="friend_requests_empty"
+        accessibilityLabel="friend_requests_empty"
+        style={{ color: C.textHint, marginLeft: 16 }}
+      >
         Chưa có lời mời kết bạn
       </Text>
     ) : null
   ), [loading, C.textHint]);
 
   return (
-    <View>
-      <Text style={[styles.sectionTitle, { color: C.primary }]}>Lời mời kết bạn</Text>
+    <View
+      testID="friend_requests_section"
+      accessibilityLabel="friend_requests_section"
+    >
+      <Text
+        testID="friend_requests_title"
+        accessibilityLabel="friend_requests_title"
+        style={[styles.sectionTitle, { color: C.primary }]}
+      >
+        Lời mời kết bạn
+      </Text>
 
       {processingId && (
         <ActivityIndicator size="small" color={C.textHint} style={{ marginVertical: 8 }} />

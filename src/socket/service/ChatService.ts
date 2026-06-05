@@ -8,6 +8,7 @@ export interface ChatMessage {
     sender: 'user' | 'other';
     timestamp?: Date;
     type?: string;
+    imageUrl?: string;
 }
 
 // Backend DTO structure - matches Java MessageDTO
@@ -19,6 +20,29 @@ export interface MessageDTO {
     timestamp?: string; 
 }
 
+const IMAGE_COMMENT_PREFIX = '__MODIS_IMAGE_COMMENT__';
+
+export const encodeMessageContent = (text: string, imageUrl?: string): string => {
+    if (!imageUrl) return text;
+    return `${IMAGE_COMMENT_PREFIX}${JSON.stringify({ text, imageUrl })}`;
+};
+
+export const decodeMessageContent = (content: string): { text: string; imageUrl?: string } => {
+    if (!content.startsWith(IMAGE_COMMENT_PREFIX)) {
+        return { text: content };
+    }
+
+    try {
+        const payload = JSON.parse(content.slice(IMAGE_COMMENT_PREFIX.length));
+        return {
+            text: typeof payload.text === 'string' ? payload.text : '',
+            imageUrl: typeof payload.imageUrl === 'string' ? payload.imageUrl : undefined,
+        };
+    } catch {
+        return { text: content };
+    }
+};
+
 class ChatService {
 
     //send message to server - matches backend's @MessageMapping("/chat.send")
@@ -26,7 +50,7 @@ class ChatService {
         const messageDTO: MessageDTO = {
             senderId: currentUserId,
             receiverId: receiverId,
-            content: message.text,
+            content: encodeMessageContent(message.text, message.imageUrl),
             timestamp: new Date().toISOString(),
         };
         // Alert.alert('Debug', `Sending message DTO: ${JSON.stringify(messageDTO)}`);
@@ -41,14 +65,15 @@ class ChatService {
             try {
                 const dto = JSON.parse(message.body) as MessageDTO;
                 console.log('Received message:', dto);
+                const decoded = decodeMessageContent(dto.content);
                 
-                // Convert backend DTO to frontend ChatMessage format
                 const chatMessage: ChatMessage = {
                     id: dto.messageId || Date.now().toString(),
-                    text: dto.content,
+                    text: decoded.text,
                     sender: dto.senderId === currentUserId ? 'user' : 'other',
                     timestamp: dto.timestamp ? new Date(dto.timestamp) : new Date(),
                     type: 'text',
+                    imageUrl: decoded.imageUrl,
                 };
                 callback(chatMessage);
             } catch (error) {

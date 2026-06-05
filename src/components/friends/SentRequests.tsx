@@ -19,6 +19,7 @@ const MemoizedSentRequestItem = memo(({ item, onCancel, disabled }: {
     avatarUrl={item.receiverAvatar}
     disabled={disabled}
     onCancel={onCancel}
+    testID={`sent_request_item_${item.id}`}
   />
 ));
 
@@ -49,7 +50,7 @@ export default function SentRequests() {
 
   const handleCancel = useCallback((requestId: string) => {
     if (processingId) return;
-    Alert.alert("Hủy lời mời", "Bạn có chắc muốn hủy lời mời kết bạn?", [
+    Alert.alert("Hủy lời mời đã gửi", "Bạn có chắc muốn hủy lời mời đã gửi này?", [
       { text: "Không", style: "cancel" },
       {
         text: "Có",
@@ -83,14 +84,21 @@ export default function SentRequests() {
 
   const ListEmptyComponent = useCallback(() => (
     !loading ? (
-      <Text style={{ color: C.textHint, marginLeft: 16 }}>
+      <Text
+        testID="sent_requests_empty"
+        accessibilityLabel="sent_requests_empty"
+        style={{ color: C.textHint, marginLeft: 16 }}
+      >
         Bạn chưa gửi lời mời nào
       </Text>
     ) : null
   ), [loading, C.textHint]);
 
   return (
-    <View>
+    <View
+      testID="sent_requests_section"
+      accessibilityLabel="sent_requests_section"
+    >
       <Text style={[styles.sectionTitle, { color: C.primary }]}>Lời mời đã gửi</Text>
 
       {processingId && (

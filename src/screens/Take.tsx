@@ -135,7 +135,7 @@ export default function TakeScreen({ goToProfile, goToMessage }: TakeScreenProps
         <Pressable 
           style={styles.history} 
           testID="take_history"
-          onPress={() => navigation.navigate("AllImage")}
+          onPress={() => navigation.navigate("AllImagesScreen")}
           accessibilityRole="button"
           accessibilityLabel="take_history"
           accessible={true}

@@ -373,6 +373,21 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
                 accessibilityState={{ selected: !allFriend && checkReceiver(item.userId) }}
                 accessible={true}
               >
+                {!allFriend && checkReceiver(item.userId) && (
+                  <View
+                    testID={`send_photo_friend_${item.userId}_selected`}
+                    accessibilityLabel={`send_photo_friend_${item.userId}_selected`}
+                    style={{
+                      position: "absolute",
+                      width: 14,
+                      height: 14,
+                      borderRadius: 7,
+                      right: 0,
+                      bottom: 0,
+                      backgroundColor: C.primary,
+                    }}
+                  />
+                )}
                 <Image
                   source={
                     item.avatarUrl
