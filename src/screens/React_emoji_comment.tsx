@@ -310,7 +310,6 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
       <LinearGradient colors={C.bgGradient} style={styles.container}>
         <StatusBar backgroundColor={C.bgGradient[0]} barStyle={C.statusBar} translucent />
 
-        {/* Header — giống Profile/AllImage: SafeAreaView transparent, hòa vào gradient */}
         <SafeAreaView edges={['top']} style={{ backgroundColor: C.bgGradient[0] }}>
           <View style={{ paddingTop: 4 }}>
             <TopBar
@@ -393,7 +392,6 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                       </Text>
                     </View>
                   </View>
-                  {/* Menu button with white icon for both modes */}
                   <Pressable 
                     testID={`feed_menu_button_${item._id}`} 
                     onPress={() => setShowMenu(true)} 
@@ -439,7 +437,6 @@ function React_emoji_comment({ goToHome, goToMessage, goToProfile }: Props) {
                   >
                     {timeAgo(item.created_at)}
                   </Text>
-                  {/* Nút grid bên phải hàng info */}
                   <Pressable 
                     testID="feed_grid_view_button" 
                     onPress={() => navigation.navigate("AllImagesScreen")} 

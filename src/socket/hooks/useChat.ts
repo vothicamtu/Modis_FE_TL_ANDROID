@@ -13,7 +13,7 @@ export const useChat = ({ conversationId, receiverId, initialMessages = [] }: Us
     const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
     const [isConnected, setIsConnected] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    
+
     //  Dùng ref để giữ userId — tránh re-render không cần thiết
     const currentUserIdRef = useRef<string>('');
 
@@ -56,11 +56,11 @@ export const useChat = ({ conversationId, receiverId, initialMessages = [] }: Us
                 }
                 currentUserIdRef.current = userId;
 
-                // 1. Fetch lịch sử tin nhắn
+                // Fetch lịch sử tin nhắn
                 await fetchMessages(userId);
                 if (!isMounted) return;
 
-                // 2. Connect WebSocket
+                // Connect WebSocket
                 await ChatService.connect();
 
                 //  Poll isConnected vì connect() không await đến khi handshake xong
@@ -85,7 +85,7 @@ export const useChat = ({ conversationId, receiverId, initialMessages = [] }: Us
 
                 setIsConnected(ChatService.isConnected());
 
-                // 3. Subscribe nhận tin nhắn realtime
+                // Subscribe nhận tin nhắn realtime
                 subscriptionId = ChatService.subscribeToMessages(userId, (message: ChatMessage) => {
                     if (message.sender === 'other' && isMounted) {
                         setMessages((prev) => {

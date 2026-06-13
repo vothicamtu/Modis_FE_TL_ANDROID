@@ -73,8 +73,6 @@ export const AuthInput = ({
           underlineColorAndroid="transparent"
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
-          // Không dùng placeholder/text hiển thị làm accessibilityLabel (không ổn định cho automation).
-          // Chuẩn: accessibilityLabel === testID (hoặc label custom do caller truyền vào).
           accessibilityLabel={accessibilityLabel ?? testID}
           accessibilityRole={accessibilityRole}
           accessible={true}

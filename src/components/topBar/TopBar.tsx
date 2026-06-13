@@ -125,7 +125,7 @@ const TopBar: React.FC<Props> = ({
     };
 
     fetchFriends();
-    
+
     const off = on('friendsUpdated', () => {
       fetchFriends();
     });
@@ -215,7 +215,6 @@ const TopBar: React.FC<Props> = ({
       accessibilityRole="header"
       accessibilityLabel="topbar_container"
     >
-      {/* Nút Back hoặc Avatar */}
       {showBackButton ? (
         <TouchableOpacity
           testID="topbar_back_button"
@@ -257,7 +256,6 @@ const TopBar: React.FC<Props> = ({
 
       {renderCenterContent()}
 
-      {/* Message */}
       <TouchableOpacity
         testID="topbar_message_button"
         onPress={() => {
@@ -279,7 +277,6 @@ const TopBar: React.FC<Props> = ({
         />
       </TouchableOpacity>
 
-      {/* Dropdown */}
       <Modal transparent animationType="fade" visible={dropdownVisible}>
         <TouchableWithoutFeedback onPress={() => setDropdownVisible(false)}>
           <View style={[styles.mask, { backgroundColor: C.modalOverlay }]}>

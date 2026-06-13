@@ -15,7 +15,7 @@ export default function FriendsSearch({ onResult, onClear, keyword = "" }: Props
   const [searchText, setSearchText] = useState(keyword);
   const [isLoading, setIsLoading] = useState(false);
   const C = useColors();
-  
+
   // Track the latest search request to prevent stale results
   const latestSearchRef = useRef<string>(keyword);
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -32,12 +32,12 @@ export default function FriendsSearch({ onResult, onClear, keyword = "" }: Props
     // Update local state immediately for responsive UI
     setSearchText(text);
     latestSearchRef.current = text;
-    
+
     // Clear any pending search timeout
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
     }
-    
+
     // If search is empty, reset immediately
     if (!text.trim()) {
       onResult([], "");
@@ -82,12 +82,12 @@ export default function FriendsSearch({ onResult, onClear, keyword = "" }: Props
   const handleClear = useCallback(() => {
     setSearchText("");
     latestSearchRef.current = "";
-    
+
     // Clear any pending search
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
     }
-    
+
     onResult([], "");
     onClear?.();
   }, [onResult, onClear]);

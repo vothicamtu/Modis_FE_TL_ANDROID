@@ -5,7 +5,6 @@ import { loadTokenFromStorage } from "../utils/token";
 
 import { PostRequest, ImagePostDTO, ReceiverRequest, PostResponse, PostFilterRequest, PostDTO, PostSimpleDTO, ReactRequest, PostUIItem, ImageFullItem } from "../types";
 
-
 export type PostFilterResponse = ImagePostDTO[] | PostResponse[];
 export const postService = {
     sendPost: async (req: PostRequest): Promise<PostResponse> => {
@@ -17,7 +16,6 @@ export const postService = {
     deletePost: async (postId: string): Promise<void> => {
         await api.delete(`api/posts/delete/${postId}`);
     },
-
 
     filterPosts: async (filterRequest: PostFilterRequest): Promise<PostDTO[] | PostSimpleDTO[]> => {
         const response = await api.get("api/posts/filter", { params: filterRequest });
@@ -49,16 +47,13 @@ export const postService = {
         try {
           const token = await loadTokenFromStorage();
           const baseURL = api.defaults.baseURL?.endsWith("/") ? api.defaults.baseURL : `${api.defaults.baseURL}/`;
-          
-          // Sử dụng fetch cho upload để tránh lỗi boundary của Axios trên Android
+
           const response = await fetch(`${baseURL}api/posts/upload/image`, {
             method: "POST",
             body: formData,
             headers: {
               "Authorization": `Bearer ${token}`,
               "Accept": "application/json",
-              // QUAN TRỌNG: KHÔNG ĐƯỢC SET Content-Type: multipart/form-data ở đây
-              // fetch sẽ tự động sinh Content-Type kèm theo boundary chính xác.
             },
           });
 

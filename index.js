@@ -1,6 +1,3 @@
-/**
- * @format
- */
 import 'react-native-reanimated';
 import 'text-encoding-polyfill';
 import React from 'react';

@@ -1,8 +1,3 @@
-/**
- * Accessibility utilities for consistent testID naming and accessibility roles
- * Following the naming convention: screen_feature_element_type
- */
-
 // Accessibility roles for React Native components
 export type AccessibilityRole = 
   | 'button'
@@ -62,7 +57,7 @@ export const FEATURES = {
   SUBMIT: 'submit',
   SIGNUP_LINK: 'signup_link',
   LOGIN_LINK: 'login_link',
-  
+
   // Navigation
   TOPBAR: 'topbar',
   BOTTOMBAR: 'bottombar',
@@ -71,14 +66,14 @@ export const FEATURES = {
   FRIENDS: 'friends',
   MESSAGE: 'message',
   FILTER: 'filter',
-  
+
   // Camera
   CAPTURE: 'capture',
   FLASH: 'flash',
   TOGGLE_CAMERA: 'toggle_camera',
   CAMERA_AREA: 'camera_area',
   HISTORY: 'history',
-  
+
   // Messages
   CONVERSATION: 'conversation',
   SEND: 'send',
@@ -86,14 +81,14 @@ export const FEATURES = {
   LAST_MESSAGE: 'last_message',
   TIME: 'time',
   NAME: 'name',
-  
+
   // Friends
   SEARCH: 'search',
   REQUEST: 'request',
   ACCEPT: 'accept',
   DECLINE: 'decline',
   ADD: 'add',
-  
+
   // General
   TITLE: 'title',
   COUNT: 'count',
@@ -101,13 +96,6 @@ export const FEATURES = {
   EMPTY: 'empty',
 } as const;
 
-/**
- * Generate testID following the naming convention: screen_feature_element_type
- * @param screen - Screen identifier
- * @param feature - Feature/section identifier
- * @param elementType - Element type
- * @param suffix - Optional suffix for dynamic IDs
- */
 export const generateTestID = (
   screen: string,
   feature: string,
@@ -118,11 +106,6 @@ export const generateTestID = (
   return suffix ? `${baseId}_${suffix}` : baseId;
 };
 
-/**
- * Generate accessibility label with fallback to testID
- * @param label - Primary accessibility label
- * @param testID - Fallback testID
- */
 export const generateAccessibilityLabel = (
   label?: string,
   testID?: string
@@ -130,9 +113,6 @@ export const generateAccessibilityLabel = (
   return label || testID || '';
 };
 
-/**
- * Common accessibility props for interactive elements
- */
 export const getAccessibilityProps = (
   testID: string,
   accessibilityLabel?: string,
@@ -150,9 +130,6 @@ export const getAccessibilityProps = (
   ...(accessibilityState && { accessibilityState }),
 });
 
-/**
- * Screen-specific testID generators
- */
 export const LoginTestIDs = {
   screen: () => generateTestID(SCREENS.LOGIN, 'main', ELEMENT_TYPES.SCREEN),
   usernameInput: () => generateTestID(SCREENS.LOGIN, FEATURES.USERNAME, ELEMENT_TYPES.INPUT),
@@ -233,9 +210,6 @@ export const SearchTestIDs = {
   rightIconButton: (context: string) => generateTestID(context, FEATURES.SEARCH, 'right_icon', ELEMENT_TYPES.BUTTON),
 };
 
-/**
- * Vietnamese accessibility labels for common UI elements
- */
 export const AccessibilityLabels = {
   // Navigation
   BACK: 'Quay lại',
@@ -243,7 +217,7 @@ export const AccessibilityLabels = {
   PROFILE: 'Hồ sơ cá nhân',
   MESSAGES: 'Tin nhắn',
   FRIENDS: 'Bạn bè',
-  
+
   // Actions
   LOGIN: 'Đăng nhập',
   SIGNUP: 'Đăng ký',
@@ -254,18 +228,18 @@ export const AccessibilityLabels = {
   EDIT: 'Chỉnh sửa',
   SEARCH: 'Tìm kiếm',
   CLEAR_SEARCH: 'Xóa nội dung tìm kiếm',
-  
+
   // Camera
   TAKE_PHOTO: 'Chụp ảnh',
   TOGGLE_FLASH: 'Bật/tắt đèn flash',
   SWITCH_CAMERA: 'Chuyển camera',
-  
+
   // Forms
   USERNAME_INPUT: 'Nhập tên đăng nhập',
   PASSWORD_INPUT: 'Nhập mật khẩu',
   EMAIL_INPUT: 'Nhập email',
   PHONE_INPUT: 'Nhập số điện thoại',
-  
+
   // States
   LOADING: 'Đang tải',
   EMPTY_LIST: 'Danh sách trống',

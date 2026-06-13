@@ -9,8 +9,6 @@ import com.facebook.react.ReactNativeHost
 import com.facebook.react.ReactPackage
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
-// import com.swmansion.gesturehandler.react.RNGestureHandlerPackage
-
 
 class MainApplication : Application(), ReactApplication {
 
@@ -18,9 +16,6 @@ class MainApplication : Application(), ReactApplication {
       object : DefaultReactNativeHost(this) {
         override fun getPackages(): List<ReactPackage> =
             PackageList(this).packages.apply {
-              // Packages that cannot be autolinked yet can be added manually here, for example:
-              // add(MyComponentPackage())
-              // RNGestureHandlerPackage()
             }
 
         override fun getJSMainModuleName(): String = "index"
@@ -31,7 +26,6 @@ class MainApplication : Application(), ReactApplication {
         override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
 
       }
-      
 
   override val reactHost: ReactHost
     get() = getDefaultReactHost(applicationContext, reactNativeHost)

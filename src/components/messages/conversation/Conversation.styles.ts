@@ -1,9 +1,6 @@
 import { StyleSheet } from 'react-native';
 import color from '../../../styles/color';
 
-// NOTE: màu động (theme-aware) được inject qua props/inline style trong Conversation.tsx
-// File này chỉ giữ các style KHÔNG phụ thuộc màu theme
-
 export const styles = StyleSheet.create({
     headerContainer: {
         flexDirection: 'row',

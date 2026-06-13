@@ -5,7 +5,6 @@ import { ImageFullItem, ImageItem, PostUIItem } from '../types';
 type FilterType = "ALL" | "MINE" | "FROM_SENDER";
 type ViewMode = 'GRID' | 'LIST';
 
-// Generic T để linh hoạt kiểu dữ liệu trả về (ImageItem hoặc ImageFullItem)
 export const usePostList = <T extends PostUIItem>(viewMode: ViewMode, pageSize: number = 20) => {
     const [data, setData] = useState<T[]>([]);
     const [loading, setLoading] = useState(false);
@@ -26,7 +25,7 @@ export const usePostList = <T extends PostUIItem>(viewMode: ViewMode, pageSize: 
     ) => {
         // Chặn gọi nếu đang load (trừ khi refresh)
         if (loading && !isRefresh) return;
-        
+
         setLoading(true);
 
         const response = await postController.filterPostsGrid(
@@ -43,7 +42,7 @@ export const usePostList = <T extends PostUIItem>(viewMode: ViewMode, pageSize: 
 
             setData(prevImages => {
                 const sourceList = isRefresh ? newData : [...prevImages, ...newData];
-                
+
                 // Logic lọc trùng ID
                 const uniqueMap = new Map();
                 sourceList.forEach(item => {

@@ -23,7 +23,7 @@ export const formatTime = (isoString: string | null | undefined): string => {
     // Logic kiểm tra hôm qua chính xác
     const yesterday = new Date(now);
     yesterday.setDate(yesterday.getDate() - 1);
-    
+
     const isYesterday = date.getDate() === yesterday.getDate() &&
                         date.getMonth() === yesterday.getMonth() &&
                         date.getFullYear() === yesterday.getFullYear();

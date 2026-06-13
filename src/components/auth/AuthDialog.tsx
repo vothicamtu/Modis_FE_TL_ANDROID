@@ -10,9 +10,6 @@ type Props = {
   okText?: string;
 };
 
-/**
- * AuthDialog: custom dialog (Modal) để automation có thể locate ổn định bằng testID/accessibilityLabel.
- */
 export const AuthDialog = ({ visible, title, message, onOk, okText = 'OK' }: Props) => {
   const C = useColors();
 
@@ -84,4 +81,3 @@ export const AuthDialog = ({ visible, title, message, onOk, okText = 'OK' }: Pro
     </Modal>
   );
 };
-

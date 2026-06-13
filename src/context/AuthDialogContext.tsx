@@ -5,10 +5,6 @@ type DialogPayload = {
   title: string;
   message: string;
   okText?: string;
-  /**
-   * Optional side-effect sau khi bấm OK (vd: analytics).
-   * Navigation thường đã xảy ra trước đó (để match flow thực tế: navigate Home/Take nhưng dialog vẫn còn).
-   */
   onOkAfterClose?: () => void;
 };
 
@@ -72,4 +68,3 @@ export const useAuthDialog = () => {
   if (!ctx) throw new Error('useAuthDialog must be used within AuthDialogProvider');
   return ctx;
 };
-

@@ -17,7 +17,6 @@ class StompService {
   private reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
   private pendingSubscriptions: PendingSubscription[] = [];
 
-
   //connect to the server
   async connect(): Promise<void> {
     if (this.client?.connected || this.isConnecting) {
@@ -28,10 +27,7 @@ class StompService {
     this.isConnecting = true;
 
     try {
-      //here we get the token from async storage
-
       const token = await AsyncStorage.getItem('userToken');
-      // const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2OTY3N2Q3MDY5OTczMDNmZTUzZWRhMGIiLCJpYXQiOjE3Njg1NzQ0MTUsImV4cCI6MTc2ODY2MDgxNX0.2YFvrD9KzoTcPL_pNDeZuaemyZoHTWZb_LKZT9YIQWI";
       console.log('STOMP connecting with token:', token);
       if (!token) {
         console.error('No access token found');
@@ -77,7 +73,7 @@ class StompService {
           console.error('WebSocket error:', event);
           this.isConnecting = false;
         }
-        
+
       });
       this.client.activate();
     } catch (error) {
@@ -95,13 +91,11 @@ class StompService {
     }
   }
 
-
  private processPendingSubscriptions() {
     if (this.pendingSubscriptions.length === 0) return;
 
     console.log(` Đang xử lý ${this.pendingSubscriptions.length} subscriptions chờ...`);
-    
-    // Đã có ID, chúng ta trực tiếp gọi client.subscribe
+
     const pending = [...this.pendingSubscriptions];
     this.pendingSubscriptions = [];
 
@@ -132,10 +126,6 @@ class StompService {
     }, 5000); // Try to reconnect after 5 seconds
   }
 
- 
-  /**
-   * Disconnect from WebSocket
-   */
   disconnect(): void {
     if (this.reconnectTimeout) {
       clearTimeout(this.reconnectTimeout);
@@ -158,49 +148,16 @@ class StompService {
     this.isConnecting = false;
   }
 
-  /**
-   * Subscribe to a destination
-   */
-  // subscribe(destination: string, callback: (message: IMessage) => void, headers?: { [key: string]: string }): string {
-  //   console.log(`[DEBUG] Đang thử subscribe vào: ${destination}`);
-  //   console.log(`[DEBUG] Trạng thái Client hiện tại:`, this.client ? 'Đã khởi tạo' : 'Null');
-  //   console.log(`[DEBUG] Đã kết nối (connected)?:`, this.client?.connected);
-  //   if (!this.client?.connected) {
-  //     console.warn('Cannot subscribe: Not connected');
-  //     return '';
-  //   }
-
-  //   if (!this.client?.connected) {
-  //     this.onConnected();
-  //   }
-  //   const subscriptionId = `sub-${Date.now()}-${Math.random()}`;
-
-  //   const subscription = this.client.subscribe(
-  //     destination,
-  //     (message) => {
-  //       try {
-  //         callback(message);
-  //       } catch (error) {
-  //         console.error('Error in subscription callback:', error);
-  //       }
-  //     },
-  //     headers || {}
-  //   );
-
-  //   this.subscription.set(subscriptionId, subscription);
-  //   return subscriptionId;
-  // }
 subscribe(
     destination: string,
-    callback: (message: any) => void, // Sửa type IMessage theo project của bạn
+    callback: (message: any) => void,
     headers?: { [key: string]: string }
   ): string {
     const subscriptionId = `sub-${Date.now()}-${Math.random()}`;
-    
-    // CASE 1: Chưa kết nối -> Lưu vào hàng đợi
+
     if (!this.client?.connected) {
-      console.log(`🔌 Socket chưa sẵn sàng. Đang lưu hàng đợi: ${destination}`);
-      
+      console.log(`Socket chưa sẵn sàng. Đang lưu hàng đợi: ${destination}`);
+
       this.pendingSubscriptions.push({
         id: subscriptionId,
         destination,
@@ -211,7 +168,6 @@ subscribe(
       return subscriptionId;
     }
 
-    // CASE 2: Đã kết nối -> Thực hiện đăng ký ngay (Logic cũ của bạn)
     const subscription = this.client.subscribe(
       destination,
       (message) => {
@@ -228,7 +184,6 @@ subscribe(
     return subscriptionId;
   }
   unsubscribe(subscriptionId: string): void {
-    // Check if it's in pending and remove it
     this.pendingSubscriptions = this.pendingSubscriptions.filter(
       (sub) => sub.id !== subscriptionId
     );
@@ -240,10 +195,6 @@ subscribe(
     }
   }
 
-  /**
-   * Send message to destination
-   * Tương ứng với @MessageMapping("/chat.send")
-   */
   send(destination: string, body: any, headers?: { [key: string]: string }): void {
     if (!this.client?.connected) {
       console.warn('Cannot send: Not connected');
@@ -261,16 +212,10 @@ subscribe(
     }
   }
 
-  /**
-   * Check if connected
-   */
   isConnected(): boolean {
     return this.client?.connected || false;
   }
 
-  /**
-   * Get client instance
-   */
   getClient(): Client | null {
     return this.client;
   }

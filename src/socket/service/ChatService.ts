@@ -66,7 +66,7 @@ class ChatService {
                 const dto = JSON.parse(message.body) as MessageDTO;
                 console.log('Received message:', dto);
                 const decoded = decodeMessageContent(dto.content);
-                
+
                 const chatMessage: ChatMessage = {
                     id: dto.messageId || Date.now().toString(),
                     text: decoded.text,
@@ -82,7 +82,6 @@ class ChatService {
         }
         );
     }
-
 
     //unsubscribe from receiving messages
     unsubscribeFromMessages(subscriptionId: string): void {

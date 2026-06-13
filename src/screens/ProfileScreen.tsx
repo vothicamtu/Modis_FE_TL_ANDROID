@@ -233,7 +233,6 @@ export default function ProfileScreen({ goToHome }: Props) {
           accessibilityRole="scrollbar"
           accessibilityLabel="profile_scroll"
         >
-          {/* Avatar Section */}
           <View 
             style={styles.header} 
             testID="profile_header"
@@ -277,13 +276,12 @@ export default function ProfileScreen({ goToHome }: Props) {
                 accessibilityLabel="profile_invite_button"
                 accessible={true}
               >
-                <Text style={[styles.inviteText, { color: C.textPrimary }]} accessible={false}>Mời bạn bè tham gia Locket!</Text>
+                <Text style={[styles.inviteText, { color: C.textPrimary }]} accessible={false}>Mời bạn bè tham gia Modis!</Text>
                 <Icon name="share" size={18} color={C.textSecondary} />
               </TouchableOpacity>
             </View>
           </View>
 
-          {/* List Items */}
           <Text style={[styles.section, { color: C.textSecondary }]}>Tổng quát</Text>
           <Item
             icon="person"
@@ -316,7 +314,6 @@ export default function ProfileScreen({ goToHome }: Props) {
             testID="profile_change_password_item"
           />
 
-          {/* Giao diện */}
           <Text style={[styles.section, { color: C.textSecondary }]}>Giao diện</Text>
           <View 
             style={[styles.item, { backgroundColor: C.surface, borderLeftColor: C.primary }]}
@@ -358,7 +355,6 @@ export default function ProfileScreen({ goToHome }: Props) {
           />
         </ScrollView>
 
-        {/* Modals */}
         <Modal
           visible={isModalVisible}
           transparent

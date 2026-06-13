@@ -23,7 +23,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function NavigationContent() {
     const C = useColors();
-    
+
     return (
         <NavigationContainer>
             <Stack.Navigator

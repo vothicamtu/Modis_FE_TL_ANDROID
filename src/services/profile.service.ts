@@ -52,14 +52,13 @@ export const profileService = {
     try {
       const token = await loadTokenFromStorage();
       const baseURL = apiClient.defaults.baseURL?.endsWith("/") ? apiClient.defaults.baseURL : `${apiClient.defaults.baseURL}/`;
-      
+
       const response = await fetch(`${baseURL}users/${id}/update-avatar`, {
         method: "PUT",
         body: formData,
         headers: {
           "Authorization": `Bearer ${token}`,
           "Accept": "application/json",
-          // KHÔNG SET Content-Type ở đây
         },
       });
 

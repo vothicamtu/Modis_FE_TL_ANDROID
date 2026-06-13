@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 export interface MockUser {
     userId: string;
     username: string;
@@ -9,7 +8,6 @@ export interface MockUser {
     refreshToken: string;
 }
 
-// Mock users for testing — tokens đã được xóa, chỉ giữ cấu trúc
 export const MOCK_USERS: Record<string, MockUser> = {
     user1: {
         userId: '',
@@ -27,10 +25,6 @@ export const MOCK_USERS: Record<string, MockUser> = {
     },
 };
 
-/**
- * Mock login - saves mock user data to AsyncStorage
- * @param userKey - 'user1', 'user2', or 'user3'
- */
 export const mockLogin = async (userKey: keyof typeof MOCK_USERS = 'user1'): Promise<boolean> => {
     try {
         const user = MOCK_USERS[userKey];
@@ -57,9 +51,6 @@ export const mockLogin = async (userKey: keyof typeof MOCK_USERS = 'user1'): Pro
     }
 };
 
-/**
- * Mock logout - clears AsyncStorage
- */
 export const mockLogout = async (): Promise<void> => {
     try {
         await AsyncStorage.multiRemove([
@@ -75,9 +66,6 @@ export const mockLogout = async (): Promise<void> => {
     }
 };
 
-/**
- * Get current mock user info
- */
 export const getMockUserInfo = async (): Promise<MockUser | null> => {
     try {
         const [userId, username, email, accessToken, refreshToken] = await AsyncStorage.multiGet([
@@ -103,9 +91,6 @@ export const getMockUserInfo = async (): Promise<MockUser | null> => {
     }
 };
 
-/**
- * Check if user is mock logged in
- */
 export const isMockLoggedIn = async (): Promise<boolean> => {
     try {
         const token = await AsyncStorage.getItem('accessToken');
@@ -115,7 +100,6 @@ export const isMockLoggedIn = async (): Promise<boolean> => {
     }
 };
 
-// Export for easy import
 export default {
     mockLogin,
     mockLogout,

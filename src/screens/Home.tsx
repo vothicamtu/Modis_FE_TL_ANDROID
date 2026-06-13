@@ -24,7 +24,6 @@ function HomeScreen() {
     const translateX = useSharedValue(-width * 1);
     const translateY = useSharedValue(0);
 
-
     useFocusEffect(
         useCallback(() => {
             translateY.value = 0
@@ -61,7 +60,6 @@ function HomeScreen() {
             translateX.value = withTiming(-activeCol.value * width, { duration: 400 });
             translateY.value = withTiming(-activeRow.value * height, { duration: 400 });
         })
-
 
     const animatedStyle = useAnimatedStyle(() => ({
         transform: [
@@ -124,7 +122,6 @@ function HomeScreen() {
                         accessibilityRole="none"
                         accessibilityLabel="home_gesture_container"
                     >
-                        {/* Hàng 0 */}
                         <View style={{ width, height }}>
                             <ProfileScreen goToHome={goToHome} />
                         </View>
@@ -135,7 +132,6 @@ function HomeScreen() {
                             <MessageScreen goToHome={goToHome}/>
                         </View>
 
-                        {/* Hàng 1 */}
                         <View style={{ width, height }}>
                             <ProfileScreen goToHome={goToHome} />
                         </View>

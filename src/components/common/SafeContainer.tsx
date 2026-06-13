@@ -86,7 +86,7 @@ export const ManualSafeArea: React.FC<{
   const C = useColors();
   const { isDark } = useTheme();
   const insets = useSafeAreaInsets();
-  
+
   const statusBar = isDark ? 'light-content' : 'dark-content';
   const bgColor = backgroundColor || C.bg;
 
@@ -99,12 +99,10 @@ export const ManualSafeArea: React.FC<{
           backgroundColor="transparent" 
         />
         <LinearGradient colors={C.bgGradient} style={{ flex: 1 }}>
-          {/* Top safe area */}
           <View style={{ height: insets.top, backgroundColor: C.bgGradient[0] }} />
           <View style={{ flex: 1 }}>
             {children}
           </View>
-          {/* Bottom safe area */}
           <View style={{ height: insets.bottom, backgroundColor: C.bgGradient[2] }} />
         </LinearGradient>
       </>
@@ -119,12 +117,10 @@ export const ManualSafeArea: React.FC<{
         backgroundColor="transparent" 
       />
       <View style={{ flex: 1, backgroundColor: bgColor }}>
-        {/* Top safe area */}
         <View style={{ height: insets.top, backgroundColor: bgColor }} />
         <View style={{ flex: 1 }}>
           {children}
         </View>
-        {/* Bottom safe area */}
         <View style={{ height: insets.bottom, backgroundColor: bgColor }} />
       </View>
     </>

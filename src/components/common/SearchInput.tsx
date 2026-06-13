@@ -106,7 +106,6 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         style,
       ]}
     >
-      {/* Left Icon */}
       {leftIcon && (
         <Icon
           testID={testID ? `${testID}_left_icon` : 'search_left_icon'}
@@ -118,7 +117,6 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         />
       )}
 
-      {/* Text Input */}
       <TextInput
         testID={testID}
         ref={inputRef}
@@ -147,7 +145,6 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         accessible={true}
       />
 
-      {/* Clear Button */}
       {showClearButton && value.length > 0 && (
         <Animated.View style={{ opacity: fadeAnim }}>
           <TouchableOpacity
@@ -178,13 +175,12 @@ export const SearchInput: React.FC<SearchInputProps> = ({
                 justifyContent: 'center',
               }}
             >
-              <Icon name="close" size={14} color="#000000" /> {/* Always black X for contrast */}
+              <Icon name="close" size={14} color="#000000" />
             </View>
           </TouchableOpacity>
         </Animated.View>
       )}
 
-      {/* Right Icon */}
       {rightIcon && (
         <TouchableOpacity
           testID={testID ? `${testID}_right_icon_button` : 'search_right_icon_button'}

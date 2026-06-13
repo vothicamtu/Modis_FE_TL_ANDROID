@@ -58,7 +58,7 @@ export default function FriendsScreen() {
         />
       );
     }
-    
+
     return (
       <>
         <ShareAppRow />
@@ -77,7 +77,6 @@ export default function FriendsScreen() {
       accessibilityLabel="friends_screen"
     >
       <View style={{ flex: 1, paddingTop: scale(28) }}>
-        {/* Header with back button */}
         <View style={[styles.headerBarModern, { 
           paddingHorizontal: scale(16),
           marginBottom: scale(8)
@@ -120,18 +119,16 @@ export default function FriendsScreen() {
           accessibilityLabel="friends_scroll"
         >
           <FriendsHeader />
-          
+
           <FriendsSearch 
             onResult={handleSearchResult}
             onClear={handleClearSearch}
             keyword={searchKeyword}
           />
-          
+
           {mainContent}
         </ScrollView>
       </View>
     </SafeContainer>
   );
 }
-
-

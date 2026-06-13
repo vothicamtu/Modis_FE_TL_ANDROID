@@ -173,7 +173,7 @@ function SendPhotoScreen({ route }: SendPhotoScreenProps) {
       setLoading(true);
 
       const urlImage = await postController.uploadImage(photoUri);
-      
+
       const postRequest: PostRequest = {
         senderId: userId,
         receivers: receivers.map((id) => ({

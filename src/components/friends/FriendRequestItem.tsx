@@ -15,7 +15,7 @@ type Props = {
 export default function FriendRequestItem({ name, avatar, disabled, onAccept, onReject, testID }: Props) {
   const C = useColors();
   const baseTestID = testID || `friend_request_item_${name.replace(/\s+/g, '_').toLowerCase()}`;
-  
+
   return (
     <View 
       testID={baseTestID} 

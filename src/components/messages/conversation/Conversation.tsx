@@ -128,7 +128,6 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
             >
-                {/* Header */}
                 <View style={{ paddingTop: 4 }}>
                     <View 
                         testID="conversation_header" 
@@ -180,7 +179,6 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                     </View>
                 </View>
 
-                {/* Message list */}
                 {isLoading ? (
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <ActivityIndicator size="large" color={C.primary} />
@@ -227,7 +225,6 @@ function Conversation({ userName, avatarUrl, avatarSource, messages, onSendMessa
                     />
                 )}
 
-                {/* Input bar - Fixed positioning */}
                 <View style={[
                     styles.inputContainer,
                     {
